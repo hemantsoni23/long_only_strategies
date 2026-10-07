@@ -1,0 +1,33 @@
+
+======================================================================================================================
+ ELENDEL   window 2019-06-01..2025-06-30  (6.0 yrs)
+======================================================================================================================
+  base       CAGR  44.0%  vol  14.4%  Sharpe  2.20  MaxDD  -12.8%  Calmar  3.45
+  np_w0.5    CAGR  43.5%  vol  14.2%  Sharpe  2.20  MaxDD  -14.2%  Calmar  3.05  | dCAGR  -0.5pt dSharpe -0.01 dMaxDD  -1.5pt  boot P(d>0)=0.44 90%CI of ann.excess [-5.1,+4.2]%
+  np_w1.0    CAGR  44.8%  vol  14.1%  Sharpe  2.29  MaxDD  -14.2%  Calmar  3.15  | dCAGR  +0.9pt dSharpe +0.09 dMaxDD  -1.5pt  boot P(d>0)=0.57 90%CI of ann.excess [-4.9,+5.8]%
+  eps_w0.5   CAGR  47.2%  vol  14.2%  Sharpe  2.38  MaxDD  -12.9%  Calmar  3.65  | dCAGR  +3.2pt dSharpe +0.18 dMaxDD  -0.2pt  boot P(d>0)=0.74 90%CI of ann.excess [-3.3,+7.7]%
+  np_w0.5 year delta (pts): 2019:+1.1  2020:+11.6  2021:-20.1  2022:-3.6  2023:+6.0  2024:+1.0  2025:-1.2
+  np_w1.0 year delta (pts): 2019:-1.0  2020:+7.3  2021:-19.2  2022:-2.5  2023:+8.9  2024:+10.2  2025:-0.9
+  mean invested weight: base 67%  np_w0.5 65%
+
+======================================================================================================================
+ ZENITH   window 2019-06-01..2025-06-30  (6.0 yrs)
+======================================================================================================================
+  base       CAGR  35.6%  vol  12.9%  Sharpe  1.97  MaxDD  -11.9%  Calmar  2.99
+  np_w0.5    CAGR  45.2%  vol  13.3%  Sharpe  2.43  MaxDD  -12.7%  Calmar  3.57  | dCAGR  +9.5pt dSharpe +0.46 dMaxDD  -0.7pt  boot P(d>0)=1.00 90%CI of ann.excess [+2.7,+11.0]%
+  np_w1.0    CAGR  44.8%  vol  13.2%  Sharpe  2.43  MaxDD  -12.8%  Calmar  3.50  | dCAGR  +9.1pt dSharpe +0.46 dMaxDD  -0.9pt  boot P(d>0)=0.98 90%CI of ann.excess [+1.2,+12.0]%
+  eps_w0.5   CAGR  48.4%  vol  13.4%  Sharpe  2.58  MaxDD  -13.0%  Calmar  3.73  | dCAGR +12.8pt dSharpe +0.61 dMaxDD  -1.1pt  boot P(d>0)=1.00 90%CI of ann.excess [+4.3,+13.9]%
+  np_w0.5 year delta (pts): 2019:+1.9  2020:+9.5  2021:+32.1  2022:+1.8  2023:+14.4  2024:+5.3  2025:+2.2
+  np_w1.0 year delta (pts): 2019:+0.9  2020:+14.8  2021:+20.4  2022:-0.5  2023:+14.2  2024:+7.0  2025:+4.4
+  mean invested weight: base 69%  np_w0.5 67%
+
+======================================================================================================================
+ QUAD   window 2019-06-01..2025-06-30  (6.0 yrs)
+======================================================================================================================
+  base       CAGR  25.4%  vol  13.8%  Sharpe  1.29  MaxDD  -15.9%  Calmar  1.60
+  np_w0.5    CAGR  29.6%  vol  13.9%  Sharpe  1.52  MaxDD  -15.9%  Calmar  1.86  | dCAGR  +4.1pt dSharpe +0.23 dMaxDD  +0.0pt  boot P(d>0)=0.93 90%CI of ann.excess [-0.3,+6.8]%
+  np_w1.0    CAGR  32.8%  vol  13.9%  Sharpe  1.69  MaxDD  -15.1%  Calmar  2.17  | dCAGR  +7.3pt dSharpe +0.40 dMaxDD  +0.8pt  boot P(d>0)=0.99 90%CI of ann.excess [+1.4,+10.1]%
+  eps_w0.5   CAGR  29.7%  vol  13.9%  Sharpe  1.52  MaxDD  -15.9%  Calmar  1.87  | dCAGR  +4.3pt dSharpe +0.23 dMaxDD  -0.0pt  boot P(d>0)=0.91 90%CI of ann.excess [-0.7,+7.6]%
+  np_w0.5 year delta (pts): 2019:+0.3  2020:+3.6  2021:+11.8  2022:+5.3  2023:-1.2  2024:+3.7  2025:+2.0
+  np_w1.0 year delta (pts): 2019:+0.4  2020:+3.9  2021:+15.4  2022:+10.7  2023:+7.3  2024:+7.4  2025:+0.5
+  mean invested weight: base 67%  np_w0.5 66%

@@ -218,3 +218,10 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+# ── Project outputs: generated data and charts are not versioned ──
+*.csv
+*.png
+*.pkl
+*.parquet
+output/
+.DS_Store
