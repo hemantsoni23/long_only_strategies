@@ -65,7 +65,10 @@ def build_universes(X, sig):
 
 # ───────────────────────── helpers ─────────────────────────
 def zscore(df):
-    return df.sub(df.mean(axis=1), axis=0).div(df.std(axis=1), axis=0)
+    """Cross-sectional z-score, computed row-wise (per date, across assets)."""
+    mu = df.mean(axis=1)
+    sigma = df.std(axis=1, ddof=0)
+    return df.sub(mu, axis=0).div(sigma, axis=0)
 
 
 def nw_tstat(x, lag):
