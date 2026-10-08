@@ -8,10 +8,12 @@ Coverage : results for FY2018-19 onward only (NSE XBRL).  Nothing earlier exists
 What a row holds (one per symbol and period_end, keyed by the filing that reported it):
     filed       filing date (a result is usable from this date; the strategy trades the NEXT close after it is known)
     np_ttm      sum of the last 4 consecutive quarters' net profit.  profit_basis='total' (default): the reported net profit line, the same definition in every quarter of every company.
+                'owners_consistent': owners' profit only where all four quarters of a figure report it, else the total line for all four.  'core': reported profit less other income and exceptional items (25% tax; banks unchanged).
                 'owners': profit attributable to owners when reported, else total -- NOT recommended: owners' profit is reported for only 80% of consolidated and 10% of standalone filings and
                 1,053 of ~1,600 consolidated companies mix both definitions across quarters, which corrupts trailing sums and year-on-year growth.  Kept for ablation.
     sg_np       symmetric yoy growth of the latest quarter's net profit: (x - x_4q_ago) / mean(|x|, |x_4q_ago|)
     shares_adj  shares outstanding in TODAY'S UNITS (see below)
+    oneoff_share  trailing-12m (other income + exceptional gains) / trailing-12m pre-tax profit (0 for banks, NaN if pre-tax profit is not positive); used by the optional one-off filter
 
 Why `shares_adj`: the OHLCV prices are retroactively split/bonus-adjusted (e.g. HDFCBANK shows ~Rs 550 in 2019 although it traded above Rs 1,100 after its 2019 split).  A filing's share count
 is in the units of its own date, so (adjusted price x filed shares) is wrong by every later split/bonus -- and it is wrong in a way that leaks the future: stocks that later split look
@@ -37,6 +39,7 @@ CLEAN_TOL = 0.03
 SHARE_RATIO_BAND = (0.05, 20.0)                             # adjacent-filing share-count ratios outside this band are corruption, not corporate actions
 CUM_FACTOR_BAND = (0.1, 60.0)                               # cumulative restored-units factor outside this band -> symbol excluded
 QUARTER_DAYS = (80, 100)
+CORE_TAX = 0.25                                             # flat tax rate applied to other income / exceptional items when building 'core' profit
 MAX_FILING_LAG_DAYS = 120
 
 
@@ -103,9 +106,16 @@ def _read_symbol(path, profit_basis='total'):
                         npf = _num(facts.get(k))
                         if npf is not None:
                             break
+                np_total = _num(inc.get('net_profit'))
+                if np_total is None:
+                    np_total = npf
+                np_owners = _num(inc.get('net_profit_attributable_to_owners'))
+                pbt_ = _num(inc.get('profit_before_tax')); pbe_ = _num(inc.get('profit_before_exceptional_and_tax'))
+                is_bank = inc.get('revenue_from_operations') is None and facts.get('InterestEarned') is not None   # banking taxonomy: 'other income' is core fee income there
                 cap, fv = _num(inc.get('paid_up_equity_share_capital')), _num(inc.get('face_value_per_share'))
                 shares = cap / fv if (cap and fv and any(abs(fv - v) < 1e-9 for v in VALID_FACE_VALUES) and cap / fv > 0) else None
-                rows.append(dict(symbol=sym, basis=basis, period_end=pd.Timestamp(d1), filed=pd.Timestamp(filed), net_profit=npf, shares=shares))
+                rows.append(dict(symbol=sym, basis=basis, period_end=pd.Timestamp(d1), filed=pd.Timestamp(filed), net_profit=npf, np_total=np_total, np_owners=np_owners, pbt=pbt_, exc=(pbt_ - pbe_) if (pbt_ is not None and pbe_ is not None) else None,
+                                 other_income=_num(inc.get('other_income')), is_bank=is_bank, shares=shares))
     return rows
 
 
@@ -165,15 +175,37 @@ def load_results(symbols=None, directory=None, cliff_checker=None, restore_units
         if adj.notna().all() and not (adj.min() >= CUM_FACTOR_BAND[0] and adj.max() <= CUM_FACTOR_BAND[1]):
             shares_adj = shares_adj * np.nan
         per_basis = {}
+        bank = bool(g.is_bank.any())
         for basis, b in g.groupby('basis'):
             b = b.sort_values('period_end').drop_duplicates('period_end', keep='last')
             grid = pd.date_range(b.period_end.min(), b.period_end.max(), freq='QE')
             b = b.set_index('period_end').reindex(grid)
-            npf = b['net_profit']
+            tot, own = b['np_total'], b['np_owners']
+            oi, exc, pbt = b['other_income'], b['exc'].fillna(0.0), b['pbt']
+            if profit_basis == 'owners_consistent':
+                # owners' profit only where all the quarters used by a figure report it; otherwise the total line for ALL of them (never a mix inside one figure)
+                own4 = own.notna().rolling(4, min_periods=4).sum() == 4
+                ttm = np.where(own4, own.rolling(4, min_periods=4).sum(), tot.rolling(4, min_periods=4).sum())
+                use_own_g = own.notna() & own.shift(4).notna()
+                q_now, q_old = own.where(use_own_g, tot), own.shift(4).where(use_own_g, tot.shift(4))
+                ttm = pd.Series(ttm, index=b.index)
+            elif profit_basis == 'core':
+                # core profit: reported net profit less other income and exceptional items, taxed at a flat 25% (banks keep their reported profit)
+                core = tot if bank else tot - (oi.fillna(0.0) + exc) * (1 - CORE_TAX)
+                ttm = core.rolling(4, min_periods=4).sum()
+                q_now, q_old = core, core.shift(4)
+            else:
+                npf = b['net_profit']
+                ttm = npf.rolling(4, min_periods=4).sum()
+                q_now, q_old = npf, npf.shift(4)
             o = pd.DataFrame(index=b.index)
             o['filed'] = b['filed']
-            o['np_ttm'] = npf.rolling(4, min_periods=4).sum()
-            o['sg_np'] = (npf - npf.shift(4)) / ((npf.abs() + npf.shift(4).abs()) / 2).replace(0, np.nan)
+            o['np_ttm'] = ttm
+            o['sg_np'] = (q_now - q_old) / ((q_now.abs() + q_old.abs()) / 2).replace(0, np.nan)
+            # share of trailing-12-month pre-tax profit that is other income or exceptional gain (0 for banks; NaN when TTM pre-tax profit is not positive)
+            pbt_ttm = pbt.rolling(4, min_periods=4).sum()
+            gains = oi.fillna(0.0).rolling(4, min_periods=4).sum() + exc.clip(lower=0.0).rolling(4, min_periods=4).sum()
+            o['oneoff_share'] = 0.0 if bank else (gains / pbt_ttm.where(pbt_ttm > 0))
             o['basis'] = basis
             per_basis[basis] = o
         for basis in ('standalone', 'consolidated'):          # consolidated wins where it has a valid TTM
