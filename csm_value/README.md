@@ -9,6 +9,7 @@ Long-only value strategy: buy cheap companies whose profits are still rising, no
 | `run_csm_value_backtest.py` | backtest runner / report (Elendel's, renamed) |
 | `fundamentals_loader.py` | reads the raw NSE XBRL JSON directly and builds the point-in-time results table — **no cache, no other project** |
 | `train_test_protocol.py` | design choices on TRAIN only, test scored once |
+| `train_test_item5_7.py` | Items 5 and 7 (one-off filter, profit definition, idle cash) with train/test selection |
 | `ablation_versions.py` | v1 / v2 / v3 data-handling ablation (table below) |
 | `test_csm_value.py` | 18 checks (causality, independent E/P and mask re-derivation, unit consistency, accounting reconciliation, full-engine truncation, self-containment) |
 | `audit_lookahead.py`, `audit_engine_accounting.py`, `execution_replay.py`, `AUDIT.md` | the adversarial audit and the execution-faithful replay |
@@ -24,12 +25,26 @@ E/P = **TTM net profit ÷ market cap**, where market cap = **month-end close (OH
 So this is **not an OHLCV-only strategy**: it needs the fundamentals JSON. Eligible: liquidity ranks 301–1000, TTM profit > 0, latest-quarter profit rising year on year, E/P ≤ 50%, result no older than 140 days, no corporate-action cliff since that result. Rank by E/P, top 15, Elendel hysteresis/sizing/stops. No SMA-200 filter and no absolute-momentum gate.
 
 ## Headline numbers under both bookings (default configuration; Sharpe rf 0; `python3 report_both_bookings.py`)
+Default = reported net profit, no one-off filter, **idle cash swept into a 6.5% liquid fund** (`use_liquid_mf=True`, as in Zenith; this was the only change adopted from Items 5/7).
 | Window | Engine booking (headline; same convention as Elendel/Zenith/Quad backtests) | Execution-faithful booking |
 |---|---|---|
-| FULL 2019-06→2025-06 | **38.5% CAGR, vol 14.5%, Sharpe 2.36, max DD −12.6%** | 20.0%, 15.7%, 1.26, −23.0% |
-| TRAIN 2019-06→2021-12 | 48.9%, 14.2%, 2.92, −12.6% | 28.7%, 15.4%, 1.74, −19.8% |
-| TEST 2022-01→2025-06 | 31.4%, 14.7%, 1.96, −12.4% | 14.0%, 15.9%, 0.92, −23.0% |
-Use the left column when comparing with your other backtests (they share that booking and are overstated by the same mechanism); use the right column for what the fills would have earned. If the two ever disagree on whether the strategy is worth running, trust the right one.
+| FULL 2019-06→2025-06 | **42.0% CAGR, vol 14.5%, Sharpe 2.53, max DD −11.8%** | 23.1%, 15.7%, 1.42, −21.3% |
+| TRAIN 2019-06→2021-12 | 53.3%, 14.2%, 3.13, −11.5% | 32.6%, 15.4%, 1.93, −18.8% |
+| TEST 2022-01→2025-06 | 34.3%, 14.7%, 2.11, −11.8% | 16.6%, 15.9%, 1.06, −21.3% |
+(Before the idle-cash sweep: 38.5% / 2.36 / −12.6% engine and 20.0% / 1.26 / −23.0% faithful over the full window.) Use the left column when comparing with your other backtests (they share that booking); the right column is what the fills would have earned. The return booking code was not changed.
+
+### Items 5 and 7 (earnings quality, profit definition, idle cash) — `train_test_item5_7.py`
+Pre-declared grid, idle cash swept in every cell: profit definition {total, owners_consistent, core} × one-off filter {off, 50%, 25% of trailing pre-tax profit from other income + exceptional gains; banks exempt}. Selection = train (2019-06→2021-12) engine-booking Sharpe; test (2022-01→2025-06) scored once.
+| Cell (engine booking: CAGR / Sharpe / max DD) | TRAIN | TEST | FULL |
+|---|---|---|---|
+| committed version (idle cash 0%) | 48.9% / 2.92 / −12.6% | 31.4% / 1.96 / −12.4% | 38.5% / 2.36 / −12.6% |
+| **idle-cash sweep only = total profit, no filter (chosen on train)** | **53.3% / 3.13 / −11.5%** | **34.3% / 2.11 / −11.8%** | **42.0% / 2.53 / −11.8%** |
+| total profit, one-off filter 50% | 51.5% / 3.03 / −11.6% | 32.5% / 2.03 / −13.3% | 40.2% / 2.45 / −13.3% |
+| total profit, one-off filter 25% | 48.4% / 2.91 / −10.9% | 31.7% / 1.99 / −14.3% | 38.5% / 2.37 / −14.3% |
+| core profit (less other income & exceptionals), no filter | 49.2% / 2.94 / −11.4% | 34.0% / 2.12 / −12.6% | 40.2% / 2.46 / −12.6% |
+| core profit, one-off filter 50% / 25% | 49.1% / 2.94 ; 48.1% / 2.87 | 31.6% / 1.99 ; 31.5% / 2.00 | 38.7% ; 38.2% |
+| owners_consistent, filter off / 50% / 25% | 44.7% ; 42.9% ; 45.4% | 27.0% ; 28.9% ; 26.1% | 34.2% ; 34.6% ; 33.9% |
+Reading: the idle-cash sweep adds ~3.5 CAGR points (engine) / ~3.1 (faithful) mechanically. **None of the earnings-quality variants beat the plain reported net profit on train or test**: the one-off filter and the core-profit definition are neutral to negative, and owners-attributable profit (consistent version) is worse by ~8 points. The earlier observation that purchases with other income above 30% of profit earn less (4.9% vs 8.7% per trade) did not turn into a portfolio improvement once those names were removed. All the differences are within the placebo noise (sd ≈ 4 CAGR points), so they are not evidence either way. The options stay in the code (`profit_basis`, `max_oneoff_share`), off by default. Two Item-7 points were left as they are: standalone→consolidated switching (the switch is causal and consolidated is the right base for a group's market cap) and the 13 days of executed weight above 100% (engine behaviour).
 
 ## Look-ahead / data audit (what was found and fixed)
 1. **Split-adjusted prices × unadjusted share counts — a real leak, fixed.** The OHLCV prices are retroactively split/bonus-adjusted (HDFCBANK shows ~₹550 in 2019; it traded above ₹1,100 after its 2019 split). A 2019 filing's share count is in 2019 units, so adjusted-price × filed-shares understates market cap by every later split/bonus — stocks that later split look 2–10× cheaper in the past (future information). `fundamentals_loader.py` multiplies each filing's share count by the clean split/bonus ratios (1.5, 2, 2.5, 3, 4, 5, 10 or reciprocals, ±3%) visible in later filings, restoring the units the prices are already in; genuine issuance/mergers are left alone. Check: for 458 companies with detected splits, jumps >2× in market cap between consecutive filings fall from 610 to 235 (`test_csm_value.py` #6).

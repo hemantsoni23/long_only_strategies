@@ -113,7 +113,7 @@ DRx = prices.pct_change(fill_method=None).fillna(0).reindex(index=ix, columns=Wx
 metax = pd.DataFrame(st.position_metadata); metax = metax[(metax.Entry_Date >= pd.Timestamp('2019-06-03')) & (metax.Exit_Reason != 'END_OF_PERIOD') & (metax.Exit_Date <= pd.Timestamp('2025-06-30'))]
 orig = sum((Wx.values[ix.get_loc(t.Entry_Date):ix.get_loc(t.Exit_Date), cx[t.Ticker]] * DRx[ix.get_loc(t.Entry_Date):ix.get_loc(t.Exit_Date), cx[t.Ticker]]).sum() for t in metax.itertuples())
 fills = sum(Wx.values[ix.get_loc(t.Entry_Date):ix.get_loc(t.Exit_Date), cx[t.Ticker]].mean() * (t.Exit_Price / t.Entry_Price - 1) for t in metax.itertuples())
-net_f, _ = er.faithful_net_returns(st, rb_res)
+net_f, _ = er.faithful_net_returns(st, rb_res, daily_cash_rate=((1 + st.liquid_mf_annual_rate) ** (1 / 252) - 1) if st.use_liquid_mf else 0.0)   # the replay must earn the same idle-cash rate as the runner
 cg_ = lambda x: (1 + x.loc['2019-06-03':'2025-06-30']).prod() ** (365.25 / (pd.Timestamp('2025-06-30') - pd.Timestamp('2019-06-03')).days) - 1
 check('9a. the runner\'s execution-faithful booking equals the independent replay (CAGR within 0.1 pt)', abs(cg_(st._net_by_booking['faithful']) - cg_(net_f)) < 0.001)
 say_ratio = orig / fills
@@ -126,6 +126,34 @@ s3 = mk(p2, v2, h2, l2, o2, bench.loc[:cut]); s3.calculate_factors(); s3.get_pos
 r3 = rb.backtest_event_driven(s3, initial_capital=100_000, transaction_cost=0.003, risk_free_rate=0.0)['net_returns']
 jj = r3.index.intersection(rb_res['net_returns'].index); jj = jj[jj <= cut - pd.Timedelta(days=10)]
 check('10. the FULL engine path is identical when the data is cut at 2023-03-31 (nothing uses the future)', np.abs(r3[jj] - rb_res['net_returns'][jj]).max() < 1e-10, f'{len(jj)} days, max diff {np.abs(r3[jj] - rb_res["net_returns"][jj]).max():.1e}')
+
+# 11. Item 5 / 7 fields, re-derived independently from the raw JSON
+import json as _json
+rr = fl.load_results(symbols=list(prices.columns), profit_basis='core'); rt = fl.load_results(symbols=list(prices.columns), profit_basis='total')
+rng2 = np.random.default_rng(21); samp = rr[rr.period_end >= '2020-12-31'].sample(60, random_state=3); bad_o = bad_c = n_o = 0
+cache_ = {}
+for r_ in samp.itertuples():
+    d_ = cache_.setdefault(r_.symbol, _json.load(open(f'{fl.FUNDAMENTALS_DIR}/{r_.symbol}.json')))
+    qs = {}
+    for fy_, nd in d_['fiscal_years'].items():
+        for qq_, qn in nd['quarters'].items():
+            b_ = qn.get(r_.basis)
+            if not b_: continue
+            inc = b_.get('income_statement') or {}; per = b_.get('period') or {}
+            if per.get('end'): qs[pd.Timestamp(per['end'][:10])] = inc
+    ends = pd.date_range(end=r_.period_end, periods=4, freq='QE')
+    if not all(e in qs for e in ends): continue
+    isb = any((qs[e].get('revenue_from_operations') is None and (qs[e].get('other_facts') or {}).get('InterestEarned') is not None) for e in ends)
+    g = lambda e, k: (qs[e].get(k) if qs[e].get(k) is not None else 0.0)
+    pbt_ = sum(g(e, 'profit_before_tax') for e in ends); oi_ = sum(g(e, 'other_income') for e in ends)
+    exc_ = sum(max(g(e, 'profit_before_tax') - g(e, 'profit_before_exceptional_and_tax'), 0.0) for e in ends)
+    exp_oo = 0.0 if isb else ((oi_ + exc_) / pbt_ if pbt_ > 0 else np.nan)
+    n_o += 1
+    if not (np.isclose(exp_oo, r_.oneoff_share, rtol=1e-6, equal_nan=True)): bad_o += 1
+check('11a. one-off share (other income + exceptional gains over TTM pre-tax profit) re-derived from the raw JSON', bad_o == 0, f'{n_o} samples, {bad_o} mismatches')
+mm = rt.merge(rr, on=['symbol', 'period_end'], suffixes=('_t', '_c'))
+check('11b. core profit differs from reported profit only through other income / exceptional items (banks identical)', bool(np.isfinite(mm.np_ttm_c).all()) and len(mm) == len(rt) and (mm.np_ttm_c / mm.np_ttm_t).median() < 1.0)
+check('11c. the idle-cash sweep into a liquid fund is on (use_liquid_mf) and the default profit definition is the reported net profit with no one-off filter', st.use_liquid_mf is True and st.profit_basis == 'total' and st.max_oneoff_share is None)
 # 7
 bad_refs = []
 for f in glob.glob(os.path.join(HERE, '*.py')):

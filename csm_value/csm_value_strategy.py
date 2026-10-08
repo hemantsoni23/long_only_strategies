@@ -33,7 +33,8 @@ class CSMValue:
         max_ep              = 0.50,  # data-error / one-off guard: ignore E/P above 50%
         min_eligible        = 60,    # fewer fundamentals-eligible names than this in a month -> no signal that month
         use_ca_mask         = True,  # corporate-action mask (price cliffs): see calculate_factors
-        profit_basis        = 'total',  # 'total' = reported net profit (consistent definition); 'owners' = attributable-to-owners with total as fallback (inconsistent coverage, ablation only)
+        max_oneoff_share    = None,  # earnings-quality filter: drop names whose trailing-12m other income + exceptional gains exceed this share of trailing-12m pre-tax profit (banks exempt). None = off
+        profit_basis        = 'total',  # 'total' = reported net profit; 'owners_consistent' = profit attributable to owners where every quarter of a figure reports it, else the total line for all of them; 'core' = reported profit less other income and exceptional items (25% tax); 'owners' = legacy mixed fallback (ablation only)
         restore_units       = True,  # restore filed share counts to today's units (matches the split-adjusted prices). False = the old leaky behaviour, for ablation only
         ca_tol              = 0.03,  # a one-day move within this of a clean split/bonus cliff (-33%, -50%, -60%, -67%, -75%, -80%, -90%) counts as a corporate action
         abs_momentum_lookback_months = 12,  # kept only for the engine's bookkeeping: the value strategy has NO absolute-momentum gate (momentum_returns is set to a constant positive)
@@ -70,7 +71,7 @@ class CSMValue:
         atr_prev_day            = False,  # use day i-1 ATR in the loop
         min_hold_trading        = False,  # count min-hold in trading days, not calendar
         # Execution-layer features
-        use_liquid_mf           = False,  # idle cash earns liquid-MF rate instead of RFR
+        use_liquid_mf           = True,   # idle cash is swept into a liquid fund (6.5%), as in Zenith; the Elendel default (False) leaves it at 0%
         liquid_mf_annual_rate   = 0.065,
         cooldown_mode           = 'loss_scaled', # 'flat' | 'loss_scaled'
         cooldown_floor_days     = 10,     # loss_scaled: min cooldown for a losing stop
@@ -122,6 +123,7 @@ class CSMValue:
         self.use_ca_mask           = use_ca_mask
         self.restore_units         = restore_units
         self.profit_basis          = profit_basis
+        self.max_oneoff_share      = max_oneoff_share
         self.ca_tol                = ca_tol
         self.abs_momentum_lookback_months = abs_momentum_lookback_months
         self.abs_momentum_lag_months      = abs_momentum_lag_months
@@ -319,6 +321,9 @@ class CSMValue:
             print(f"  [corporate-action mask] stock-months with a price cliff after the latest filing excluded: {int((self.ca_stale_mask & (npttm > 0)).sum().sum()):,}")
         if self.require_profit_growth:
             ok &= (growth > 0)
+        if self.max_oneoff_share is not None:
+            oo = monthly_frame(res, 'oneoff_share', idx, self.prices.columns, self.results_max_age_days)
+            ok &= (oo <= self.max_oneoff_share)          # NaN (no positive pre-tax profit) fails the test
         ep_unf = ep.where(ok)
         ep_masked = ep_unf.where(valid_universe)
         ep_masked = ep_masked.where(ep_masked.notna().sum(axis=1) >= self.min_eligible, np.nan)     # too thin a month -> no signal
