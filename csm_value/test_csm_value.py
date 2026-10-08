@@ -1,51 +1,52 @@
-"""Checks for CSMValue (Elendel chassis).  python3 test_csm_value.py
- 1. E/P at month-ends re-derived independently from raw results filed on/before the date (400 random stock-months)
- 2. no look-ahead: data truncated at 2023-06-30 gives identical factor rows through 2023-03-31 (and identical positions)
- 3. universe: every scored name is inside liquidity ranks 301-1000, price > 20, positive TTM profit, rising profit, E/P in (0, 50%]; no SMA-200 filter was applied
- 4. no absolute-momentum gate: held names include some with negative trailing-12m return; Elendel's own gate would have excluded them
- 5. chassis intact: weights <= 5% each, total <= 1, positions only in scored names; get_exit_signals runs on a held name and returns the Elendel keys"""
-import os, sys, importlib, numpy as np, pandas as pd, warnings
+"""Checks for CSMValue.  python3 test_csm_value.py     (needs only this folder, the OHLCV folder and the raw fundamentals JSON folder)
+ 1. E/P at month-ends re-derived independently from the loader's results table (400 random stock-months)
+ 2. no look-ahead: data truncated at 2023-06-30 gives identical factor rows through 2023-03-31 (and identical target positions)
+ 3. universe: every scored name is inside liquidity ranks 301-1000 with positive E/P <= 50%, positive TTM profit and rising quarterly profit
+ 4. no absolute-momentum gate: held names include some with negative trailing-12m return
+ 5. chassis intact: weights <= 5%, total <= 1, positions only in scored names; get_exit_signals keeps the Elendel interface
+ 6. units: restoring today's share units cuts the number of >2x market-cap jumps between consecutive filings of split/bonus companies (vs raw share counts)
+ 9. engine accounting reconciles with the trade log; 10. full-engine truncation invariance
+ 7. self-contained: no source file in this folder reads pit_harness, a parquet/pickle cache, or another project's code"""
+import glob, os, re, sys, numpy as np, pandas as pd, warnings
 warnings.filterwarnings('ignore')
 HERE = os.path.dirname(os.path.abspath(__file__)); sys.path.insert(0, HERE)
-LIVE = '/Users/hemantsoni/Documents/long_only_strategies/Old_live_strategies'; sys.path.insert(0, LIVE)
-ele = importlib.import_module('run_csm_elendel_backtest')
+import run_csm_value_backtest as rb
 from csm_value_strategy import CSMValue
-from value_fundamentals import build_results
+import fundamentals_loader as fl
 fails = []
 def check(name, ok, info=''):
     print(('PASS ' if ok else 'FAIL ') + name + (f'  [{info}]' if info else '')); (None if ok else fails.append(name))
-prices, volumes, highs, lows, opens = ele.load_data(ele.data_folder_path)
+prices, volumes, highs, lows, opens = rb.load_data(rb.data_folder_path)
 sl = lambda d: d.loc['2001-01-01':'2025-06-30']
 prices, volumes, highs, lows, opens = map(sl, (prices, volumes, highs, lows, opens))
-prices, highs, lows, opens = ele.mask_corporate_actions(prices, highs, lows, opens)
-bench = ele.build_benchmark(prices)
+prices, highs, lows, opens = rb.mask_corporate_actions(prices, highs, lows, opens)
+bench = rb.build_benchmark(prices)
 mk = lambda p, v, h, l, o, b: CSMValue(prices_df=p, volumes_df=v, highs_df=h, lows_df=l, opens_df=o, benchmark_series=b)
 st = mk(prices, volumes, highs, lows, opens, bench); st.calculate_factors(); pos = st.get_positions()
 F = st.factors; ep = st._legs_unfiltered['EP']
 # 1
-raw = build_results(symbols=list(prices.columns)); rng = np.random.default_rng(5); mp = prices.resample('ME').last(); bad = 0; n = 0
+raw = fl.load_results(symbols=list(prices.columns)); rng = np.random.default_rng(5); mp = prices.resample('ME').last(); bad = 0; n = 0
 Fn = F.dropna(how='all')
 for _ in range(400):
     d = Fn.index[rng.integers(0, len(Fn))]; row = Fn.loc[d].dropna(); s = row.index[rng.integers(0, len(row))]
     g = raw[(raw.symbol == s) & (raw.filed <= d)].sort_values('filed'); last = g.iloc[-1]
-    exp = last.np_ttm / (mp.loc[d, s] * last.shares); n += 1
+    exp = last.np_ttm / (mp.loc[d, s] * last.shares_adj); n += 1
     if (d - last.filed).days > st.results_max_age_days or not np.isclose(exp, ep.loc[d, s], rtol=1e-9): bad += 1
-check('1. E/P re-derived independently from raw results', bad == 0, f'{n} samples, {bad} mismatches')
+check('1. E/P re-derived independently from the results table', bad == 0, f'{n} samples, {bad} mismatches')
 # 2
 cut = pd.Timestamp('2023-06-30'); p2, v2, h2, l2, o2 = [d.loc[:cut] for d in (prices, volumes, highs, lows, opens)]
 s2 = mk(p2, v2, h2, l2, o2, bench.loc[:cut]); s2.calculate_factors(); pos2 = s2.get_positions()
 idx = F.index[F.index <= '2023-03-31'].intersection(s2.factors.index)
-same = all(np.allclose(F.loc[d].fillna(-99).values, s2.factors.loc[d].fillna(-99).values) for d in idx)
-check('2a. factor rows identical on truncated data', same, f'{len(idx)} months')
+check('2a. factor rows identical on truncated data', all(np.allclose(F.loc[d].fillna(-99).values, s2.factors.loc[d].fillna(-99).values) for d in idx), f'{len(idx)} months')
 pi = pos.index[pos.index <= '2023-03-31'].intersection(pos2.index)
 check('2b. target positions identical on truncated data', np.allclose(pos.loc[pi].values, pos2.loc[pi].values), f'{len(pi)} months')
 # 3
 dv = (prices * volumes).rolling(63, min_periods=21).median().shift(1).resample('ME').last().reindex(F.index).rank(axis=1, ascending=False, method='min')
-sc = F.notna()
-inband = ((dv >= 301) & (dv <= 1000)) | ~sc
-check('3a. scored names are inside liquidity ranks 301-1000', bool(inband.all().all()))
-epx = ep.reindex(index=F.index, columns=F.columns)
+sc = F.notna(); epx = ep.reindex(index=F.index, columns=F.columns)
+check('3a. scored names are inside liquidity ranks 301-1000', bool((((dv >= 301) & (dv <= 1000)) | ~sc).all().all()))
 check('3b. scored names have positive E/P <= 50%', bool(((epx > 0) | ~sc).all().all() and ((epx <= 0.5) | ~sc).all().all()))
+gr = fl.monthly_frame(raw, 'sg_np', F.index, F.columns, st.results_max_age_days); ttm = fl.monthly_frame(raw, 'np_ttm', F.index, F.columns, st.results_max_age_days)
+check('3c. scored names have positive TTM profit and rising quarterly profit', bool(((ttm > 0) & (gr > 0) | ~sc).all().all()))
 # 4
 m12 = (mp.shift(1) / mp.shift(13) - 1).reindex(pos.index); held = (pos > 0)
 neg_held = int(((m12 <= 0) & held).sum().sum()); tot = int(held.sum().sum())
@@ -55,5 +56,81 @@ check('5a. weights <= 5% and total <= 1', bool((pos.max(axis=1) <= 0.0500001).al
 check('5b. positions only in scored names', bool(((pos > 0) & ~F.reindex(pos.index).notna()).sum().sum() == 0))
 t = pos.index[(pos > 0).sum(axis=1) > 5][-1]; tk = pos.loc[t][pos.loc[t] > 0].index[0]
 g = st.get_exit_signals({tk: dict(entry_price=100.0, entry_date='2025-01-02', peak_price=105.0, atr_stop=0.0)}, {tk: dict(close=99.0)}, today='2025-02-03')
-check('5c. get_exit_signals runs and returns the Elendel interface keys', set(g) == {'exits', 'holds', 'crash_guard_fired', 'high_vol'})
+check('5c. get_exit_signals returns the Elendel interface keys', set(g) == {'exits', 'holds', 'crash_guard_fired', 'high_vol'})
+# 6
+rows = []
+for p in sorted(glob.glob(fl.FUNDAMENTALS_DIR + '/*.json')): rows.extend(fl._read_symbol(p))
+df = pd.DataFrame(rows); big_raw = big_adj = pairs = 0
+for sym, g in df.groupby('symbol'):
+    sh = g.groupby('period_end').shares.median().sort_index().dropna()
+    if len(sh) < 2 or sym not in prices.columns: continue
+    f = fl._split_factor_per_period(sh)
+    if f.isna().any() or not (np.abs(f - 1) > 1e-9).any(): continue
+    px = prices[sym].dropna(); filed = g.groupby('period_end').filed.max().reindex(sh.index); ix = pd.DatetimeIndex(filed.values)
+    p = px.reindex(px.index.union(ix.unique())).ffill().loc[ix].values
+    for series, which in ((sh.values, 'raw'), ((sh * f).values, 'adj')):
+        d = np.abs(np.diff(np.log(p * series))); d = d[np.isfinite(d)]
+        if which == 'raw': big_raw += int((d > 0.69).sum())
+        else: big_adj += int((d > 0.69).sum())
+    pairs += len(sh) - 1
+check('6. restoring share units removes spurious >2x market-cap jumps', big_adj < 0.7 * big_raw, f'{pairs} filing pairs of split/bonus companies: {big_raw} jumps with raw shares -> {big_adj} with restored units')
+
+# 8. corporate-action mask, re-derived independently from raw prices and the results table
+r1 = prices.pct_change(fill_method=None); mday = prices.isna() & prices.shift(1).notna() & prices.shift(-1).notna()
+cl = mday.copy()
+for c_ in (1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 10.0):
+    cl |= (r1 - (1 / c_ - 1)).abs() <= st.ca_tol; cl |= (r1 - (c_ - 1)).abs() <= st.ca_tol * c_
+stale = st.ca_stale_mask; sm = stale[stale.any(axis=1)]
+rng = np.random.default_rng(11); bad_s = 0; n_s = 0
+pairs = [(d, c) for d in sm.index for c in sm.columns[sm.loc[d].values]]
+for k in rng.choice(len(pairs), size=min(300, len(pairs)), replace=False):
+    d, s_ = pairs[k]; g = raw[(raw.symbol == s_) & (raw.filed <= d)].sort_values('filed'); L = g.filed.iloc[-1]
+    seg = cl.loc[(cl.index > L) & (cl.index <= d), s_]; n_s += 1
+    bad_s += (not bool(seg.any()))
+check('8a. every sampled stale-mask month really has a corporate-action cliff after its latest filing', bad_s == 0, f'{n_s} samples, {bad_s} wrong')
+bad_f = 0; n_f = 0
+scored = F.notna()
+for _ in range(400):
+    d = F.index[scored.any(axis=1).values][rng.integers(0, int(scored.any(axis=1).sum()))]; row = scored.loc[d]; s_ = row.index[row.values][rng.integers(0, int(row.sum()))]
+    L = raw[(raw.symbol == s_) & (raw.filed <= d)].sort_values('filed').filed.iloc[-1]
+    n_f += 1; bad_f += bool(cl.loc[(cl.index > L) & (cl.index <= d), s_].any())
+check('8b. no scored stock-month has a cliff after the filing it uses', bad_f == 0, f'{n_f} samples, {bad_f} violations')
+tot_steps = skipped = 0
+for sym, g in df.groupby('symbol'):
+    sh = g.groupby('period_end').shares.median().sort_index().dropna()
+    f_noc = fl._split_factor_per_period(sh)
+    if f_noc.isna().any(): continue
+    steps_all = (f_noc / f_noc.shift(-1)).iloc[:-1] if len(f_noc) > 1 else pd.Series(dtype=float)
+    tot_steps += int((np.abs(steps_all - 1) > 1e-9).sum())
+res_masked = fl.load_results(symbols=list(prices.columns))
+print(f'   info: clean split/bonus steps seen in filings: {tot_steps}')
+
+# 9. engine accounting: booked P&L of the closed trades must agree with the trade log's own fills (this is what exposed the original Elendel booking)
+import execution_replay as er
+rb_res = rb.backtest_event_driven(st, initial_capital=100_000, transaction_cost=0.003, risk_free_rate=0.0)
+Wx = rb_res['executed_weights']; ix = Wx.index; cx = {x: k for k, x in enumerate(Wx.columns)}
+DRx = prices.pct_change(fill_method=None).fillna(0).reindex(index=ix, columns=Wx.columns).values
+metax = pd.DataFrame(st.position_metadata); metax = metax[(metax.Entry_Date >= pd.Timestamp('2019-06-03')) & (metax.Exit_Reason != 'END_OF_PERIOD') & (metax.Exit_Date <= pd.Timestamp('2025-06-30'))]
+orig = sum((Wx.values[ix.get_loc(t.Entry_Date):ix.get_loc(t.Exit_Date), cx[t.Ticker]] * DRx[ix.get_loc(t.Entry_Date):ix.get_loc(t.Exit_Date), cx[t.Ticker]]).sum() for t in metax.itertuples())
+fills = sum(Wx.values[ix.get_loc(t.Entry_Date):ix.get_loc(t.Exit_Date), cx[t.Ticker]].mean() * (t.Exit_Price / t.Entry_Price - 1) for t in metax.itertuples())
+net_f, _ = er.faithful_net_returns(st, rb_res)
+check('9a. runner returns equal the independent execution-faithful replay (CAGR within 0.1 pt)', abs(((1 + rb_res['net_returns'].loc['2019-06-03':'2025-06-30']).prod() ** (365.25 / (pd.Timestamp('2025-06-30') - pd.Timestamp('2019-06-03')).days) - 1) - ((1 + net_f.loc['2019-06-03':'2025-06-30']).prod() ** (365.25 / (pd.Timestamp('2025-06-30') - pd.Timestamp('2019-06-03')).days) - 1)) < 0.001)
+say_ratio = orig / fills
+print(f'   info: the ORIGINAL Elendel booking would credit {orig:+.3f} of equity for these trades vs {fills:+.3f} implied by buy-and-hold at their fills ({say_ratio:.2f}x); the runner uses execution-faithful booking instead')
+check('9b. the original booking overstates trade P&L by > 1.3x (documents why EXECUTION_FAITHFUL_ACCOUNTING is on)', say_ratio > 1.3)
+check('9c. EXECUTION_FAITHFUL_ACCOUNTING is switched on in the runner', rb.EXECUTION_FAITHFUL_ACCOUNTING is True)
+# 10. full-engine truncation invariance (signals, regimes, vol scaling, stops, fills all causal)
+cut = pd.Timestamp('2023-03-31'); p2, v2, h2, l2, o2 = [d.loc[:cut] for d in (prices, volumes, highs, lows, opens)]
+s3 = mk(p2, v2, h2, l2, o2, bench.loc[:cut]); s3.calculate_factors(); s3.get_positions()
+r3 = rb.backtest_event_driven(s3, initial_capital=100_000, transaction_cost=0.003, risk_free_rate=0.0)['net_returns']
+jj = r3.index.intersection(rb_res['net_returns'].index); jj = jj[jj <= cut - pd.Timedelta(days=10)]
+check('10. the FULL engine path is identical when the data is cut at 2023-03-31 (nothing uses the future)', np.abs(r3[jj] - rb_res['net_returns'][jj]).max() < 1e-10, f'{len(jj)} days, max diff {np.abs(r3[jj] - rb_res["net_returns"][jj]).max():.1e}')
+# 7
+bad_refs = []
+for f in glob.glob(os.path.join(HERE, '*.py')):
+    if os.path.basename(f) in ('test_csm_value.py', '_generate_elendel_chassis.py'): continue
+    src = open(f).read()
+    for pat in ('pit_harness', 'read_parquet', 'to_parquet', 'pickle.load', 'factor_research', 'momentum_gold', 'momentum_value', 'csm_pead'):
+        if pat in src: bad_refs.append((os.path.basename(f), pat))
+check('7. strategy, loader and runner do not touch pit_harness / caches / other projects', not bad_refs, str(bad_refs) if bad_refs else 'clean')
 print('\nALL PASS' if not fails else f'\nFAILED: {fails}'); sys.exit(1 if fails else 0)

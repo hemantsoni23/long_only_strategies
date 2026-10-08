@@ -1,67 +1,70 @@
-# csm_value — CSM Earnings-Yield
+# csm_value — CSM Earnings-Yield (Elendel chassis)
 
-**Two implementations live here.**
-* **`csm_value_strategy.py` + `run_csm_value_backtest.py` — the main one: the Elendel chassis** (derived from `csm_elendel_strategy.py` / `run_csm_elendel_backtest.py` by `_generate_elendel_chassis.py`, the way Zenith/Quad were derived). Only the ranking signal and the universe differ; sizing (inverse-vol, 5% cap), hysteresis + swap gap, three-layer hard stops, Crash Guard, correlation guard, 15% vol target, BULL/BEAR/HIGH_VOL/PANIC leverage, loss-scaled cooldown, T+1 fills, 0.3% cost, trade/reject/daily logs, IC/ICIR and realised-IC sections are Elendel's, so the report is the same as your other strategies'.
-* `value_strategy.py` + `run_value_backtest.py` — the earlier lightweight version (simple stops, no regime overlays); kept for reference (results in the second half of this file).
+Long-only value strategy: buy cheap companies whose profits are still rising, no price-trend condition. Same engine and report as `csm_elendel_strategy.py` (inverse-vol sizing, hysteresis + swap gap, 3-layer stops, Crash Guard, vol target, regime leverage, T+1 fills, 0.3% cost, logs, IC/ICIR).
 
-## Elendel-chassis version
-Signal: E/P = TTM net profit / (month-end price × shares) from point-in-time quarterly results (usable from the filing date, expires after 140 days), among names with positive TTM profit, rising latest-quarter profit and E/P ≤ 50%; z-scored. Universe: liquidity ranks **301–1000** (the 300 largest excluded), price > ₹20, circuit/falling-knife filters as Elendel, **no SMA-200 trend filter and no absolute-momentum gate**. Top 15, buffer 0.2, swap gap 10, all other Elendel defaults (idle cash earns 0%, as in the Elendel runner).
+## Files (everything needed is in this folder + two data folders)
+| File | Role |
+|---|---|
+| `csm_value_strategy.py` | the strategy class `CSMValue` (derived from the Elendel file by `_generate_elendel_chassis.py`; only the signal and universe differ) |
+| `run_csm_value_backtest.py` | backtest runner / report (Elendel's, renamed) |
+| `fundamentals_loader.py` | reads the raw NSE XBRL JSON directly and builds the point-in-time results table — **no cache, no other project** |
+| `train_test_protocol.py` | design choices on TRAIN only, test scored once |
+| `ablation_versions.py` | v1 / v2 / v3 data-handling ablation (table below) |
+| `test_csm_value.py` | 18 checks (causality, independent E/P and mask re-derivation, unit consistency, accounting reconciliation, full-engine truncation, self-containment) |
+| `audit_lookahead.py`, `audit_engine_accounting.py`, `execution_replay.py`, `AUDIT.md` | the adversarial audit and the execution-faithful replay |
 
-Result (`python3 run_csm_value_backtest.py`; 2019-06-03 → 2025-06-30; Elendel report conventions, Sharpe/Sortino with rf = 0):
+Data: OHLCV CSVs `/Users/hemantsoni/Documents/upstox_data_folder/ohlcv_data` and raw fundamentals `/Users/hemantsoni/Documents/stocks_fundamentals/fundamentals/*.json` (override with env `CSM_FUNDAMENTALS_DIR`). Parsing all 2,019 JSON files takes ~4 s per run, so nothing is cached.
+Not used any more: `upstox_data_folder/pit_harness/cache/facts_quarterly.parquet`. (That folder exists — created 2026-09-08/09 — it is a separate "point-in-time harness" project whose `io_fundamentals.py` flattened these same JSON files into parquet caches. The earlier version of this strategy read its parquet; this version reads the JSON itself.)
 
-| | CAGR | Vol | Max DD | Sharpe | Sortino | Calmar |
-|---|---|---|---|---|---|---|
-| **CSM Value** | **44.7%** | 14.3% | **−12.6%** | **2.70** | 4.04 | 3.56 |
-| Elendel (same window) | 43.2% | 14.4% | −12.8% | 2.61 | 3.82 | 3.39 |
-| Zenith | 35.1% | 13.0% | −11.9% | 2.42 | 3.54 | 2.94 |
-| Quad | 25.0% | 13.8% | −15.9% | 1.72 | 2.46 | 1.57 |
+## The signal and where each number comes from
+E/P = **TTM net profit ÷ market cap**, where market cap = **month-end close (OHLCV) × shares outstanding (fundamentals)**:
+* price — `close` from the OHLCV CSV, as in every other strategy;
+* TTM net profit — sum of the last four consecutive quarterly results (reported net-profit line, same definition everywhere) from the JSON, each usable only from its `filed_date`;
+* shares — `paid_up_equity_share_capital ÷ face_value_per_share` from the same filing (face value must be 0.5/1/2/5/10/100), restored to today's units (below).
+So this is **not an OHLCV-only strategy**: it needs the fundamentals JSON. Eligible: liquidity ranks 301–1000, TTM profit > 0, latest-quarter profit rising year on year, E/P ≤ 50%, result no older than 140 days, no corporate-action cliff since that result. Rank by E/P, top 15, Elendel hysteresis/sizing/stops. No SMA-200 filter and no absolute-momentum gate.
 
-535 trades, trade win rate 47%, payoff 2.8, profit factor 2.55, median trade −1.3% (a skew book), average MAE −7.7% / MFE +29.6%; exits: rebalance 141, hard stop 378 (PEAK_HARD 240, ENTRY_HARD 97, GAP_DOWN_OPEN 41), Crash Guard 1. Yearly returns: 2020 +69%, 2021 +107%, 2022 +7%, 2023 +73%, 2024 +38%, 2025 H1 +3% (year max drawdowns −7% to −13%).
-IC/ICIR of the E/P factor (filtered universe): 1m +0.032 (ICIR 0.27, hit 66%), 3m +0.053, 6m +0.071, 12m +0.097 (ICIR 0.93, NW-t 3.6; the slow, 12-month horizon is typical of value).
+## Look-ahead / data audit (what was found and fixed)
+1. **Split-adjusted prices × unadjusted share counts — a real leak, fixed.** The OHLCV prices are retroactively split/bonus-adjusted (HDFCBANK shows ~₹550 in 2019; it traded above ₹1,100 after its 2019 split). A 2019 filing's share count is in 2019 units, so adjusted-price × filed-shares understates market cap by every later split/bonus — stocks that later split look 2–10× cheaper in the past (future information). `fundamentals_loader.py` multiplies each filing's share count by the clean split/bonus ratios (1.5, 2, 2.5, 3, 4, 5, 10 or reciprocals, ±3%) visible in later filings, restoring the units the prices are already in; genuine issuance/mergers are left alone. Check: for 458 companies with detected splits, jumps >2× in market cap between consecutive filings fall from 610 to 235 (`test_csm_value.py` #6).
+2. **Corporate-action mask (new, in the spirit of the runner's `mask_corporate_actions`).** A *cliff* is a one-day price move that matches a clean split/bonus (−33%, −50%, −60%, −67%, −75%, −80%, −90%, or a clean reverse-split jump, ±3 points) or a day the runner already NaN'd (move outside [−40%, +300%]). It is used twice: (a) a split seen in the filings is restored **only if the price series was adjusted** for it (no cliff around it) — if the vendor left it unadjusted, prices and filings already agree and nothing is restored; (b) a stock-month is **excluded** when a cliff occurred after the latest filing it uses (the filed share count is then stale): 3,900 stock-months. Independently re-derived in tests #8a/#8b.
+3. **Net-profit definition must be the same in every quarter.** Profit "attributable to owners" is reported in only 80% of consolidated and 10% of standalone filings, and 1,053 of ~1,600 consolidated companies mix both across quarters, so "owners, else total" corrupts trailing sums and year-on-year growth. The default is now the reported net-profit line (`profit_basis='total'`, same definition everywhere); its limitation is that minority interests are included. (A rewrite of the loader on 2026-10-08 briefly used the inconsistent "owners" form; that is what produced the interim 30.0% / 1.93 figure.)
+4. **No cache, no other project.** The loader reads the raw JSON directly; `test_csm_value.py` #7 fails if any file here touches `pit_harness`, parquet/pickle caches or another project's code.
+5. Timing: a result counts only from its filing date and the trade is the next close; out-of-order and >120-day-late filings are dropped; truncating the data at any date reproduces identical signals/positions up to it (test #2).
+6. **Residual that cannot be fixed from the data:** a split/bonus *after* the last filing (results end Dec-2024) that the vendor *did* adjust leaves historical share counts in old units for that stock; no cliff and no filing reveals it (volume is adjusted too, so it carries no information; I tested this). Upstox corporate actions are not available, so this stays as a known, small bias (it makes some historical E/P too high). Also shared with the live strategies: survivorship and split-adjusted `min_price`.
 
-**Correlation and portfolio effect (same window; `daily log`s):** raw daily correlation with Elendel / Zenith / Quad **0.67 / 0.64 / 0.71** (live engines among themselves 0.82 / 0.72 / 0.66). With the equal-weight market removed: **0.36 / 0.37 / 0.42** (live engines 0.42–0.70 among themselves). Beta to the market 0.61 (engines 0.46–0.56).
-Blend with the equal-weight live trio: value 10% / 20% / 30% / 50% → Sharpe(rf6) 2.10 / 2.18 / 2.24 / 2.32 (trio alone 2.01), CAGR +1.1 / +2.2 / +3.2 / +5.3 pt, max drawdown unchanged at −12.6%. On the Elendel chassis it is a genuine addition to the trio, unlike the lightweight version below (which was a full-beta book).
+### Ablation — what each data fix is worth (same chassis and configuration, execution-faithful accounting, Sharpe rf 0)
+| | FULL 2019-06→2025-06 | TRAIN 2019-06→2021-12 | TEST 2022-01→2025-06 |
+|---|---|---|---|
+| v1 leaky (raw filed shares) | 25.2% / 1.54 / −26.2% | 44.3% / 2.61 / −16.7% | 12.8% / 0.83 / −24.1% |
+| v2 units restored | 20.2% / 1.27 / −23.0% | 28.1% / 1.71 / −19.9% | 14.8% / 0.95 / −23.0% |
+| **v3 + corporate-action mask (default)** | **20.0% / 1.26 / −23.0%** | 28.7% / 1.74 / −19.8% | **14.0% / 0.92 / −23.0%** |
 
-Tests (`python3 test_csm_value.py`, all pass): E/P re-derived independently from raw results for 400 random stock-months; truncating the data at 2023-06 leaves factor rows and target positions identical; scored names are all inside ranks 301–1000 with positive E/P ≤ 50%; no absolute-momentum gate (26% of held name-months have negative trailing-12m return); weights ≤ 5%, total ≤ 1; `get_exit_signals` keeps Elendel's interface.
+## 7. Engine accounting (the largest correction) — see `AUDIT.md`
+The Elendel engine books executed weight × same-day close-to-close return, which credits entry gaps the buyer never owned and never charges the move from the previous close to a stop fill (−5.1% on average, 385 stops). `run_csm_value_backtest.py` therefore books **execution-faithful returns** (`EXECUTION_FAITHFUL_ACCOUNTING = True`). The same fix applied to the live engines (read-only replay) lowers their backtests by 17–26 CAGR points. All numbers in this README are execution-faithful; the earlier ones (44.7% → 38.5% CAGR) used the original booking.
 
-Caveats: fundamentals cover 2019-02→2025-06 only — one cheap-cyclical/PSU/commodity regime, 6 years, survivorship in the cheap end; the chassis parameters were not tuned, but the design choices (ranks 301–1000, growth filter) came from earlier look-ups in the same short window. Capacity: ranks 301–1000 hold ~₹5–17 cr/day per name. Needs the quarterly-results feed refreshed for live use (ends 2024Q4 results, filed ≤ 2025-04). Kill/review: pause if trailing-12-month return trails the equal-weight market by > 25 points or the median pick P/E stays < ~4.
+## Train / test
+Requested: train 2002–2013, test 2014–2025. **Not possible for this signal** — the fundamentals start with FY2018-19 results, so TTM earnings exist only from 2019 (the code runs unchanged if you obtain older results). Instead (`train_test_protocol.py`): **TRAIN 2019-06-03 → 2021-12-31** chooses among 8 pre-declared configurations (net-profit definition × liquidity-rank floor {1, 301} × rising-profit filter on/off) by train Sharpe; **TEST 2022-01-03 → 2025-06-30** is scored for the winner only.
+Train winner (unchanged by the accounting fix): total profit, ranks 301–1000, growth on — train CAGR 28.7%, Sharpe 1.74. **Test: CAGR 14.0%, vol 15.9%, Sharpe 0.92, max DD −23.0%, Calmar 0.61.** The other seven configurations on test (not used for any choice): CAGR 6.1%–18.2%. Limits: the E/P idea and the candidate list came from earlier looks at 2019–2025; the train window is 31 months.
 
----
-## Earlier lightweight version (`value_strategy.py`, `run_value_backtest.py`) — for reference
+## Final result (defaults = train winner; Elendel report layout; execution-faithful; Sharpe rf 0)
+| | CAGR | Vol | Max DD | Sharpe | Calmar |
+|---|---|---|---|---|---|
+| **CSM Value, FULL 2019-06→2025-06** | **20.0%** | 15.7% | **−23.0%** | **1.26** | 0.87 |
+| **CSM Value, TEST 2022-01→2025-06** | **14.0%** | 15.9% | −23.0% | 0.92 | 0.61 |
+| Elendel / Zenith / Quad, full window, same faithful booking | 17.6 / 14.1 / 1.7% | | −33.0 / −25.1 / −35.6% | 1.08 / 0.97 / 0.19 | |
+| Elendel / Zenith / Quad, test window, same faithful booking | 4.0 / 2.6 / −8.7% | | −33.0 / −25.1 / −35.3% | 0.32 / 0.25 / −0.53 | |
+544 trades, win rate 50%, median trade −0.1%, payoff 2.5, avg MAE −7.5% / MFE +28.8%; factor IC (1m) +0.018 (t 1.0), 12m +0.071 (NW-t 2.8): a slow signal.
+Correlation with the engines (daily, faithful): 0.68 / 0.65 / 0.71; market-residual 0.36 / 0.35 / 0.39; beta to the market 0.69. Blend with their equal-weight trio (Sharpe rf 6%): value 0 / 10 / 20 / 30 / 50% → 0.42 / 0.48 / 0.54 / 0.60 / 0.71, max DD −30.4% → −21.2%.
 
-A standalone strategy + backtest module in the same two-file layout as the live ones (`value_strategy.py` ↔ `csm_*_strategy.py`, `run_value_backtest.py` ↔ `run_csm_*_backtest.py`), plus `value_fundamentals.py` (point-in-time results) and `test_value.py`.
-Nothing in `Old_live_strategies` is modified; data loading, corporate-action masking and the equal-weight benchmark are imported from the live Elendel runner.
+## Is there an edge? (permutation placebo, `AUDIT.md`)
+Shuffling E/P across stocks inside each month (same universe, eligibility, chassis, costs; 40 runs) gives 13.8% CAGR / Sharpe 0.92 for random picks; the real strategy is +6.2 CAGR points above that, **p = 0.07 (CAGR) / 0.10 (Sharpe) — suggestive, not significant at 5%**. It also earns less than the equal-weight pool it picks from (38.9% CAGR before costs, but with a −44.7% drawdown vs −23.0%).
 
-## Rules
-Month-end signal, trade at the next close. **Eligible:** liquidity rank 301–1000 (63-day median traded value; the 300 largest excluded), price > ₹20, ≤ 5 circuit-locked days in 63, latest quarterly result filed ≤ 140 days ago,
-TTM net profit > 0, latest quarter's yoy net-profit growth > 0, E/P ≤ 50%. **Rank** by E/P = TTM net profit / (price × shares). **Hold** the top 20; a name stays until rank > 30 or it stops being eligible; equal weight 1/20 at entry, survivors not rebalanced.
-**Risk:** −20% hard stop from entry (close-based, sell next open less 0.3% slippage, 20-day cooldown); new entries at 70% size when the equal-weight benchmark is below its SMA200; idle cash earns 6.5%; 0.3% cost per side. No price-trend condition anywhere.
+## Verdict
+Implemented, self-contained and leak-audited (14 unit tests + the adversarial audit pass; the full engine is identical when the future is cut off). After the accounting correction it is a modest strategy: 20% CAGR / Sharpe 1.26 over the window, 14% / 0.92 on the held-out 2022-25 test, better than the live engines on the same faithful booking, but its ranking edge over random picks is not statistically established and capacity is thin (a ₹5 cr book makes a 5% position 7% of typical daily value). Treat as a paper-trading candidate, not a proven edge.
 
-## Result (2019-08 → 2025-06, 5.8 years; defaults fixed before running, nothing tuned)
-CAGR **49.6%**, vol 22.2%, Sharpe (rf 6%) **1.67**, max drawdown **−30.8%**, 382 trades, win rate 57%, payoff 3.0, ~27% monthly turnover. Years: 2019 +8, 2020 +52, 2021 +151, 2022 +6, 2023 +96, 2024 +42, 2025 H1 −14 (equal-weight market: +5, +56, +138, +29, +62, +53, −6).
-Sensitivity (`--sensitivity`, one-at-a-time; every row reported): Sharpe 1.49–1.78 and CAGR 42–56% across top-15/30, no growth filter, no bear scaling, stop 12%/none, universe variants, 2× costs, 0% cash yield — the result is not fragile to the design.
-
-## Correlation — the point of building it (`output/value_report.txt`)
-| | corr with Elendel / Zenith / Quad (daily) | monthly |
-|---|---|---|
-| Earnings-Yield | 0.67 / 0.62 / 0.70 | 0.71 / 0.58 / 0.72 |
-| for comparison, live engines among themselves | 0.82 / 0.72 / 0.66 | |
-
-**The raw correlation is mostly market beta**: EY's beta to the equal-weight market is ~1.0 while the live engines run ~0.55 (they hold ~40% cash and cut exposure in weak regimes). With the equal-weight market removed from every stream, EY's residual correlation with Elendel/Zenith/Quad is **0.20 / 0.20 / 0.26**, versus 0.34–0.64 among the live engines themselves — the stock-selection stream is genuinely different, the market exposure is not.
-Blend with the live trio (equal weight, 2020-09→2025-06): +10% EY: Sharpe 2.08 → 2.11, CAGR +1.9 pt, max DD −12.6% → −14.6%; +20% EY: Sharpe 2.11, CAGR +3.9 pt, DD −16.5%. The Sharpe break-even rule (new Sharpe > corr × portfolio Sharpe) is met only narrowly (1.67 vs 1.56). **So it is a modest, return-adding diversifier, not a drawdown reducer.**
-Lowering the correlation further would need the market component taken out (an index-futures hedge; not long-only) — untested.
-
-## Checks (`python3 test_value.py`, all pass)
-E/P re-derived independently from raw results for 400 random (stock, month) pairs; truncating the data at 2023-06 leaves E/P rows and equity identical; `get_exit_signals` agrees with all 66 simulated stops; `get_target_portfolio` reproduces the simulated rebalance sells exactly and buys as a subset across 69 rebalances; position/weight/universe accounting.
-
-## Use
+## Run
 ```
-python3 run_value_backtest.py               # report, plots, trade/daily logs -> ./output
-python3 run_value_backtest.py --sensitivity
+python3 run_csm_value_backtest.py       # Elendel-style report + logs/plots in ./output (git-ignored)
+python3 train_test_protocol.py          # train/test table -> output/train_test_report.txt
+python3 ablation_versions.py            # what each data fix is worth
+python3 test_csm_value.py
 ```
-Live: at each month-end after the close call `get_target_portfolio(as_of, current_holdings)` → keep/sell/buy lists and the new-position weight; each day call `get_exit_signals(portfolio, live_data)` for the stop. Needs the quarterly-results feed refreshed (the file ends with 2024Q4 results, filed ≤ 2025-04).
-
-## Caveats — read before sizing
-Fundamentals cover 2019-02→2025-06 only; this is one cheap-cyclical/PSU/commodity-value regime (median picks have P/E ≈ 5). Survivorship: cheap stocks that later died are missing. Ranks 301–1000 hold ~₹5–17 cr of daily value per name today, so capacity is a few crore per strategy.
-Quarterly results can contain one-offs (other income, exceptional gains) that inflate E/P; the 50% cap and the growth filter only partly guard against it. 2025 H1 was −14%: the strategy has no history in a value-hostile regime.
-Kill/review: pause if trailing-12-month return is below the equal-weight market by more than 25 points, or if the median pick P/E stays under ~4 (peak-earnings crowding).

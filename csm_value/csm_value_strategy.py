@@ -10,7 +10,7 @@ import pandas as pd
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from value_fundamentals import build_results, monthly_frame   # point-in-time quarterly results
+from fundamentals_loader import load_results, monthly_frame   # point-in-time quarterly results read straight from the raw NSE XBRL JSON
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -27,17 +27,21 @@ class CSMValue:
         opens_df            = None,
         benchmark_series    = None,
         # Ranking signal: E/P (TTM net profit / market cap) among names with positive TTM profit AND rising latest-quarter profit; point-in-time quarterly results
-        results_df          = None,  # optional pre-built results table (value_fundamentals.build_results); default loads facts_quarterly.parquet
+        results_df          = None,  # optional pre-built results table (fundamentals_loader.load_results); default reads the raw JSON directory
         results_max_age_days = 140,  # a quarterly result stays 'current' this long after its filing date
         require_profit_growth = True,  # latest quarter's yoy net profit must be rising
         max_ep              = 0.50,  # data-error / one-off guard: ignore E/P above 50%
         min_eligible        = 60,    # fewer fundamentals-eligible names than this in a month -> no signal that month
+        use_ca_mask         = True,  # corporate-action mask (price cliffs): see calculate_factors
+        profit_basis        = 'total',  # 'total' = reported net profit (consistent definition); 'owners' = attributable-to-owners with total as fallback (inconsistent coverage, ablation only)
+        restore_units       = True,  # restore filed share counts to today's units (matches the split-adjusted prices). False = the old leaky behaviour, for ablation only
+        ca_tol              = 0.03,  # a one-day move within this of a clean split/bonus cliff (-33%, -50%, -60%, -67%, -75%, -80%, -90%) counts as a corporate action
         abs_momentum_lookback_months = 12,  # kept only for the engine's bookkeeping: the value strategy has NO absolute-momentum gate (momentum_returns is set to a constant positive)
         abs_momentum_lag_months      = 1,
         # Universe
         top_n               = 15,
         min_price           = 20.0,
-        universe_top_n_min = 301,   # the 300 most liquid names are excluded (value works in the mid-liquidity band; see MASTER_RANKING.md)
+        universe_top_n_min = 301,   # liquidity ranks 301-1000 (the 300 most liquid names excluded): chosen on the TRAIN window by train_test_protocol.py (a near tie with a floor of 1)
         universe_top_n_max      = 1000,
         max_circuit_days    = 5,
         buffer_ratio        = 0.2,
@@ -115,6 +119,10 @@ class CSMValue:
         self.require_profit_growth = require_profit_growth
         self.max_ep                = max_ep
         self.min_eligible          = min_eligible
+        self.use_ca_mask           = use_ca_mask
+        self.restore_units         = restore_units
+        self.profit_basis          = profit_basis
+        self.ca_tol                = ca_tol
         self.abs_momentum_lookback_months = abs_momentum_lookback_months
         self.abs_momentum_lag_months      = abs_momentum_lag_months
 
@@ -259,13 +267,56 @@ class CSMValue:
         valid_universe = self.filter_universe(monthly_prices, monthly_avg_dvol, self.prices)
 
         # E/P, point-in-time: latest quarterly result filed on/before each month-end (expires after results_max_age_days), TTM net profit / (month-end price x shares outstanding)
-        res = build_results(symbols=list(self.prices.columns)) if self._results_in is None else self._results_in
+        # ── Corporate-action mask (price side), in the spirit of the runner's mask_corporate_actions ───────────────────────────────────────────────
+        # A corporate-action "cliff" is a one-day move that matches a clean split/bonus (-33%, -50%, -60%, -67%, -75%, -80%, -90%, or a clean reverse-split jump) or a day the runner already
+        # NaN'd (move outside [-40%, +300%]).  Two uses:
+        #  (a) a split seen in the filings is restored to today's units ONLY if the price series was adjusted for it (no cliff in the prices around it); if the vendor left it unadjusted the
+        #      prices and the filings are already in the same units, so nothing is restored;
+        #  (b) a stock-month is excluded when a cliff occurred AFTER the latest filing used for it: the filed share count is then stale relative to the price.
+        px_ca = self.prices
+        r1 = px_ca.pct_change(fill_method=None)
+        masked_day = px_ca.isna() & px_ca.shift(1).notna() & px_ca.shift(-1).notna()
+        ratios_ca = (1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 10.0)
+        cliff_ca = masked_day.copy()
+        for c_ in ratios_ca:
+            cliff_ca |= (r1 - (1.0 / c_ - 1.0)).abs() <= self.ca_tol          # forward split / bonus: price falls to 1/c
+            cliff_ca |= (r1 - (c_ - 1.0)).abs() <= self.ca_tol * c_          # reverse split: price rises c-fold
+        R_ca, M_ca, D_ca = r1.values, masked_day.values, px_ca.index
+        col_ca = {s_: i_ for i_, s_ in enumerate(px_ca.columns)}
+        def cliff_checker(sym, a, b, ratio):
+            j = col_ca.get(sym)
+            if j is None or a is None or b is None:
+                return False
+            i0, i1 = D_ca.searchsorted(pd.Timestamp(a)), D_ca.searchsorted(pd.Timestamp(b), side='right')
+            if i1 <= i0:
+                return False
+            seg, msk = R_ca[i0:i1, j], M_ca[i0:i1, j]
+            if ratio >= 1.0:
+                return bool(msk.any() or np.nanmin(np.append(seg, 0.0)) <= -0.8 * (1.0 - 1.0 / ratio))
+            return bool(msk.any() or np.nanmax(np.append(seg, 0.0)) >= 0.8 * (1.0 / ratio - 1.0))
+        res = (load_results(symbols=list(self.prices.columns), cliff_checker=(cliff_checker if self.use_ca_mask else None), restore_units=self.restore_units, profit_basis=self.profit_basis)
+               if self._results_in is None else self._results_in)
         idx = monthly_prices.index
         npttm  = monthly_frame(res, 'np_ttm', idx, self.prices.columns, self.results_max_age_days)
-        shares = monthly_frame(res, 'shares', idx, self.prices.columns, self.results_max_age_days)
+        shares = monthly_frame(res, 'shares_adj', idx, self.prices.columns, self.results_max_age_days)   # shares in today's (split-adjusted) units to match the split-adjusted prices
         growth = monthly_frame(res, 'sg_np', idx, self.prices.columns, self.results_max_age_days)
         ep = (npttm / (monthly_prices * shares)).replace([np.inf, -np.inf], np.nan)
         ok = (npttm > 0) & ep.notna() & (ep <= self.max_ep)
+        self.ca_stale_mask = pd.DataFrame(False, index=idx, columns=self.prices.columns)
+        if self.use_ca_mask:
+            filed_ns = monthly_frame(res.assign(filed_ns=res.filed.astype('int64').astype('float64')), 'filed_ns', idx, self.prices.columns, self.results_max_age_days)
+            cc = cliff_ca.fillna(False).astype('int32').cumsum().values
+            pos_me = D_ca.searchsorted(idx.values, side='right') - 1
+            Lns = filed_ns.values
+            valid_L = ~np.isnan(Lns)
+            L_dt = np.where(valid_L, Lns, 0).astype('int64').astype('datetime64[ns]')
+            pos_L = D_ca.searchsorted(L_dt.reshape(-1), side='right').reshape(Lns.shape) - 1
+            pos_L = np.clip(pos_L, 0, len(D_ca) - 1)
+            cols_ix = np.arange(cc.shape[1])[None, :].repeat(len(idx), axis=0)
+            stale = (cc[pos_me[:, None].repeat(cc.shape[1], axis=1), cols_ix] - cc[pos_L, cols_ix]) > 0
+            self.ca_stale_mask = pd.DataFrame(stale & valid_L, index=idx, columns=self.prices.columns)
+            ok &= ~self.ca_stale_mask
+            print(f"  [corporate-action mask] stock-months with a price cliff after the latest filing excluded: {int((self.ca_stale_mask & (npttm > 0)).sum().sum()):,}")
         if self.require_profit_growth:
             ok &= (growth > 0)
         ep_unf = ep.where(ok)

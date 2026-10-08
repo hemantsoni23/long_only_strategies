@@ -1,3 +1,5 @@
+> **Warning (2026-10-08):** absolute CAGR/Sharpe/drawdown figures in this document come from the Elendel engine's original booking (same-day weight × close-to-close return), which overstates results by ~17-26 CAGR points (see `csm_value/AUDIT.md`). Relative comparisons between variants may or may not survive; they have not been re-run.
+
 # Value × momentum on the real live engines
 
 Test of the lead idea in `../factor_research/MOMENTUM_LITERATURE_PLAYBOOK.md`: replace each engine's monthly score by
