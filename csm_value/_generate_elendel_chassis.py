@@ -145,7 +145,7 @@ new_gross = """    # Execution-faithful accounting (added in csm_value; the orig
     _w_ret = executed_weights.copy()
     _dr_f  = _dr.copy()
     _pp = strategy._prices_ff_backtest
-    if EXECUTION_FAITHFUL_ACCOUNTING:
+    if True:   # always computed so both bookings can be reported; EXECUTION_FAITHFUL_ACCOUNTING only chooses which one is the headline
         _idx_pos = {d_: k_ for k_, d_ in enumerate(executed_weights.index)}
         for meta in strategy.position_metadata:
             tk = meta['Ticker']
@@ -163,10 +163,29 @@ new_gross = """    # Execution-faithful accounting (added in csm_value; the orig
                     if pd.notna(xp_) and xp_ > 0 and pd.notna(pc_) and pc_ > 0:
                         _w_ret.at[ext, tk] = executed_weights.at[prev_d, tk]
                         _dr_f.at[ext, tk] = xp_ / pc_ - 1.0
-    gross_eq_ret    = (_w_ret * _dr_f).sum(axis=1)
+    gross_eng_ret   = (executed_weights * _dr).sum(axis=1)        # the Elendel engine's own booking
+    gross_faith_ret = (_w_ret * _dr_f).sum(axis=1)                # execution-faithful booking (see AUDIT.md)
+    gross_eq_ret    = gross_faith_ret if EXECUTION_FAITHFUL_ACCOUNTING else gross_eng_ret
 """
 r = sub1(r, old_gross, new_gross)
-r = sub1(r, "VERSION_TAG = 'ey'\n", "VERSION_TAG = 'ey'\nEXECUTION_FAITHFUL_ACCOUNTING = True   # False reproduces the Elendel engine's original booking (ablation only)\n")
+r = sub1(r, "VERSION_TAG = 'ey'\n", "VERSION_TAG = 'ey'\n# Which booking is the HEADLINE.  False = the Elendel engine's own booking, directly comparable with the Elendel / Zenith / Quad backtests (CSM Value FULL window: 38.5% CAGR, -12.6% max DD).\n# True = execution-faithful booking (charges the gap to the real fill; AUDIT.md: 20.0% / -23.0%).  Both are always computed and both are printed in the 'Accounting cross-check' block.\nEXECUTION_FAITHFUL_ACCOUNTING = False\n")
+r = sub1(r, "    net_returns     = gross_eq_ret + cash_ret - txn_cost\n", "    net_returns     = gross_eq_ret + cash_ret - txn_cost\n    strategy._net_by_booking = {'engine': gross_eng_ret + cash_ret - txn_cost, 'faithful': gross_faith_ret + cash_ret - txn_cost}\n")
+_xcheck = '''    # ── 9b. Accounting cross-check (both bookings, same trades) ─────────────────────────────────────────────
+    try:
+        print(f"\\n── Accounting cross-check ({report_start} → {end_load}, Sharpe rf 0) ──")
+        print("  engine booking = executed weight x same-day close-to-close return (as the Elendel / Zenith / Quad backtests);")
+        print("  execution-faithful = also charges the gap from the previous close to the real stop/sell fill and drops the overnight gap before an open fill (AUDIT.md).")
+        for _k, _lab in (('engine', 'engine booking'), ('faithful', 'execution-faithful booking')):
+            _r = csm._net_by_booking[_k].loc[report_start:end_load]
+            _eq = (1 + _r).cumprod(); _yrs = (_r.index[-1] - _r.index[0]).days / 365.25
+            print(f"  {_lab:<28} CAGR {(_eq.iloc[-1] ** (1 / _yrs) - 1) * 100:6.2f}%   MaxDD {((_eq / _eq.cummax()) - 1).min() * 100:7.2f}%   Sharpe {np.sqrt(252) * _r.mean() / _r.std():5.2f}")
+        print("  HEADLINE above uses: " + ("execution-faithful booking" if EXECUTION_FAITHFUL_ACCOUNTING else "engine booking") + "  (EXECUTION_FAITHFUL_ACCOUNTING)")
+    except Exception as e:
+        print(f"[Accounting] cross-check failed: {e}")
+
+'''
+r = sub1(r, "    # ── 10. Visualisation", _xcheck + "    # ── 10. Visualisation")
+
 r = r.replace("CSMElendel's own", "CSMValue's own")
 r = r.replace("CSM elendel v1", "CSM Value v1").replace("elendel", "value")
 assert 'CSMElendel' not in r, [m.start() for m in re.finditer('CSMElendel', r)][:3]

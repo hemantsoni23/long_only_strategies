@@ -19,7 +19,9 @@ from csm_value_strategy import CSMValue
 
 
 VERSION_TAG = 'ey'
-EXECUTION_FAITHFUL_ACCOUNTING = True   # False reproduces the Elendel engine's original booking (ablation only)
+# Which booking is the HEADLINE.  False = the Elendel engine's own booking, directly comparable with the Elendel / Zenith / Quad backtests (CSM Value FULL window: 38.5% CAGR, -12.6% max DD).
+# True = execution-faithful booking (charges the gap to the real fill; AUDIT.md: 20.0% / -23.0%).  Both are always computed and both are printed in the 'Accounting cross-check' block.
+EXECUTION_FAITHFUL_ACCOUNTING = False
 data_folder_path = '/Users/hemantsoni/Documents/upstox_data_folder/ohlcv_data'
 
 
@@ -1222,7 +1224,7 @@ def _run_backtest_core(
     _w_ret = executed_weights.copy()
     _dr_f  = _dr.copy()
     _pp = strategy._prices_ff_backtest
-    if EXECUTION_FAITHFUL_ACCOUNTING:
+    if True:   # always computed so both bookings can be reported; EXECUTION_FAITHFUL_ACCOUNTING only chooses which one is the headline
         _idx_pos = {d_: k_ for k_, d_ in enumerate(executed_weights.index)}
         for meta in strategy.position_metadata:
             tk = meta['Ticker']
@@ -1240,13 +1242,16 @@ def _run_backtest_core(
                     if pd.notna(xp_) and xp_ > 0 and pd.notna(pc_) and pc_ > 0:
                         _w_ret.at[ext, tk] = executed_weights.at[prev_d, tk]
                         _dr_f.at[ext, tk] = xp_ / pc_ - 1.0
-    gross_eq_ret    = (_w_ret * _dr_f).sum(axis=1)
+    gross_eng_ret   = (executed_weights * _dr).sum(axis=1)        # the Elendel engine's own booking
+    gross_faith_ret = (_w_ret * _dr_f).sum(axis=1)                # execution-faithful booking (see AUDIT.md)
+    gross_eq_ret    = gross_faith_ret if EXECUTION_FAITHFUL_ACCOUNTING else gross_eng_ret
     total_w         = executed_weights.sum(axis=1)
     cash_w          = (1.0 - total_w).clip(lower=0.0)
     cash_ret        = cash_w * daily_cash_rate
     w_chg           = executed_weights.diff().abs().sum(axis=1)
     txn_cost        = w_chg * transaction_cost
     net_returns     = gross_eq_ret + cash_ret - txn_cost
+    strategy._net_by_booking = {'engine': gross_eng_ret + cash_ret - txn_cost, 'faithful': gross_faith_ret + cash_ret - txn_cost}
 
     equity_curve    = (1.0 + net_returns).cumprod()
     portfolio_value = equity_curve * initial_capital
@@ -2051,6 +2056,19 @@ def main(load_start=None, load_end=None, start_report=None, mode=None, universe_
         print(f"  Ann Turnover      : {results['ann_turnover']*100:>8.2f}%  (daily weight changes × txn cost)")
     if 'ann_signal_turnover' in results:
         print(f"  Signal Turnover   : {results['ann_signal_turnover']:>8.1f}  round-trips/year (monthly rebal only)")
+
+    # ── 9b. Accounting cross-check (both bookings, same trades) ─────────────────────────────────────────────
+    try:
+        print(f"\n── Accounting cross-check ({report_start} → {end_load}, Sharpe rf 0) ──")
+        print("  engine booking = executed weight x same-day close-to-close return (as the Elendel / Zenith / Quad backtests);")
+        print("  execution-faithful = also charges the gap from the previous close to the real stop/sell fill and drops the overnight gap before an open fill (AUDIT.md).")
+        for _k, _lab in (('engine', 'engine booking'), ('faithful', 'execution-faithful booking')):
+            _r = csm._net_by_booking[_k].loc[report_start:end_load]
+            _eq = (1 + _r).cumprod(); _yrs = (_r.index[-1] - _r.index[0]).days / 365.25
+            print(f"  {_lab:<28} CAGR {(_eq.iloc[-1] ** (1 / _yrs) - 1) * 100:6.2f}%   MaxDD {((_eq / _eq.cummax()) - 1).min() * 100:7.2f}%   Sharpe {np.sqrt(252) * _r.mean() / _r.std():5.2f}")
+        print("  HEADLINE above uses: " + ("execution-faithful booking" if EXECUTION_FAITHFUL_ACCOUNTING else "engine booking") + "  (EXECUTION_FAITHFUL_ACCOUNTING)")
+    except Exception as e:
+        print(f"[Accounting] cross-check failed: {e}")
 
     # ── 10. Visualisation ─────────────────────────────────────────────────────
     print_yearly_returns(results['portfolio_value'], dd_series=results.get('dd_series'))

@@ -114,11 +114,12 @@ metax = pd.DataFrame(st.position_metadata); metax = metax[(metax.Entry_Date >= p
 orig = sum((Wx.values[ix.get_loc(t.Entry_Date):ix.get_loc(t.Exit_Date), cx[t.Ticker]] * DRx[ix.get_loc(t.Entry_Date):ix.get_loc(t.Exit_Date), cx[t.Ticker]]).sum() for t in metax.itertuples())
 fills = sum(Wx.values[ix.get_loc(t.Entry_Date):ix.get_loc(t.Exit_Date), cx[t.Ticker]].mean() * (t.Exit_Price / t.Entry_Price - 1) for t in metax.itertuples())
 net_f, _ = er.faithful_net_returns(st, rb_res)
-check('9a. runner returns equal the independent execution-faithful replay (CAGR within 0.1 pt)', abs(((1 + rb_res['net_returns'].loc['2019-06-03':'2025-06-30']).prod() ** (365.25 / (pd.Timestamp('2025-06-30') - pd.Timestamp('2019-06-03')).days) - 1) - ((1 + net_f.loc['2019-06-03':'2025-06-30']).prod() ** (365.25 / (pd.Timestamp('2025-06-30') - pd.Timestamp('2019-06-03')).days) - 1)) < 0.001)
+cg_ = lambda x: (1 + x.loc['2019-06-03':'2025-06-30']).prod() ** (365.25 / (pd.Timestamp('2025-06-30') - pd.Timestamp('2019-06-03')).days) - 1
+check('9a. the runner\'s execution-faithful booking equals the independent replay (CAGR within 0.1 pt)', abs(cg_(st._net_by_booking['faithful']) - cg_(net_f)) < 0.001)
 say_ratio = orig / fills
-print(f'   info: the ORIGINAL Elendel booking would credit {orig:+.3f} of equity for these trades vs {fills:+.3f} implied by buy-and-hold at their fills ({say_ratio:.2f}x); the runner uses execution-faithful booking instead')
-check('9b. the original booking overstates trade P&L by > 1.3x (documents why EXECUTION_FAITHFUL_ACCOUNTING is on)', say_ratio > 1.3)
-check('9c. EXECUTION_FAITHFUL_ACCOUNTING is switched on in the runner', rb.EXECUTION_FAITHFUL_ACCOUNTING is True)
+print(f'   info: the ORIGINAL Elendel booking would credit {orig:+.3f} of equity for these trades vs {fills:+.3f} implied by buy-and-hold at their fills ({say_ratio:.2f}x); the runner prints both bookings')
+check('9b. the original booking overstates trade P&L by > 1.3x (documents why the faithful booking is always reported next to the headline)', say_ratio > 1.3)
+check('9c. headline = engine booking (flag False, comparable with Elendel/Zenith/Quad) and both bookings are exposed', rb.EXECUTION_FAITHFUL_ACCOUNTING is False and set(st._net_by_booking) == {'engine', 'faithful'} and np.allclose(rb_res['net_returns'].values, st._net_by_booking['engine'].values))
 # 10. full-engine truncation invariance (signals, regimes, vol scaling, stops, fills all causal)
 cut = pd.Timestamp('2023-03-31'); p2, v2, h2, l2, o2 = [d.loc[:cut] for d in (prices, volumes, highs, lows, opens)]
 s3 = mk(p2, v2, h2, l2, o2, bench.loc[:cut]); s3.calculate_factors(); s3.get_positions()

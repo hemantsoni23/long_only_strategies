@@ -1,5 +1,7 @@
 # CSM Value — look-ahead / inflation audit (2026-10-08)
 
+> Update: the runner's headline is the engine booking again (`EXECUTION_FAITHFUL_ACCOUNTING = False`, 38.5% / −12.6%) so it matches the other strategies' backtests; the execution-faithful figures below (20.0% / −23.0%) are printed beside it in every run. Nothing in the audit's findings changed.
+
 Everything below is reproducible: `python3 audit_lookahead.py fills replay filings truncation splitters holdings benchmark delay placebo 40`, `python3 audit_engine_accounting.py`, `python3 test_csm_value.py`, `python3 ablation_versions.py`, `python3 train_test_protocol.py`. Raw output: `output/audit_report.txt`, `output/audit_engine_accounting.txt`.
 
 ## 1. The one thing that WAS inflating the results (now fixed in this strategy's runner)
