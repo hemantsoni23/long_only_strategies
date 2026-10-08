@@ -27,3 +27,8 @@ python3 run_pead_backtest.py [--sensitivity]
 python3 diag_event_alpha.py        # causal per-signal alpha;   python3 diag_correlation.py   # where the correlation comes from
 ```
 Live: `get_entry_candidates(as_of)` (eligible signals, best first) and `get_exit_signals(portfolio, live_data, today)`. Needs a refreshed quarterly-results feed (data ends with results filed 2025-04).
+
+## Data caveat (added 2026-10-08)
+SUE is built from per-share EPS differences; around a split or bonus a quarter's EPS is in different units from the year-ago quarter, which creates spurious surprises. This has not been audited or corrected (the market-cap unit fix in `csm_value/fundamentals_loader.py` does not apply here). Treat the PEAD numbers as unaudited for that effect.
+
+Note (2026-10-08): PEAD's own event loop books entries at the close, stops at the next open and cash/shares explicitly, so it does not share the Elendel engine's same-day booking issue (see `csm_value/AUDIT.md`).

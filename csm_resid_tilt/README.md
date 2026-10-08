@@ -1,3 +1,5 @@
+> **Warning (2026-10-08):** absolute CAGR/Sharpe/drawdown figures in this document come from the Elendel engine's original booking (same-day weight × close-to-close return), which overstates results by ~17-26 CAGR points (see `csm_value/AUDIT.md`). Relative comparisons between variants may or may not survive; they have not been re-run.
+
 # csm_resid_tilt — residual-momentum tilt for Zenith and Elendel
 
 **What it is.** `CSMZenithResid` and `CSMElendelResid` subclass the live `CSMZenith` / `CSMElendel` (imported from `Old_live_strategies`, never copied or edited) and change one thing:

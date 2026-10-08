@@ -19,6 +19,7 @@ from csm_value_strategy import CSMValue
 
 
 VERSION_TAG = 'ey'
+EXECUTION_FAITHFUL_ACCOUNTING = True   # False reproduces the Elendel engine's original booking (ablation only)
 data_folder_path = '/Users/hemantsoni/Documents/upstox_data_folder/ohlcv_data'
 
 
@@ -1214,7 +1215,32 @@ def _run_backtest_core(
             _dr.at[exit_date, ticker] = capped_ret
 
     # ── Portfolio returns & equity curve ──────────────────────────────────
-    gross_eq_ret    = (executed_weights * _dr).sum(axis=1)
+    # Execution-faithful accounting (added in csm_value; the original line was `gross_eq_ret = (executed_weights * _dr).sum(axis=1)`):
+    #  * a position bought at the OPEN of day i earns close_i / entry_fill - 1 on that day, not the full close-to-close return that includes the overnight gap it never owned;
+    #  * a position sold at day j's fill (stop level, gap-down open, or rebalance open) keeps its previous weight on day j and earns exit_fill / close_{j-1} - 1: the original books the weight
+    #    as 0 on the exit day, so the loss from the previous close to a stop fill (about -5% on average) was never charged (the 'stop-return capping' block above is dead code for that reason).
+    _w_ret = executed_weights.copy()
+    _dr_f  = _dr.copy()
+    _pp = strategy._prices_ff_backtest
+    if EXECUTION_FAITHFUL_ACCOUNTING:
+        _idx_pos = {d_: k_ for k_, d_ in enumerate(executed_weights.index)}
+        for meta in strategy.position_metadata:
+            tk = meta['Ticker']
+            if tk not in executed_weights.columns:
+                continue
+            ent, ext = meta['Entry_Date'], meta['Exit_Date']
+            if ent in _idx_pos:
+                ep_ = meta['Entry_Price']; c_ = _pp.at[ent, tk]
+                if pd.notna(ep_) and ep_ > 0 and pd.notna(c_) and c_ > 0:
+                    _dr_f.at[ent, tk] = c_ / ep_ - 1.0
+            if meta['Exit_Reason'] != 'END_OF_PERIOD' and ext in _idx_pos and _idx_pos[ext] > 0:
+                jx = _idx_pos[ext]; prev_d = executed_weights.index[jx - 1]
+                if executed_weights.at[ext, tk] == 0.0 and executed_weights.at[prev_d, tk] > 0.0:
+                    xp_ = meta['Exit_Price']; pc_ = _pp.at[prev_d, tk]
+                    if pd.notna(xp_) and xp_ > 0 and pd.notna(pc_) and pc_ > 0:
+                        _w_ret.at[ext, tk] = executed_weights.at[prev_d, tk]
+                        _dr_f.at[ext, tk] = xp_ / pc_ - 1.0
+    gross_eq_ret    = (_w_ret * _dr_f).sum(axis=1)
     total_w         = executed_weights.sum(axis=1)
     cash_w          = (1.0 - total_w).clip(lower=0.0)
     cash_ret        = cash_w * daily_cash_rate
