@@ -154,6 +154,15 @@ check('11a. one-off share (other income + exceptional gains over TTM pre-tax pro
 mm = rt.merge(rr, on=['symbol', 'period_end'], suffixes=('_t', '_c'))
 check('11b. core profit differs from reported profit only through other income / exceptional items (banks identical)', bool(np.isfinite(mm.np_ttm_c).all()) and len(mm) == len(rt) and (mm.np_ttm_c / mm.np_ttm_t).median() < 1.0)
 check('11c. the idle-cash sweep into a liquid fund is on (use_liquid_mf) and the default profit definition is the reported net profit with no one-off filter', st.use_liquid_mf is True and st.profit_basis == 'total' and st.max_oneoff_share is None)
+
+# 12. Item 6 / Item 3 options
+sc_ = mk(prices, volumes, highs, lows, opens, bench); sc_.min_cooldown_days = 42; sc_.book_size_cr = 5.0; sc_.max_adv_participation = 0.10
+sc_.calculate_factors(); pos_c = sc_.get_positions()
+check('12a. min_cooldown_days puts a floor under every stop cooldown (profitable stops included) and leaves longer cooldowns alone', sc_._cooldown_days_for(+8.0) == 42 and sc_._cooldown_days_for(-30.0) >= 42 and st._cooldown_days_for(+8.0) == 0)
+adv_ = sc_._adv_monthly.reindex(index=pos_c.index, columns=pos_c.columns)
+lim_ = (0.10 * adv_ / (5.0 * 1e7)).fillna(0.0)
+check('12b. capacity cap: every target weight <= 10% of the name\'s median daily traded value for a Rs 5 cr book', bool(((pos_c - lim_) <= 1e-12).all().all()), f'max target weight {pos_c.max().max():.3%}; tightest cap hit in {(abs(pos_c - lim_) < 1e-12).sum().sum() if False else int(((pos_c > 0) & ((pos_c - lim_).abs() < 1e-12)).sum().sum())} name-months')
+check('12c. the cap is off by default and the default cooldown floor is 0', st.book_size_cr is None and st.min_cooldown_days == 0)
 # 7
 bad_refs = []
 for f in glob.glob(os.path.join(HERE, '*.py')):

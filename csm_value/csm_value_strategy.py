@@ -33,6 +33,9 @@ class CSMValue:
         max_ep              = 0.50,  # data-error / one-off guard: ignore E/P above 50%
         min_eligible        = 60,    # fewer fundamentals-eligible names than this in a month -> no signal that month
         use_ca_mask         = True,  # corporate-action mask (price cliffs): see calculate_factors
+        book_size_cr        = None,  # capacity-aware sizing: assumed book size in Rs crore. None = off (no liquidity cap on position size)
+        max_adv_participation = 0.10,  # with book_size_cr: a position may not exceed this share of the stock's 63-day median daily traded value (the excess weight stays in cash)
+        min_cooldown_days   = 0,     # re-entry churn control: minimum calendar days a name is blocked after ANY stop, including profitable ones (the loss-scaled cooldown gives profitable stops 0 days)
         max_oneoff_share    = None,  # earnings-quality filter: drop names whose trailing-12m other income + exceptional gains exceed this share of trailing-12m pre-tax profit (banks exempt). None = off
         profit_basis        = 'total',  # 'total' = reported net profit; 'owners_consistent' = profit attributable to owners where every quarter of a figure reports it, else the total line for all of them; 'core' = reported profit less other income and exceptional items (25% tax); 'owners' = legacy mixed fallback (ablation only)
         restore_units       = True,  # restore filed share counts to today's units (matches the split-adjusted prices). False = the old leaky behaviour, for ablation only
@@ -124,6 +127,9 @@ class CSMValue:
         self.restore_units         = restore_units
         self.profit_basis          = profit_basis
         self.max_oneoff_share      = max_oneoff_share
+        self.book_size_cr          = book_size_cr
+        self.max_adv_participation = max_adv_participation
+        self.min_cooldown_days     = min_cooldown_days
         self.ca_tol                = ca_tol
         self.abs_momentum_lookback_months = abs_momentum_lookback_months
         self.abs_momentum_lag_months      = abs_momentum_lag_months
@@ -339,6 +345,8 @@ class CSMValue:
         self.momentum_returns = valid_universe.astype(float).where(valid_universe)
 
         self._prepare_stop_indicators(monthly_prices)
+        # 63-day median traded value (Rs), lagged one day, at each month-end: used by the optional capacity cap in get_positions()
+        self._adv_monthly = ((self.prices * self.volumes).rolling(63, min_periods=21).median().shift(1).resample('ME').last().reindex(monthly_prices.index))
         self.factors.dropna(how='all', inplace=True)
         self.momentum_returns.dropna(how='all', inplace=True)
 
@@ -409,6 +417,10 @@ class CSMValue:
     # ──────────────────────────────────────────────────────────────────────────
 
     def _cooldown_days_for(self, pnl_pct):
+        """Re-entry cooldown after a STOP_HIT: the base rule below, but never shorter than min_cooldown_days (default 0 = unchanged)."""
+        return max(self._cooldown_days_base(pnl_pct), self.min_cooldown_days)
+
+    def _cooldown_days_base(self, pnl_pct):
         """Re-entry cooldown after a STOP_HIT: 'flat' = fixed days; 'loss_scaled' = proportional to the loss (a profitable exit gets none, a big loss gets up to cooldown_cap_days)."""
         if self.cooldown_mode == 'loss_scaled':
             if pd.isna(pnl_pct) or pnl_pct >= 0:
@@ -605,6 +617,12 @@ class CSMValue:
                 if total > 0:
                     raw_w = raw_w / total   # renormalize
             raw_w = raw_w.clip(upper=cap)   # final safety clip
+
+            # Capacity-aware sizing (optional): position <= max_adv_participation x the name's median daily traded value, for a book of book_size_cr crore.
+            # The weight removed here is NOT redistributed; it stays in cash (liquid fund).
+            if self.book_size_cr is not None:
+                _adv = self._adv_monthly.loc[date].reindex(raw_w.index)
+                raw_w = np.minimum(raw_w, (self.max_adv_participation * _adv / (self.book_size_cr * 1e7)).fillna(0.0))
 
             full_w = pd.Series(0.0, index=self.factors.columns, name=date)
             full_w.update(raw_w)
