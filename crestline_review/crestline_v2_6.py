@@ -1,0 +1,838 @@
+"""
+crestline_v2_6.py -- CRESTLINE v2.6 (cleaned: logic consolidated; successor of the colleague's crestline_v2_2.py)
+=====================================================================================================
+Cross-sectional trend-leadership, 25 equal-weight names, rebalanced every 60 bars, ~half the book idle -> held in a capped gold ETF.
+
+SIGNAL      score = z(close / 252d high) + z(share of the last 189 days above SMA50), z-scored on the ranking pool of each signal bar.
+UNIVERSE    price > Rs 20 (as-traded), 63-day median traded value rank 1-1000, <= 5 locked-circuit days in 63, traded on the signal bar.
+BOOK        top 25 by score, equal weight 1/25 fixed at entry (never re-weighted), ADV cap 5%; bought at the NEXT OPEN; a held name leaves at a rebalance when its rank > 2 x 25.
+            A name sold within 30 bars cannot be bought back at a rebalance.
+STOPS       two trailing stops from the peak CLOSE: 15% and a volatility-scaled one (clip(2.5 x ATR%/close at entry, 10%, 25%)). Whichever is tighter binds. (A 20% hard stop from entry is
+            mathematically dead -- the 15% peak stop always sits above it -- and was removed.)
+OVERLAY     benchmark (equal-weight universe index) below its SMA200 -> NEW entries sized x0.6; benchmark volatility above its expanding 95th percentile -> x0.3. Held positions are not de-risked.
+GOLD SLEEVE idle capital (cash) is held in GOLDBEES, untimed, up to GOLD_CAP = 25% of equity; trades at the PREVIOUS close (the vendor's ETF opening prints are unreliable); funds stock
+            entries by selling; closed in the 2011-14 data gap; never bought on a stale price. Idle cash otherwise earns CASH_RATE_ANNUAL = 0%.
+DATA        vendor jumps outside [-40%, +300%] are unadjusted splits/glitches and are BACK-ADJUSTED (price history and volume), so a position held through a split is not booked a fake loss;
+            the Rs 20 floor uses as-traded prices.
+
+EXIT_MODE   how exits are executed and booked (a modelling convention that cannot be resolved with daily OHLCV):
+  "zenith"  (default; the live engines' convention) each day the stop in force (state through the previous bar) is tested against TODAY'S LOW; a hit closes the position TODAY at
+            stop level x (1 - ZEN_SLIP) or at the open if the day gaps through it; locked (high == low) days defer. The sale is BOOKED AT THE PREVIOUS CLOSE (exit-day weight 0: the move from
+            the previous close to the fill is never charged). Rebalance exits are booked the same way. A position is first tested the day after entry.
+  "honest"  stop flagged on the CLOSE, filled at the NEXT OPEN, gap booked.
+  "resting" zenith trigger and fill, booked at the fill (gap charged).
+Every run prints/stores 'Exit P&L NOT booked %/yr' (what the zenith convention hides). NEVER quote a zenith-mode number without the honest one beside it.
+
+RUNNING     python3 crestline_review/crestline_v2_6.py   (from the repo root; env: CL_OVR='{"TOP_N": 15}' config overrides, CL_OUT=<dir> output dir, CRESTLINE_OFFSET=<bars> schedule anchor)
+            Quote results over several anchors (anchor_report.py), never anchor 0 alone. Idle cash earns 0% here; report Sharpe at rf = 0.
+Lineage and the evidence behind every choice: docs/LINEAGE.md.
+"""
+
+import os
+import glob
+import json as _json
+import warnings
+
+import numpy as np
+import pandas as pd
+
+warnings.filterwarnings("ignore", message="All-NaN slice encountered")
+warnings.filterwarnings("ignore", message="Mean of empty slice")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# CONFIG  (edit only this block; override from the environment with CL_OVR)
+# ══════════════════════════════════════════════════════════════════════════════
+
+STRATEGY_NAME        = "CRESTLINE_V2_6"
+DATA_FOLDER          = '/Users/hemantsoni/Documents/upstox_data_folder/ohlcv_data'
+ETF_FOLDER           = '/Users/hemantsoni/Documents/upstox_data_folder/gold_silver_ohlcv_data'
+START_DATE           = "2006-01-01"
+END_DATE             = "2025-12-31"
+BUFFER_DAYS          = 400
+
+# ── data hygiene ─────────────────────────────────────────────────────────────
+CA_DOWN, CA_UP       = -0.40, 3.00        # 1-day moves outside this band are splits/glitches -> back-adjusted
+
+# ── universe ─────────────────────────────────────────────────────────────────
+MIN_PRICE            = 20.0
+UNIVERSE_TOP_N_MIN, UNIVERSE_TOP_N_MAX = 1, 1000
+DVOL_WINDOW, DVOL_MIN_PERIODS = 63, 21
+CIRCUIT_WINDOW, MAX_CIRCUIT_DAYS = 63, 5
+
+# ── score ────────────────────────────────────────────────────────────────────
+HP_WINDOW, HP_MIN_PERIODS = 252, 200
+TP_LOOKBACK, TP_MIN_PERIODS = 189, 150
+TP_SMA_WINDOW, TP_SMA_MIN_PERIODS = 50, 40
+MIN_POOL_SIZE        = 20
+IC_HORIZONS          = [5, 10, 15, 20, 40, 60, 120]      # signal diagnostics only
+
+# ── schedule ─────────────────────────────────────────────────────────────────
+REBALANCE_FREQ_DAYS  = 60
+SCHEDULE_OFFSET_DAYS = int(os.environ.get("CRESTLINE_OFFSET", 0))
+
+# ── book ─────────────────────────────────────────────────────────────────────
+TOP_N                = 25
+EXIT_RANK_MULT       = 2.0                # a held name is sold at a rebalance when its rank > TOP_N x this
+MAX_WEIGHT           = 1.0 / TOP_N
+MAX_ENTRY_PCT        = 0.10
+ADV_CAP              = 0.05
+REENTRY_COOLDOWN_BARS = 30                # a name sold within this many bars cannot be bought back at a rebalance
+INITIAL_CAPITAL      = 100_000.0
+
+# ── stops (trailing from the peak CLOSE) ─────────────────────────────────────
+ATR_WINDOW           = 14
+PEAK_STOP_PCT        = 0.15
+VOLSTOP_K            = 2.5                # width = K x (ATR / close at entry), clipped
+VOLSTOP_MIN_PCT      = 0.10
+VOLSTOP_MAX_PCT      = 0.25
+EXIT_MODE            = "zenith"           # "zenith" | "honest" | "resting"  (see the docstring)
+ZEN_SLIP             = 0.003              # slippage on the logged fill in zenith/resting modes
+
+# ── regime overlay (scales NEW-entry sizing only) ────────────────────────────
+BENCH_SMA            = 200
+BENCH_SMA_MIN_PERIODS = 150
+BEAR_SCALE           = 0.6                # 1.0 disables the bear tier
+PANIC_VOL_WINDOW     = 21
+PANIC_PCTL           = 0.95
+PANIC_MIN_PERIODS    = 126
+PANIC_SCALE          = 0.3                # 1.0 disables the panic tier
+
+# ── frictions ────────────────────────────────────────────────────────────────
+COST_ONE_WAY         = 0.003
+CASH_RATE_ANNUAL     = 0.0                # idle cash earns nothing (conservative accounting)
+
+# ── gold sleeve ──────────────────────────────────────────────────────────────
+GOLD_CAP             = 0.25               # max share of equity in the gold ETF, never more than idle cash; 0 = off
+GOLD_SYM             = "GOLDBEES"
+GOLD_COST            = 0.0015             # one-way
+GOLD_BAND            = 0.02               # trade only when the target differs from the holding by more than this share of equity
+GOLD_TARGET_RET      = None               # None = real prices; a number re-centres the ETF's ARITHMETIC mean daily return so its usable-sample annual return equals it (scenario testing, e.g. 0.08)
+
+SAVE_OUTPUTS         = True
+OUTPUT_DIR           = os.path.join(os.path.dirname(os.path.abspath(__file__)), "crestline_v2_6_output")
+
+_OVR = _json.loads(os.environ.get("CL_OVR", "{}"))
+for _k, _v in _OVR.items():
+    if _k not in globals():
+        raise SystemExit(f"unknown override {_k}")
+    globals()[_k] = _v
+if "MAX_WEIGHT" not in _OVR:
+    MAX_WEIGHT = 1.0 / TOP_N
+if "CL_OUT" in os.environ:
+    OUTPUT_DIR = os.environ["CL_OUT"]
+if EXIT_MODE not in ("zenith", "honest", "resting"):
+    raise SystemExit(f"EXIT_MODE must be zenith | honest | resting, got {EXIT_MODE!r}")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# DATA LOADER
+# ══════════════════════════════════════════════════════════════════════════════
+
+def load_data(folder_path):
+    """Load every CSV in folder_path. Returns prices, volumes, highs, lows, opens (DataFrames).
+    Non-positive prices are masked to NaN; duplicate timestamps keep the last row."""
+    all_files = glob.glob(os.path.join(folder_path, "*.csv"))
+    if not all_files:
+        raise ValueError(f"No CSV files found in {folder_path}")
+
+    price_list, volume_list, high_list, low_list, open_list = [], [], [], [], []
+    print(f"Loading {len(all_files)} files from {folder_path}...")
+
+    for filename in all_files:
+        try:
+            symbol = os.path.basename(filename).replace('.csv', '')
+            df = pd.read_csv(filename, parse_dates=['datetime'], index_col='datetime')
+
+            def _clean(s):
+                return s[~s.index.duplicated(keep='last')]
+
+            def _clean_price(s):
+                s = _clean(s)
+                return s.mask(s <= 0)
+
+            if 'close' in df.columns:
+                price_list.append(_clean_price(df['close'].rename(symbol)).astype("float32"))
+            else:
+                print(f"Warning: 'close' missing in {filename}")
+            if 'volume' in df.columns:
+                volume_list.append(_clean(df['volume'].rename(symbol)).astype("float32"))
+            if 'high' in df.columns:
+                high_list.append(_clean_price(df['high'].rename(symbol)).astype("float32"))
+            if 'low' in df.columns:
+                low_list.append(_clean_price(df['low'].rename(symbol)).astype("float32"))
+            if 'open' in df.columns:
+                open_list.append(_clean_price(df['open'].rename(symbol)).astype("float32"))
+        except Exception as e:
+            print(f"Error loading {filename}: {e}")
+
+    if not price_list:
+        return (pd.DataFrame(),) * 5
+
+    def _build(lst):
+        if not lst:
+            return pd.DataFrame()
+        df = pd.concat(lst, axis=1)
+        df.sort_index(inplace=True)
+        return df
+
+    prices_df, volumes_df = _build(price_list), _build(volume_list)
+    highs_df, lows_df, opens_df = _build(high_list), _build(low_list), _build(open_list)
+
+    print(f"Loaded  Prices:{prices_df.shape}  Volumes:{volumes_df.shape}  "
+          f"Highs:{highs_df.shape}  Lows:{lows_df.shape}  Opens:{opens_df.shape}")
+    return prices_df, volumes_df, highs_df, lows_df, opens_df
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 1. LOAD + SLICE + GOLD SERIES + CORPORATE-ACTION BACK-ADJUSTMENT
+# ══════════════════════════════════════════════════════════════════════════════
+
+prices, volumes, highs, lows, opens = load_data(DATA_FOLDER)
+if prices.empty:
+    raise SystemExit("No price data loaded.")
+if volumes.empty or highs.empty or lows.empty or opens.empty:
+    raise SystemExit("Open, high, low and volume data are required (stops, circuit filter and liquidity filter).")
+
+prices = prices.sort_index()
+start_ts = pd.Timestamp(START_DATE)
+end_ts   = pd.Timestamp(END_DATE)
+
+full_index = prices.index
+start_pos  = int(full_index.searchsorted(start_ts))
+if start_pos >= len(full_index):
+    raise SystemExit(f"START_DATE {START_DATE} is after the last bar in the data.")
+buf_pos = max(start_pos - BUFFER_DAYS, 0)
+if buf_pos == 0 and start_pos < BUFFER_DAYS:
+    print(f"WARNING: only {start_pos} bars exist before START_DATE (wanted {BUFFER_DAYS}).")
+load_start = full_index[buf_pos]
+
+prices  = prices.loc[load_start:end_ts]
+volumes = volumes.reindex(index=prices.index, columns=prices.columns)
+highs   = highs.reindex(index=prices.index, columns=prices.columns)
+lows    = lows.reindex(index=prices.index, columns=prices.columns)
+opens   = opens.reindex(index=prices.index, columns=prices.columns)
+
+index, n_bars, n_stk = prices.index, len(prices.index), prices.shape[1]
+
+# gold ETF series on the stock calendar (never forward-filled across the 2011-14 gap; g_c is forward-filled ONLY for marking, units are zero across gaps)
+g_o = g_c = g_has = None
+if GOLD_CAP > 0:
+    _g = pd.read_csv(os.path.join(ETF_FOLDER, GOLD_SYM + ".csv")); _g["t"] = pd.to_datetime(_g.timestamp.str[:10]); _g = _g.set_index("t")[["open", "close"]]
+    _g = _g[~_g.index.duplicated(keep="last")].sort_index().mask(lambda d: d <= 0)
+    if GOLD_TARGET_RET is not None:
+        _gs = _g.close["2007-03-01":"2025-12-31"]; _r = _gs.pct_change(fill_method=None); _r[_gs.index.to_series().diff().dt.days > 5] = np.nan
+        _rr = _g.close.pct_change(fill_method=None); _rr[_g.index.to_series().diff().dt.days > 5] = np.nan
+        _rn = _rr - (np.nanmean(_r) - ((1 + GOLD_TARGET_RET) ** (1 / 252) - 1))
+        _f = ((1 + _rn.fillna(0.0)) / (1 + _rr.fillna(0.0))).cumprod(); _g = _g.mul(_f, axis=0)
+    g_o = _g.open.reindex(index).to_numpy(dtype=float)          # only used to know whether the ETF traded today
+    g_has = _g.close.reindex(index).notna().to_numpy()
+    g_c = _g.close.reindex(index).ffill().to_numpy(dtype=float)
+
+# corporate actions: back-adjust history at every flagged jump (price AND volume) instead of masking, so a held position is split-neutral
+_ret_raw = prices.ffill().pct_change(fill_method=None)
+ca_flag  = ((_ret_raw < CA_DOWN) | (_ret_raw > CA_UP)).fillna(False)
+_floor_src = prices                                        # as-traded prices for the Rs 20 floor (back-adjustment uses future splits)
+_lr = np.nan_to_num(np.log1p(_ret_raw.where(ca_flag)).to_numpy(dtype=float), nan=0.0)
+_adj = pd.DataFrame(np.exp(np.cumsum(_lr[::-1], axis=0)[::-1] - _lr), index=prices.index, columns=prices.columns)
+prices = prices * _adj; highs = highs * _adj; lows = lows * _adj; opens = opens * _adj; volumes = volumes / _adj
+print(f"\nCorporate-action ADJUST: {int(ca_flag.to_numpy().sum())} jump cells back-adjusted")
+del _ret_raw, _lr, _adj
+
+if REBALANCE_FREQ_DAYS < 1:
+    raise SystemExit("REBALANCE_FREQ_DAYS must be a positive integer.")
+
+# ── signal schedule: a full rebalance every REBALANCE_FREQ_DAYS bars ─────────
+sched_start_pos = int(index.searchsorted(start_ts)) + SCHEDULE_OFFSET_DAYS
+me_pos = np.arange(sched_start_pos, n_bars, REBALANCE_FREQ_DAYS).astype(int)
+me_pos = me_pos[(me_pos >= 1) & (me_pos + 1 < n_bars)]
+me_dates = index[me_pos]
+n_m = len(me_pos)
+eval_mask = (me_dates >= start_ts) & (me_dates <= end_ts)
+sig_rows = np.where(eval_mask)[0]                # every rebalance row inside the evaluation window
+
+print(f"Buffer starts : {load_start.date()}")
+print(f"Schedule      : rebalance every {REBALANCE_FREQ_DAYS} bars -> {len(sig_rows)} rebalances   ({me_dates[sig_rows[0]].date()} -> {me_dates[sig_rows[-1]].date()})")
+print(f"Stocks loaded : {n_stk}")
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 2. FEATURE MATRICES  (rows = signal bars, cols = stocks)
+# ══════════════════════════════════════════════════════════════════════════════
+
+prices_sig = prices.ffill()
+floor_sig  = _floor_src.ffill()
+highs_sig  = highs.ffill()
+lows_sig   = lows.ffill()
+
+traded_on_signal_bar = prices.iloc[me_pos].notna().to_numpy()
+
+# price floor: previous BAR's as-traded close (known at the signal bar)
+price_ok = floor_sig.shift(1).iloc[me_pos].to_numpy(dtype=float) > MIN_PRICE
+
+dvol = (prices_sig * volumes).to_numpy(dtype=float)
+med = np.full((n_m, n_stk), np.nan)
+for i, p in enumerate(me_pos):
+    w = dvol[max(0, p - DVOL_WINDOW):p]
+    if w.shape[0] == 0:
+        continue
+    cnt = np.sum(~np.isnan(w), axis=0)
+    m = np.nanmedian(w, axis=0)
+    med[i] = np.where(cnt >= DVOL_MIN_PERIODS, m, np.nan)
+del dvol
+liq_rank = pd.DataFrame(med).rank(axis=1, ascending=False, method="min").to_numpy()
+liq_ok = (liq_rank >= UNIVERSE_TOP_N_MIN) & (liq_rank <= UNIVERSE_TOP_N_MAX)
+
+locked = ((highs == lows) & highs.notna()).to_numpy(dtype=np.int32)
+cs = np.vstack([np.zeros((1, n_stk), dtype=np.int64), np.cumsum(locked, axis=0, dtype=np.int64)])
+circ_cnt = np.empty((n_m, n_stk))
+for i, p in enumerate(me_pos):
+    circ_cnt[i] = cs[p] - cs[max(0, p - CIRCUIT_WINDOW)]
+circ_ok = circ_cnt <= MAX_CIRCUIT_DAYS
+del locked, cs
+
+universe = traded_on_signal_bar & price_ok & liq_ok & circ_ok
+
+
+def hp_matrix(window, min_periods):
+    hi = highs_sig.rolling(window, min_periods=min_periods).max()
+    return (prices_sig / hi).iloc[me_pos].to_numpy(dtype=float)
+
+
+def tp_matrix(lookback, min_periods, sma_window):
+    sma = prices_sig.rolling(sma_window, min_periods=int(round(sma_window * 0.8))).mean()
+    above = (prices_sig > sma).astype("float32").where(prices_sig.notna() & sma.notna())
+    return above.rolling(lookback, min_periods=min_periods).mean().iloc[me_pos].to_numpy(dtype=float)
+
+
+hp = hp_matrix(HP_WINDOW, HP_MIN_PERIODS)
+tp = tp_matrix(TP_LOOKBACK, TP_MIN_PERIODS, TP_SMA_WINDOW)
+
+
+def zscore(x, mask):
+    out = np.full(x.shape, np.nan)
+    v = x[mask]
+    if v.size < 3:
+        return out
+    sd = v.std(ddof=1)
+    if sd == 0 or np.isnan(sd):
+        return out
+    out[mask] = (v - v.mean()) / sd
+    return out
+
+
+def score_for_row(i):
+    """Composite score z(HP) + z(TP) and the ranking pool for signal row i."""
+    u = universe[i]
+    z_hp = zscore(hp[i], u & ~np.isnan(hp[i]))
+    z_tp = zscore(tp[i], u & ~np.isnan(tp[i]))
+    score = z_hp + z_tp
+    pool = u & ~np.isnan(score)
+    return score, pool
+
+
+# ── daily ATR: TR = max(H-L, |H-prevC|, |L-prevC|), simple rolling mean ──
+prev_close_d = prices_sig.shift(1)
+_tr = np.maximum(
+    np.maximum((highs_sig - lows_sig).to_numpy(dtype=float),
+               np.abs((highs_sig - prev_close_d).to_numpy(dtype=float))),
+    np.abs((lows_sig - prev_close_d).to_numpy(dtype=float)))
+atr_np = pd.DataFrame(_tr, index=prices_sig.index, columns=prices_sig.columns) \
+    .rolling(ATR_WINDOW, min_periods=ATR_WINDOW).mean().to_numpy(dtype=np.float32)
+del _tr, prev_close_d
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 3. BENCHMARK, REGIME TIERS AND RANKS
+# ══════════════════════════════════════════════════════════════════════════════
+
+# equal-weight benchmark of the liquid universe, daily returns clipped to +-50%
+ret_np = prices_sig.pct_change(fill_method=None).to_numpy(dtype=np.float32)
+bench_ret = np.zeros(n_bars)
+# warm-up over the buffer (before the first signal bar): all names with prior as-traded close above the price floor
+pre_end = int(me_pos[0])
+if pre_end >= 1:
+    ok_pre = (floor_sig.shift(1).to_numpy() > MIN_PRICE)[1:pre_end + 1]
+    seg = np.where(ok_pre, np.clip(ret_np[1:pre_end + 1], -0.5, 0.5), np.nan)
+    bench_ret[1:pre_end + 1] = np.nan_to_num(np.nanmean(seg, axis=1))
+for j in range(n_m):
+    a_ = me_pos[j] + 1
+    b_ = me_pos[j + 1] if j + 1 < n_m else n_bars - 1
+    if a_ > b_ or a_ >= n_bars:
+        continue
+    seg = np.clip(ret_np[a_:b_ + 1][:, universe[j]], -0.5, 0.5)
+    if seg.shape[1]:
+        bench_ret[a_:b_ + 1] = np.nan_to_num(np.nanmean(seg, axis=1))
+del ret_np
+bench_idx = pd.Series((1.0 + bench_ret).cumprod(), index=index)
+bench_sma = bench_idx.rolling(BENCH_SMA, min_periods=BENCH_SMA_MIN_PERIODS).mean()
+bear = (bench_idx.shift(1) < bench_sma.shift(1)).to_numpy()
+bvol = pd.Series(bench_ret, index=index).rolling(PANIC_VOL_WINDOW).std().shift(1)
+panic = (bvol > bvol.expanding(min_periods=PANIC_MIN_PERIODS).quantile(PANIC_PCTL)).to_numpy()
+tier_arr = np.ones(n_bars)
+tier_arr[bear] = BEAR_SCALE
+tier_arr[panic] = np.minimum(tier_arr[panic], PANIC_SCALE)
+
+ranks, scores, pools = {}, {}, {}
+for k in sig_rows:
+    score, pool = score_for_row(k)
+    scores[k] = score
+    pools[k] = pool
+    rk = np.full(n_stk, np.nan)
+    if pool.sum() >= MIN_POOL_SIZE:
+        idx = np.where(pool)[0]
+        order = idx[np.argsort(-score[idx], kind="stable")]
+        rk[order] = np.arange(1, len(order) + 1)
+    ranks[k] = rk
+
+_p0 = int(me_pos[sig_rows[0]])
+print(f"\nRegime overlay: BEAR on {bear[_p0:].mean()*100:.1f}% of backtest days, PANIC on {panic[_p0:].mean()*100:.1f}%")
+print(f"Stops: peak {PEAK_STOP_PCT*100:.0f}% | vol-scaled clip({VOLSTOP_K} x ATR%, {VOLSTOP_MIN_PCT*100:.0f}%, {VOLSTOP_MAX_PCT*100:.0f}%) below the peak close   |   EXIT_MODE = {EXIT_MODE}")
+print(f"Gold sleeve   : {'OFF' if GOLD_CAP <= 0 else f'{GOLD_SYM} up to {GOLD_CAP*100:.0f}% of equity'}")
+
+open_np  = opens.to_numpy(dtype=np.float32)
+close_np = prices_sig.to_numpy(dtype=np.float32)
+high_np  = highs.to_numpy(dtype=np.float32)
+low_np   = lows.to_numpy(dtype=np.float32)
+dates_np = index
+rebal_map = {int(me_pos[k]) + 1: k for k in sig_rows if int(me_pos[k]) + 1 < n_bars}
+t_first = min(rebal_map)
+cash_daily = (1.0 + CASH_RATE_ANNUAL) ** (1.0 / 252.0) - 1.0
+
+
+def allocate(raw, caps):
+    """Equal-weight raw shares summing to <= 1 with per-name caps (excess left as idle cash, never levered)."""
+    n = len(raw)
+    w = np.zeros(n)
+    free = np.ones(n, dtype=bool)
+    remaining = 1.0
+    while free.any() and remaining > 1e-12:
+        alloc = np.where(free, raw, 0.0)
+        alloc = remaining * alloc / alloc.sum()
+        over = free & (alloc > caps + 1e-12)
+        if not over.any():
+            w[free] = alloc[free]
+            break
+        w[over] = caps[over]
+        remaining -= caps[over].sum()
+        free &= ~over
+    return w
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 4. DAILY EVENT LOOP
+# ══════════════════════════════════════════════════════════════════════════════
+
+def run_backtest(log_trades=False):
+    N = TOP_N
+    exit_rank = int(round(N * EXIT_RANK_MULT))
+    entry_cap = min(MAX_WEIGHT, MAX_ENTRY_PCT)
+
+    # ── per-position state (index = stock) ───────────────────────────────────
+    shares = np.zeros(n_stk)
+    cost_basis = np.zeros(n_stk)                     # entry open * (1 + cost)
+    entry_px = np.zeros(n_stk)
+    entry_bar = np.zeros(n_stk, dtype=np.int64)
+    entry_w_int = np.zeros(n_stk); entry_pv = np.zeros(n_stk); entry_tier = np.ones(n_stk)
+    entry_atr = np.full(n_stk, np.nan)
+    vs_width = np.full(n_stk, VOLSTOP_MIN_PCT)
+    min_low = np.zeros(n_stk); max_high = np.zeros(n_stk)
+    peak = np.zeros(n_stk)
+    last_exit_bar = np.full(n_stk, -10**9, dtype=np.int64)
+    pending_stop = np.zeros(n_stk, dtype=bool)       # honest mode: stops flagged at yesterday's close
+    pending_reason = np.full(n_stk, "", dtype=object)
+    pending_level = np.full(n_stk, np.nan); pending_pct = np.full(n_stk, np.nan)
+
+    cash, traded = INITIAL_CAPITAL, 0.0
+    gold_units = 0.0; gold_w = np.zeros(n_bars); gold_traded = 0.0
+    hidden_pnl = 0.0                                 # P&L the exit convention does NOT book: sum(shares x (logged fill - booked price)) over exits
+    eq = np.full(n_bars, np.nan); expo = np.zeros(n_bars); nheld = np.zeros(n_bars)
+    trade_pnls = []                                  # NET P&L per closed trade
+    trades = []
+    exit_counts = {}
+    n_entries = 0
+    cols = prices.columns
+
+    def close_positions(mask, t, px_exit, c_prev, reasons, levels=None, pcts=None, fills=None):
+        """Sell the masked positions IN FULL, booked at px_exit; fills = the logged fill when it differs from the booked price."""
+        nonlocal cash, traded, hidden_pnl
+        idxs = np.where(mask)[0]
+        if idxs.size == 0:
+            return
+        sh, px = shares[idxs], px_exit[idxs]
+        if fills is not None:
+            hidden_pnl += float((sh * (fills[idxs] - px)).sum())
+        notion = float((sh * px).sum())
+        cash += notion * (1 - COST_ONE_WAY); traded += notion
+        net = sh * (px * (1 - COST_ONE_WAY) - cost_basis[idxs])
+        trade_pnls.extend(net.tolist())
+        for j, i in enumerate(idxs):
+            rsn = reasons[i]
+            exit_counts[rsn] = exit_counts.get(rsn, 0) + 1
+            if log_trades:
+                ep = entry_px[i]
+                pos_size = sh[j] * ep
+                trades.append(dict(
+                    Ticker=cols[i], Entry_Date=dates_np[entry_bar[i]], Entry_Price=ep,
+                    Exit_Date=dates_np[t], Exit_Price=px[j], Fill_Logged=(fills[i] if fills is not None else px[j]), Close_At_Exit=c_prev[i], Peak_Price=peak[i],
+                    Stop_Price_At_Exit=(levels[i] if levels is not None else np.nan),
+                    Stop_Pct=(pcts[i] if pcts is not None else np.nan),
+                    ATR_At_Entry=entry_atr[i], Exit_Reason=rsn,
+                    Intended_Weight=entry_w_int[i], Weight=pos_size / entry_pv[i],
+                    Quantity=sh[j], Position_Size=pos_size, Portfolio_Value=entry_pv[i],
+                    PnL_Pct=(px[j] / ep - 1) * 100, PnL_Abs=sh[j] * (px[j] - ep),
+                    Net_PnL_Pct=(px[j] * (1 - COST_ONE_WAY) / cost_basis[i] - 1) * 100, Net_PnL_Abs=net[j],
+                    Holding_Days=(dates_np[t] - dates_np[entry_bar[i]]).days,
+                    MAE_Pct=(min_low[i] / ep - 1) * 100, MFE_Pct=(max_high[i] / ep - 1) * 100,
+                    Regime_Tier=entry_tier[i]))
+        shares[idxs] = 0.0
+        peak[idxs] = 0.0
+        last_exit_bar[idxs] = t
+
+    for t in range(t_first, n_bars):
+        o = open_np[t].astype(float)
+        c_prev = np.nan_to_num(close_np[t - 1].astype(float))
+        held = shares > 0
+        g_prev = (g_c[t - 1] if np.isfinite(g_c[t - 1]) else 0.0) if GOLD_CAP > 0 else 0.0
+        eq_open = cash + float((shares * c_prev)[held].sum()) + gold_units * g_prev
+        px_exit = np.where(np.isnan(o), c_prev, o)
+
+        # (0) honest mode: a stop flagged at yesterday's close -> exit in full at today's open
+        if pending_stop.any():
+            close_positions(pending_stop & held, t, px_exit, c_prev, pending_reason, pending_level, pending_pct)
+            pending_stop[:] = False; pending_reason[:] = ""
+            pending_level[:] = np.nan; pending_pct[:] = np.nan
+            held = shares > 0
+
+        # (0z) zenith / resting: the stop in force (state through the PREVIOUS bar) is tested against TODAY'S LOW; the position is closed today at the stop level x (1 - ZEN_SLIP), or at the open
+        # when the day gaps through it; locked (high == low) days defer the exit. 'zenith' books the sale at the PREVIOUS CLOSE (the live engines' weight-0-on-the-exit-day convention: the move
+        # from the previous close to the fill is never charged); 'resting' books it at the fill. A position bought today is first tested tomorrow.
+        if EXIT_MODE != "honest" and held.any():
+            _lo = low_np[t].astype(float); _hi = high_np[t].astype(float)
+            _L = np.full((2, n_stk), -np.inf)
+            _L[0] = np.where(peak > 0, peak * (1 - PEAK_STOP_PCT), -np.inf)
+            _L[1] = np.where(peak > 0, peak * (1 - vs_width), -np.inf)
+            _eff = _L.max(axis=0); _which = _L.argmax(axis=0)
+            _ok = (held & (entry_bar < t) & np.isfinite(_lo) & (_lo > 0) & np.isfinite(_eff) & (_eff > 0) & (_lo <= _eff)
+                   & ~(np.isfinite(_hi) & (_hi == _lo)))
+            if _ok.any():
+                _rs = np.array(["PEAK_STOP", "VOLSTOP"], dtype=object)[_which]
+                _fill = np.where(np.isfinite(o) & (o <= _eff), o, _eff * (1 - ZEN_SLIP))
+                _book = c_prev if EXIT_MODE == "zenith" else _fill
+                _pct = np.where(peak > 0, (peak - _eff) / np.where(peak > 0, peak, 1.0) * 100, np.nan)
+                close_positions(_ok, t, np.where(_ok, _book, c_prev), c_prev, _rs, _eff, _pct, fills=_fill)
+                held = shares > 0
+
+        tier_t = tier_arr[t]
+
+        # rebalance row today: rank exits, then entries into the free slots
+        if t in rebal_map:
+            k = rebal_map[t]
+            rk = ranks[k]
+            ok_rk = ~np.isnan(rk)
+            if ok_rk.any():
+                kept = held & ok_rk & (rk <= exit_rank)
+                if kept.sum() > N:
+                    ids = np.where(kept)[0]
+                    kept = np.zeros(n_stk, dtype=bool)
+                    kept[ids[np.argsort(rk[ids])[:N]]] = True
+                drop = held & ~kept
+                if drop.any():
+                    close_positions(drop, t, (c_prev if EXIT_MODE == "zenith" else px_exit), c_prev, np.full(n_stk, "REBAL_EXIT", dtype=object),
+                                    fills=(px_exit if EXIT_MODE == "zenith" else None))
+                slots = N - int(kept.sum())
+                cand = (~held) & ok_rk & (rk <= N) & ~np.isnan(o) & (o > 0) & ((t - last_exit_bar) >= REENTRY_COOLDOWN_BARS)
+                cand_ids = np.where(cand)[0]
+                cids = cand_ids[np.argsort(rk[cand_ids])][:max(slots, 0)]
+
+                if len(cids):
+                    adv = med[k][cids]
+                    caps = np.where(np.isnan(adv), entry_cap, np.minimum(entry_cap, ADV_CAP * adv / max(eq_open, 1.0)))
+                    w_int = allocate(np.ones(len(cids)), caps)
+                    w = w_int * tier_t
+                    need = np.zeros(n_stk); need[cids] = w * eq_open
+                    w_int_full = np.zeros(n_stk); w_int_full[cids] = w_int
+                    tot = float(need.sum())
+                    if gold_units > 0 and tot * (1 + COST_ONE_WAY) > cash:       # fund stock entries by selling gold (at the previous close; entries are known from yesterday's signals)
+                        _u = min(gold_units, (tot * (1 + COST_ONE_WAY) - cash) / (g_prev * (1 - GOLD_COST)))
+                        cash += _u * g_prev * (1 - GOLD_COST); gold_traded += _u * g_prev; gold_units -= _u
+                    scale = min(1.0, max(cash, 0.0) / (tot * (1 + COST_ONE_WAY))) if tot > 0 else 0.0
+                    spend = need * scale
+                    sh_buy = np.where(spend > 0, spend / np.where(o > 0, o, 1.0), 0.0)
+                    bought = sh_buy > 0
+                    cash -= float(spend.sum()) * (1 + COST_ONE_WAY); traded += float(spend.sum())
+                    if bought.any():
+                        b = np.where(bought)[0]
+                        n_entries += int(b.size)
+                        shares[b] += sh_buy[b]
+                        cost_basis[b] = o[b] * (1 + COST_ONE_WAY)
+                        entry_px[b] = o[b]; entry_bar[b] = t; entry_w_int[b] = w_int_full[b]
+                        entry_pv[b] = eq_open; entry_tier[b] = tier_t
+                        atr_e = atr_np[t - 1].astype(float)       # ATR at the signal bar
+                        entry_atr[b] = atr_e[b]
+                        cp = c_prev[b]
+                        ap = np.where(cp > 0, atr_e[b] / np.where(cp > 0, cp, 1.0), np.nan)
+                        vs_width[b] = np.clip(np.nan_to_num(VOLSTOP_K * ap, nan=VOLSTOP_MIN_PCT),
+                                              VOLSTOP_MIN_PCT, VOLSTOP_MAX_PCT)
+                        peak[b] = o[b]
+                        min_low[b] = o[b]; max_high[b] = o[b]
+
+        # gold sleeve: idle capital (cash + gold) is held in the ETF up to GOLD_CAP of equity, traded at the previous close
+        if GOLD_CAP > 0:
+            if gold_units > 0 and not np.isfinite(g_o[t]):                          # no ETF price today (data gap): close the position at the last known price
+                cash += gold_units * g_prev * (1 - GOLD_COST); gold_traded += gold_units * g_prev; gold_units = 0.0
+            elif np.isfinite(g_o[t]) and g_has[t - 1]:                              # trade only on consecutive genuine ETF prices (never at a stale price after the gap)
+                _val = gold_units * g_prev; _tgt = min(GOLD_CAP * eq_open, cash + _val)
+                if abs(_tgt - _val) > GOLD_BAND * eq_open:
+                    if _tgt > _val:
+                        _amt = min(_tgt - _val, cash / (1 + GOLD_COST)); gold_units += _amt / g_prev; cash -= _amt * (1 + GOLD_COST); gold_traded += _amt
+                    else:
+                        _u = (_val - _tgt) / g_prev; cash += _u * g_prev * (1 - GOLD_COST); gold_units -= _u; gold_traded += _u * g_prev
+
+        # end of day: carry cash, mark to close, update excursions and peaks
+        cash *= (1.0 + cash_daily)
+        c = close_np[t].astype(float)
+        held = shares > 0
+        pos = np.where(held, shares * np.nan_to_num(c), 0.0)
+        _gv = gold_units * g_c[t] if (GOLD_CAP > 0 and gold_units > 0) else 0.0
+        eq[t] = cash + float(pos.sum()) + _gv
+        expo[t] = pos.sum() / eq[t] if eq[t] > 0 else 0.0
+        gold_w[t] = _gv / eq[t] if eq[t] > 0 else 0.0
+        nheld[t] = held.sum()
+
+        if held.any():
+            peak[held] = np.maximum(peak[held], c[held])
+            min_low[held] = np.fmin(min_low[held], low_np[t].astype(float)[held])
+            max_high[held] = np.fmax(max_high[held], high_np[t].astype(float)[held])
+
+            if EXIT_MODE == "honest":                # flag stops on the CLOSE; the exit happens at tomorrow's open. Peak stop is checked first and claims the logged reason.
+                claimed = np.zeros(n_stk, dtype=bool)
+                for reason, width in (("PEAK_STOP", PEAK_STOP_PCT), ("VOLSTOP", vs_width)):
+                    lvl = peak * (1 - width)
+                    hit = held & (c < lvl) & ~claimed
+                    if hit.any():
+                        pending_reason[hit] = reason
+                        pending_level[hit] = lvl[hit]
+                        pending_pct[hit] = (width[hit] if isinstance(width, np.ndarray) else width) * 100
+                        claimed[hit] = True
+                pending_stop |= claimed
+
+    eq_s = pd.Series(eq, index=index).iloc[t_first:]
+
+    held = shares > 0
+    open_unreal = float((shares[held] * (close_np[-1].astype(float)[held] - cost_basis[held])).sum())
+
+    pnl = np.array(trade_pnls)
+    wins, losses = pnl[pnl > 0], pnl[pnl < 0]
+    n_trades = len(pnl)
+    win_rate = len(wins) / n_trades * 100 if n_trades else np.nan
+    profit_factor = wins.sum() / abs(losses.sum()) if len(losses) and losses.sum() < 0 else np.nan
+    avg_win = wins.mean() if len(wins) else np.nan
+    avg_loss = abs(losses.mean()) if len(losses) else np.nan
+    payoff_ratio = avg_win / avg_loss if avg_loss else np.nan
+
+    return dict(hidden_pnl=hidden_pnl, gold_w=pd.Series(gold_w, index=index).iloc[t_first:], gold_traded=gold_traded, eq=eq_s,
+                expo=pd.Series(expo, index=index).iloc[t_first:], nheld=pd.Series(nheld, index=index).iloc[t_first:],
+                traded=traded, exit_counts=exit_counts, n_entries=n_entries, trades=trades,
+                open_n=int(held.sum()), open_unreal=open_unreal,
+                n_trades=n_trades, win_rate=win_rate, profit_factor=profit_factor,
+                avg_win=avg_win, avg_loss=avg_loss, payoff_ratio=payoff_ratio)
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 5. METRICS + REPORT
+# ══════════════════════════════════════════════════════════════════════════════
+
+def metrics(eq_s, expo_s, nheld_s, traded):
+    eq0 = pd.concat([pd.Series([INITIAL_CAPITAL], index=[eq_s.index[0] - pd.Timedelta(days=1)]), eq_s])
+    r = eq0.pct_change().dropna()
+    yrs = (eq_s.index[-1] - eq_s.index[0]).days / 365.25
+    cagr = (eq_s.iloc[-1] / INITIAL_CAPITAL) ** (1 / yrs) - 1
+    vol = r.std() * np.sqrt(252)
+    dd = eq0 / eq0.cummax() - 1
+    rf_d = (1 + CASH_RATE_ANNUAL) ** (1 / 252) - 1
+    down = np.sqrt((np.minimum(r - rf_d, 0.0) ** 2).mean()) * np.sqrt(252)      # true downside deviation
+    mret = eq_s.resample("ME").last().pct_change().dropna()
+    avg_eq = eq_s.mean()
+    return dict(CAGR=cagr * 100, Vol=vol * 100, Sharpe0=r.mean() / r.std() * np.sqrt(252),
+                SharpeEx=(r.mean() - rf_d) / r.std() * np.sqrt(252),
+                Sortino=((r.mean() - rf_d) * 252) / down if down > 0 else np.nan,
+                MaxDD=dd.min() * 100, Calmar=cagr / abs(dd.min()) if dd.min() < 0 else np.nan,
+                WinMo=(mret > 0).mean() * 100, AvgHold=nheld_s.mean(), AvgExpo=expo_s.mean() * 100,
+                Turnover=traded / 2 / avg_eq / yrs * 100,                       # one-way
+                CostDrag=traded * COST_ONE_WAY / avg_eq / yrs * 100)            # % of avg equity per year
+
+
+def year_returns(eq_s):
+    ye = eq_s.resample("YE").last()
+    prev = pd.concat([pd.Series([INITIAL_CAPITAL]), ye.iloc[:-1]]).to_numpy()
+    return pd.Series(ye.to_numpy() / prev - 1, index=ye.index.year) * 100
+
+
+def year_drawdowns(eq_s):
+    eq0 = pd.concat([pd.Series([INITIAL_CAPITAL], index=[eq_s.index[0] - pd.Timedelta(days=1)]), eq_s])
+    dd = (eq0 / eq0.cummax() - 1).iloc[1:]
+    return dd.groupby(dd.index.year).min() * 100
+
+
+def trade_diagnostics(tr):
+    """Exit-reason and holding-period breakdown on NET trade P&L."""
+    if tr.empty:
+        return None, None
+    tr = tr.copy()
+    tr["win"] = tr.Net_PnL_Abs > 0
+    by_reason = tr.groupby("Exit_Reason").agg(
+        N=("win", "size"), Win_Pct=("win", lambda x: x.mean() * 100), AvgRet_Pct=("Net_PnL_Pct", "mean"),
+        MedRet_Pct=("Net_PnL_Pct", "median"), MedDays=("Holding_Days", "median"),
+        MAE_Pct=("MAE_Pct", "median"), MFE_Pct=("MFE_Pct", "median"), NetPnL=("Net_PnL_Abs", "sum"))
+    bins = pd.cut(tr.Holding_Days, [-1, 30, 60, 120, 100000], labels=["<=30d", "31-60d", "61-120d", ">120d"])
+    by_hold = tr.groupby(bins, observed=True).agg(
+        N=("win", "size"), Win_Pct=("win", lambda x: x.mean() * 100), AvgRet_Pct=("Net_PnL_Pct", "mean"),
+        NetPnL=("Net_PnL_Abs", "sum"))
+    return by_reason, by_hold
+
+
+# ══════════════════════════════════════════════════════════════════════════════
+# 6. SIGNAL DIAGNOSTICS: RANK-IC / ICIR vs FORWARD RETURNS, PER HORIZON
+# ══════════════════════════════════════════════════════════════════════════════
+
+def _nw_tstat(x, lags):
+    """t-stat of the mean with a Newey-West (Bartlett) long-run variance."""
+    x = np.asarray(x, dtype=float); n = len(x)
+    if n < 3:
+        return np.nan
+    xc = x - x.mean()
+    s = xc @ xc / n
+    for l in range(1, min(lags, n - 1) + 1):
+        s += 2 * (1 - l / (lags + 1)) * (xc[l:] @ xc[:-l] / n)
+    return x.mean() / np.sqrt(s / n) if s > 0 else np.nan
+
+
+def compute_icir(horizons):
+    """Spearman rank-IC of the composite score vs forward h-day return at every rebalance row
+    (universe-filtered pool, gross of cost). Forward return runs signal-bar close -> close; observations
+    spaced REBALANCE_FREQ_DAYS apart overlap when h > REBALANCE_FREQ_DAYS, hence the HAC t-stat."""
+    close_sig = prices_sig.to_numpy(dtype=float)
+    rows = []
+    for h in horizons:
+        ics = []
+        for k in sig_rows:
+            p = me_pos[k]
+            if p + h >= n_bars:
+                continue
+            pool = pools[k]
+            if pool.sum() < MIN_POOL_SIZE:
+                continue
+            idx = np.where(pool)[0]
+            s = scores[k][idx]
+            c0 = close_sig[p, idx]
+            c1 = close_sig[p + h, idx]
+            valid = np.isfinite(s) & np.isfinite(c0) & np.isfinite(c1) & (c0 > 0)
+            if valid.sum() < MIN_POOL_SIZE:
+                continue
+            fwd = c1[valid] / c0[valid] - 1.0
+            ic = pd.Series(s[valid]).corr(pd.Series(fwd), method="spearman")
+            if pd.notna(ic):
+                ics.append(ic)
+        ics = np.array(ics)
+        n_obs = len(ics)
+        if n_obs >= 2 and ics.std(ddof=1) > 0:
+            ic_mean, ic_std = ics.mean(), ics.std(ddof=1)
+            icir = ic_mean / ic_std
+            lags = max(int(np.ceil(h / REBALANCE_FREQ_DAYS)) - 1, 0)
+            rows.append(dict(Horizon=h, N=n_obs, MeanIC=ic_mean, StdIC=ic_std, ICIR=icir,
+                             tStat_naive=icir * np.sqrt(n_obs), tStat_HAC=_nw_tstat(ics, lags),
+                             PctPos=(ics > 0).mean() * 100))
+        else:
+            rows.append(dict(Horizon=h, N=n_obs, MeanIC=np.nan, StdIC=np.nan, ICIR=np.nan,
+                             tStat_naive=np.nan, tStat_HAC=np.nan, PctPos=np.nan))
+    return pd.DataFrame(rows).set_index("Horizon")
+
+
+if SAVE_OUTPUTS:
+    os.makedirs(OUTPUT_DIR, exist_ok=True)
+
+print(f"\nRunning {STRATEGY_NAME}  (TOP_N={TOP_N}, rebalance every {REBALANCE_FREQ_DAYS}d, EXIT_MODE={EXIT_MODE}, offset={SCHEDULE_OFFSET_DAYS}) ...")
+res = run_backtest(log_trades=True)
+res["m"] = metrics(res["eq"], res["expo"], res["nheld"], res["traded"])
+res["yr"] = year_returns(res["eq"])
+res["yr_dd"] = year_drawdowns(res["eq"])
+trades_df = pd.DataFrame(res["trades"])
+_years = (res["eq"].index[-1] - res["eq"].index[0]).days / 365.25
+hidden_pct_yr = res["hidden_pnl"] / res["eq"].mean() / _years * 100
+
+W = 60
+m = res["m"]
+print("\n" + "=" * W)
+print(f" {STRATEGY_NAME} BACKTEST")
+print(f" {dates_np[t_first].date()} -> {dates_np[-1].date()}")
+print(f" cost {COST_ONE_WAY*100:.1f}% one-way   cash {CASH_RATE_ANNUAL*100:.1f}%   capital {INITIAL_CAPITAL:,.0f}")
+print("=" * W)
+ec = res["exit_counts"]
+rows = [
+    ("CAGR %",              f"{m['CAGR']:.1f}"),
+    ("Volatility %",        f"{m['Vol']:.1f}"),
+    ("Sharpe (rf=0)",       f"{m['Sharpe0']:.2f}"),
+    ("Sharpe (rf=cash)",    f"{m['SharpeEx']:.2f}"),
+    ("Sortino",             f"{m['Sortino']:.2f}"),
+    ("Max Drawdown %",      f"{m['MaxDD']:.1f}"),
+    ("Calmar",              f"{m['Calmar']:.2f}"),
+    ("Winning Months %",    f"{m['WinMo']:.1f}"),
+    ("Avg Holdings",        f"{m['AvgHold']:.1f}"),
+    ("Avg Exposure %",      f"{m['AvgExpo']:.0f}"),
+    ("Avg Gold Weight %",   f"{res['gold_w'].mean() * 100:.1f}"),
+    ("Turnover %/yr (1-way)", f"{m['Turnover']:.0f}"),
+    ("Est. Cost Drag %/yr", f"{m['CostDrag']:.2f}"),
+    ("EXIT_MODE",           f"{EXIT_MODE}"),
+    ("Exit P&L NOT booked %/yr of avg equity", f"{hidden_pct_yr:.2f}"),
+    ("Entries",             f"{res['n_entries']}"),
+]
+for rsn in ["REBAL_EXIT", "PEAK_STOP", "VOLSTOP"]:
+    rows.append((f"Exits: {rsn}", f"{ec.get(rsn, 0)}"))
+rows += [
+    ("Open at end (n / unreal.)", f"{res['open_n']} / {res['open_unreal']:,.0f}"),
+    ("Closed Trades",       f"{res['n_trades']}"),
+    ("Trade Win Rate % (net)", f"{res['win_rate']:.1f}" if pd.notna(res['win_rate']) else "n/a"),
+    ("Profit Factor (net)", f"{res['profit_factor']:.2f}" if pd.notna(res['profit_factor']) else "n/a"),
+    ("Avg Win (net)",       f"{res['avg_win']:,.0f}" if pd.notna(res['avg_win']) else "n/a"),
+    ("Avg Loss (net)",      f"{res['avg_loss']:,.0f}" if pd.notna(res['avg_loss']) else "n/a"),
+    ("Payoff Ratio",        f"{res['payoff_ratio']:.2f}" if pd.notna(res['payoff_ratio']) else "n/a"),
+]
+label_w = max(len(r[0]) for r in rows) + 2
+for label, val in rows:
+    print(f" {label:<{label_w}}{val:>15}")
+
+print("\n" + "=" * W)
+print(" CALENDAR-YEAR RETURN % / MAX DRAWDOWN %")
+print("=" * W)
+yr_tab = pd.DataFrame({"Return%": res["yr"], "MaxDD%": res["yr_dd"]})
+print(yr_tab.round(1).to_string())
+
+by_reason, by_hold = trade_diagnostics(trades_df)
+if by_reason is not None:
+    print("\n" + "=" * W)
+    print(" TRADE DIAGNOSTICS (net of cost)  --  by exit reason")
+    print("=" * W)
+    print(by_reason.round(1).to_string())
+    print("\n by holding period")
+    print(by_hold.round(1).to_string())
+
+print("\n" + "=" * W)
+print(" ENTRY-SIGNAL RANK-IC / ICIR vs FORWARD RETURNS (gross, universe-filtered pool)")
+print("=" * W)
+icir_tab = compute_icir(IC_HORIZONS)
+print(icir_tab.round(3).to_string())
+
+if SAVE_OUTPUTS:
+    res["eq"].rename(STRATEGY_NAME).to_csv(os.path.join(OUTPUT_DIR, "equity_curves.csv"))
+    pd.DataFrame({"eq": res["eq"], "expo": res["expo"], "nheld": res["nheld"], "gold_w": res["gold_w"], "bear": bear[t_first:], "panic": panic[t_first:]}, index=res["eq"].index).to_csv(os.path.join(OUTPUT_DIR, "daily.csv"))
+    trades_df.to_csv(os.path.join(OUTPUT_DIR, "trade_log_full.csv"), index=False)
+    yr_tab.to_csv(os.path.join(OUTPUT_DIR, "yearly_returns.csv"))
+    icir_tab.to_csv(os.path.join(OUTPUT_DIR, "icir_report.csv"))
+    if by_reason is not None:
+        by_reason.to_csv(os.path.join(OUTPUT_DIR, "exit_reason_summary.csv"))
+    _json.dump(dict(hidden_pct_yr=hidden_pct_yr, exit_mode=EXIT_MODE, m=m, exits=ec, n_trades=res["n_trades"], entries=res["n_entries"], win=res["win_rate"],
+                    pf=res["profit_factor"], ic=icir_tab.reset_index().to_dict("records")),
+               open(os.path.join(OUTPUT_DIR, "summary.json"), "w"), default=float)
+    print(f"\n[Saved] equity_curves.csv, daily.csv, trade_log_full.csv, yearly_returns.csv, icir_report.csv, "
+          f"exit_reason_summary.csv, summary.json -> {os.path.abspath(OUTPUT_DIR)}")

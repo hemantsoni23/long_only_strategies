@@ -1,0 +1,102 @@
+Loading 5205 files from /Users/hemantsoni/Documents/upstox_data_folder/ohlcv_data...
+Loaded  Prices:(6638, 5205)  Volumes:(6638, 5205)  Highs:(6638, 5205)  Lows:(6638, 5205)  Opens:(6638, 5205)
+
+Corporate-action ADJUST: 857 jump cells back-adjusted
+Buffer starts : 2004-06-03
+Schedule      : rebalance every 60 bars -> 83 rebalances   (2006-02-01 -> 2025-12-01)
+Stocks loaded : 5205
+
+Regime overlay: BEAR on 33.8% of backtest days, PANIC on 2.9%
+Stops: peak 15% | vol-scaled clip(2.5 x ATR%, 10%, 25%) below the peak close   |   EXIT_MODE = honest
+Gold sleeve   : GOLDBEES up to 25% of equity
+
+Running CRESTLINE  (TOP_N=25, rebalance every 60d, EXIT_MODE=honest, offset=20) ...
+
+============================================================
+ CRESTLINE BACKTEST
+ 2006-02-02 -> 2025-12-31
+ cost 0.3% one-way   cash 0.0%   capital 100,000
+============================================================
+ CAGR %                                             17.1
+ Volatility %                                       10.6
+ Sharpe (rf=0)                                      1.56
+ Sharpe (rf=cash)                                   1.56
+ Sortino                                            2.19
+ Max Drawdown %                                    -25.2
+ Calmar                                             0.68
+ Winning Months %                                   64.7
+ Avg Holdings                                       14.6
+ Avg Exposure %                                       52
+ Avg Gold Weight %                                  15.7
+ Turnover %/yr (1-way)                               278
+ Est. Cost Drag %/yr                                1.67
+ EXIT_MODE                                        honest
+ Exit P&L NOT booked %/yr of avg equity             0.00
+ Entries                                            1529
+ Exits: REBAL_EXIT                                   142
+ Exits: PEAK_STOP                                    312
+ Exits: VOLSTOP                                     1053
+ Open at end (n / unreal.)                  22 / 179,516
+ Closed Trades                                      1507
+ Trade Win Rate % (net)                             43.7
+ Profit Factor (net)                                1.80
+ Avg Win (net)                                     5,298
+ Avg Loss (net)                                    2,277
+ Payoff Ratio                                       2.33
+
+============================================================
+ CALENDAR-YEAR RETURN % / MAX DRAWDOWN %
+============================================================
+      Return%  MaxDD%
+2006     35.9   -11.6
+2007     42.1    -7.5
+2008    -17.7   -25.2
+2009     24.4   -24.3
+2010     19.8   -10.1
+2011     -2.1   -13.7
+2012     19.2   -11.0
+2013      1.4    -8.5
+2014     61.3    -5.6
+2015      6.0   -15.1
+2016     -5.8   -15.3
+2017     32.1   -11.7
+2018    -10.6   -12.7
+2019     10.2   -10.7
+2020     36.5   -11.5
+2021     75.4    -7.6
+2022    -13.3   -19.3
+2023     47.6   -18.2
+2024     15.0    -8.3
+2025     11.7   -11.0
+
+============================================================
+ TRADE DIAGNOSTICS (net of cost)  --  by exit reason
+============================================================
+                N  Win_Pct  AvgRet_Pct  MedRet_Pct  MedDays  MAE_Pct  MFE_Pct    NetPnL
+Exit_Reason                                                                            
+PEAK_STOP     312     32.1         2.8        -8.7     42.5    -12.1     14.3  100659.7
+REBAL_EXIT    142     68.3        15.6         7.3     90.0     -5.6     18.1  457187.3
+VOLSTOP      1053     43.8         5.6        -2.5     47.0     -7.3     13.5  994412.1
+
+ by holding period
+                N  Win_Pct  AvgRet_Pct     NetPnL
+Holding_Days                                     
+<=30d         489      9.8        -9.3 -1087050.2
+31-60d        345     37.1         0.6  -116015.7
+61-120d       453     61.1        11.4  1218331.3
+>120d         220     93.2        37.1  1536993.7
+
+============================================================
+ ENTRY-SIGNAL RANK-IC / ICIR vs FORWARD RETURNS (gross, universe-filtered pool)
+============================================================
+          N  MeanIC  StdIC   ICIR  tStat_naive  tStat_HAC  PctPos
+Horizon                                                          
+5        83   0.046  0.142  0.324        2.949      2.967  65.060
+10       83   0.044  0.165  0.264        2.403      2.418  69.880
+15       83   0.049  0.189  0.257        2.343      2.357  68.675
+20       83   0.058  0.174  0.331        3.013      3.031  67.470
+40       82   0.077  0.169  0.452        4.093      4.118  76.829
+60       82   0.096  0.159  0.605        5.474      5.508  75.610
+120      81   0.119  0.152  0.781        7.030      5.976  80.247
+
+[Saved] equity_curves.csv, daily.csv, trade_log_full.csv, yearly_returns.csv, icir_report.csv, exit_reason_summary.csv, summary.json -> /Users/hemantsoni/Documents/long_only_strategies/crestline_review/.anchor_cache/f102d8a3d0bd

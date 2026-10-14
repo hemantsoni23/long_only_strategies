@@ -638,6 +638,8 @@ def _run_backtest_core(
     stop_cooldown_tickers:  dict = {}
     _last_stop_date:        dict = {}   # ticker → last STOP/CG exit date (entry-reason tag)
     executed_weights_list        = []
+    _target_unscaled_list        = []   # per-day UNSCALED target weights (before vol_scale x leverage); deferred holds restore these, never the scaled executed weights
+    _entry_fills                 = []   # (date, ticker, open fill) of every new position, for entry-day booking
     strategy.position_metadata       = []
     strategy.reject_log              = []
     strategy._reject_seen            = set()
@@ -682,6 +684,7 @@ def _run_backtest_core(
         if i == 0:
             _zero_w = pd.Series(0.0, index=strategy.prices.columns)
             executed_weights_list.append(_zero_w)
+            _target_unscaled_list.append(_zero_w)
             _port_ret_buf.append(0.0)
             _weight_buf.append(_zero_w)
             _vol_scale_list.append(1.0)
@@ -691,6 +694,9 @@ def _run_backtest_core(
 
         prev_weights   = executed_weights_list[i - 1]
         prev_held      = set(prev_weights.index[prev_weights > 1e-6])
+        # weight a deferred hold is restored to: the previous day's UNSCALED target. prev_weights is the EXECUTED weight (already x vol_scale x leverage), so restoring it
+        # and letting Step I scale it again would shrink the position every day (a 5% name went 0.030 -> 0.0065 -> 0.0039 in a bear regime).
+        prev_target    = _target_unscaled_list[i - 1] if strategy.fix_deferred_double_scale else prev_weights
         target_weights = monthly_signal.iloc[i].copy()
         exited_today: set = set()
 
@@ -730,6 +736,7 @@ def _run_backtest_core(
                 _last_stop_date[_cg_stock]       = date
             _zero_w = target_weights.copy()
             executed_weights_list.append(_zero_w)
+            _target_unscaled_list.append(_zero_w.copy())
             _port_ret_buf.append(0.0)
             _weight_buf.append(_zero_w)
             _vol_scale_list.append(1.0)
@@ -934,11 +941,11 @@ def _run_backtest_core(
                 continue
             # stop-only exits -- a position never leaves via rank-based REBALANCE; it holds at its last weight (slot stays occupied) until a stop / Crash Guard / time stop forces it out.
             if strategy.stop_only_exits and stock in active_holdings:
-                target_weights[stock] = float(prev_weights.get(stock, 0.0))
+                target_weights[stock] = float(prev_target.get(stock, 0.0))
                 continue
             # Circuit day: can't sell — restore previous weight and defer to next bar
             if stock in is_circuit_ff.columns and bool(is_circuit_ff.at[date, stock]):
-                target_weights[stock] = float(prev_weights.get(stock, 0.0))
+                target_weights[stock] = float(prev_target.get(stock, 0.0))
                 continue
             # rebalance exit buffer -- first signal-month drop is deferred (position kept at previous weight, stops stay live); exit only when a NEWER signal month still drops it.
             if strategy.rebalance_exit_buffer_months > 0 and stock in active_holdings:
@@ -946,7 +953,7 @@ def _run_backtest_core(
                 _pend    = _drop_pending.get(stock)
                 if _pend is None or _pend == _sig_now:
                     _drop_pending[stock] = _sig_now
-                    target_weights[stock] = float(prev_weights.get(stock, 0.0))
+                    target_weights[stock] = float(prev_target.get(stock, 0.0))
                     continue
                 _drop_pending.pop(stock, None)
             _close = float(prices_ff.at[date, stock])
@@ -1072,6 +1079,50 @@ def _run_backtest_core(
                     'regime_at_entry': strategy._regime_daily.iloc[i],
                     'signal_age_months': int(_age_e) if pd.notna(_age_e) else np.nan,
                 }
+                if strategy.fix_entry_booking:
+                    _entry_fills.append((date, stock, _ep))
+
+                # Entry day: the fill is at the OPEN, so the position lives the rest of that bar. Start its peak / min / max from the bar and, when min_hold_days allows
+                # (min_hold_days <= 0), let the entry-based stop fire the same day. (Before: the first stop check happened the NEXT day with the peak still equal to the entry price.)
+                if strategy.check_stop_on_entry_day:
+                    _e_close = float(prices_ff.at[date, stock])
+                    _e_low   = float(lows_ff.at[date, stock]);  _e_high = float(highs_ff.at[date, stock])
+                    if pd.isna(_e_low)  or _e_low  <= 0: _e_low  = _e_close
+                    if pd.isna(_e_high) or _e_high <= 0: _e_high = _e_close
+                    _e_atr = _atr_entry if (pd.notna(_atr_entry) and _atr_entry > 0) else _e_close * 0.02
+                    _sx, _fpx, _slv, _uh, _det = strategy._check_stop_exit(
+                        stock, _e_close, _e_low, _e_atr, _ep, active_holdings[stock],
+                        curr_high=_e_high, high_vol=bool(is_high_vol.iloc[i]))
+                    if _sx and strategy.min_hold_days <= 0:
+                        _record_closed_trade(
+                            strategy,
+                            ticker             = stock,
+                            holding            = active_holdings[stock],
+                            exit_date          = date,
+                            exit_price         = _e_close,
+                            fill_price         = _fpx,
+                            exit_reason        = 'STOP_HIT',
+                            stop_price_at_exit = _slv,
+                            exit_detail        = _det,
+                            exit_idx           = i,
+                        )
+                        del active_holdings[stock]
+                        target_weights[stock] = 0.0
+                        exited_today.add(stock)
+                        n_stop += 1
+                        _pnl_e = ((_fpx / _ep) - 1) * 100 if _ep > 0 else np.nan
+                        _cd_e  = strategy._cooldown_days_for(_pnl_e)
+                        if _cd_e > 0:
+                            stop_cooldown_tickers[stock] = (date, _cd_e)
+                        _last_stop_date[stock] = date
+                        _crystallised.discard(stock)
+                        continue
+                    _uh['min_price'] = min(_ep, _e_low)
+                    _uh['max_price'] = max(_ep, _e_high)
+                    active_holdings[stock] = _uh
+
+        # unscaled target of THIS day (after exits / deferrals / entries, before crystallisation, renormalisation and Step I's scaling): what a deferred hold restores tomorrow
+        _target_unscaled_list.append(target_weights.copy())
 
         # ── STEP H: Sync weight into active_holdings ──────────────────────
         # crystallised positions run at (1 − fraction) of signal weight
@@ -1219,6 +1270,16 @@ def _run_backtest_core(
         raw_ret    = _dr.at[exit_date, ticker]
         if not pd.isna(raw_ret) and raw_ret < capped_ret:
             _dr.at[exit_date, ticker] = capped_ret
+
+    # ── Entry-day booking (fix_entry_booking) ─────────────────────────────
+    # A position is bought at the OPEN of its entry day (the trade log's Entry_Price). The equity curve used to credit it that day's full close-to-close return, i.e. as if it had been
+    # bought at the previous close (the signal bar's close). It now earns close / entry_fill - 1. Exit days are unchanged (weight 0 on the exit day, as before).
+    if strategy.fix_entry_booking:
+        for _d_e, _tk_e, _fill_e in _entry_fills:
+            _c_e = prices_ff.at[_d_e, _tk_e]
+            if pd.notna(_c_e) and _c_e > 0 and pd.notna(_fill_e) and _fill_e > 0:
+                _dr.at[_d_e, _tk_e] = _c_e / _fill_e - 1.0
+    strategy._target_unscaled = pd.DataFrame(_target_unscaled_list, index=strategy.prices.index).fillna(0.0)   # diagnostics / tests
 
     # ── Portfolio returns & equity curve ──────────────────────────────────
     gross_eq_ret    = (executed_weights * _dr).sum(axis=1)

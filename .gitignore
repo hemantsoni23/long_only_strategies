@@ -225,3 +225,4 @@ __marimo__/
 *.parquet
 output/
 .DS_Store
+results/

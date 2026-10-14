@@ -10,6 +10,11 @@ LEGACY_V1_OVERRIDES = dict(
     cooldown_mode        = 'loss_scaled',
     use_cg_quality_gate  = False,
     leverage_bear        = 0.8,
+    # backtest-engine corrections of 2026-10-09 (see CSMZenith.__init__): off = the pre-correction engine
+    fix_deferred_double_scale = False,
+    fix_stop_uses_prior_peak  = False,
+    check_stop_on_entry_day   = False,
+    fix_entry_booking         = False,
 )
 
 
@@ -117,6 +122,11 @@ class CSMZenith:
         atr_initial_max         = 0.20,
         sector_cap_frac         = 0.0,    # D4: max share of the book in one Sector_clean bucket (0 = off)
         instruments_path        = None,   # sector map source (defaults to instruments_clean.csv beside this file)
+        # Backtest-engine corrections (2026-10-09). True = corrected engine; LEGACY_V1_OVERRIDES switches all four off to reproduce older numbers.
+        fix_deferred_double_scale = True,  # deferred holds (rebalance-exit buffer / circuit day / stop_only_exits) restore the UNSCALED target, not the executed weight that already carries vol_scale x leverage
+        fix_stop_uses_prior_peak  = True,  # the stop in force while a bar prints is set from the peak through the PREVIOUS bar; today's high only raises the stop for tomorrow (intrabar high/low order is unknown)
+        check_stop_on_entry_day   = True,  # a position bought at the open is exposed to its entry-based stop for the rest of that day (still subject to min_hold_days) and its peak/low-high start from the entry day's bar
+        fix_entry_booking         = True,  # a new position earns close/entry_fill - 1 on its entry day, not the close-to-close return that includes the overnight gap before the fill it never owned
         **kwargs,
     ):
         self.prices               = prices_df
@@ -206,6 +216,10 @@ class CSMZenith:
         self.sector_cap_frac          = sector_cap_frac
         self.instruments_path         = instruments_path
         self.sector_map               = None  # ticker -> Sector_clean, loaded lazily when sector_cap_frac > 0
+        self.fix_deferred_double_scale = fix_deferred_double_scale
+        self.fix_stop_uses_prior_peak  = fix_stop_uses_prior_peak
+        self.check_stop_on_entry_day   = check_stop_on_entry_day
+        self.fix_entry_booking         = fix_entry_booking
 
         self.factors              = None
         self.factor_legs          = {}    # {component: universe-filtered component DataFrame}
@@ -434,7 +448,77 @@ class CSMZenith:
 
     def _check_stop_exit(self, stock, curr_close, curr_low, curr_atr,
                           curr_open, holding, curr_high=np.nan, high_vol=False):
-        """Three-layer stop (effective_stop = max(chandelier, entry_hard, peak_hard); atr_stop only ratchets up). Returns (should_exit, fill_price, stop_level, updated_holding, exit_detail) with exit_detail in {CHANDELIER, ENTRY_HARD, PEAK_HARD, FORCE_60, GAP_DOWN_OPEN}."""
+        """Three-layer stop (effective_stop = max(chandelier, entry_hard, peak_hard); atr_stop only ratchets up). Returns (should_exit, fill_price, stop_level, updated_holding, exit_detail) with exit_detail in {CHANDELIER, ENTRY_HARD, PEAK_HARD, FORCE_60, GAP_DOWN_OPEN}.
+
+        Corrected ordering (fix_stop_uses_prior_peak=True): the stop in force while this bar printed is built from the state through the PREVIOUS bar (`holding['peak_price']` and `holding['atr_stop']` as persisted
+        by the caller), and today's low is tested against THAT level. The order of today's high and low inside the bar is unknown, so today's high may only raise the stop for tomorrow: the returned holding carries the
+        new peak and the next bar's stop, and for a bar that does not trigger the returned stop_level is tomorrow's resting-stop level. (The legacy path updates the peak with today's high first and then tests today's low
+        against the raised stop, which can fire stops that were not in force when the low printed.)"""
+        if not self.fix_stop_uses_prior_peak:
+            return self._check_stop_exit_legacy(stock, curr_close, curr_low, curr_atr, curr_open, holding, curr_high, high_vol)
+        if pd.isna(curr_close) or curr_close <= 0:
+            return False, np.nan, holding.get('atr_stop', np.nan), holding, ''
+
+        entry_price = holding['entry_price']
+        peak_price  = holding['peak_price']
+        atr_stop    = holding['atr_stop']
+        entry_stop  = holding.get('entry_stop_pct', self.hard_stop_from_entry)   # per-name when F3 is on
+
+        # Force-exit on extreme loss (>60% from entry) -- treats as data anomaly
+        if not pd.isna(entry_price) and entry_price > 0:
+            if (curr_close / entry_price) - 1 < -0.60:
+                synthetic_stop = entry_price * 0.40
+                fill = curr_open if (not pd.isna(curr_open) and curr_open > 0
+                                     and curr_open <= synthetic_stop) \
+                       else synthetic_stop * (1.0 - self.stop_slippage_pct)
+                return True, float(fill), float(synthetic_stop), holding, 'FORCE_60'
+
+        # Stop in force during today's bar: previous-bar peak, previous ratchet
+        entry_hard     = entry_price * (1.0 - entry_stop) if not pd.isna(entry_price) else -np.inf
+        peak_hard      = peak_price * (1.0 - self.hard_stop_from_peak)
+        effective_stop = max(atr_stop, entry_hard, peak_hard)
+
+        # Tomorrow's state: today's high lifts the peak (and the chandelier, if on) -- only AFTER today's test
+        bar_high = curr_high if (not pd.isna(curr_high) and curr_high > 0) else curr_close
+        new_peak = max(peak_price, bar_high)
+        next_atr_stop = max(atr_stop, entry_hard, effective_stop)
+        _atr_mult = self.atr_multiplier_high_vol if high_vol else self.atr_multiplier
+        if self.use_chandelier and not pd.isna(curr_atr) and curr_atr > 0:
+            _chand_raw = new_peak - _atr_mult * curr_atr
+            if self.use_chandelier_floor:
+                chandelier = float(np.clip(_chand_raw, new_peak * 0.70, new_peak * 0.97))
+            else:
+                chandelier = float(max(_chand_raw, new_peak * 0.70))   # cap only, no floor
+            next_atr_stop = max(next_atr_stop, chandelier)             # ratchet up only
+        next_stop    = max(next_atr_stop, new_peak * (1.0 - self.hard_stop_from_peak))
+        next_holding = {**holding, 'atr_stop': next_stop, 'peak_price': new_peak}
+
+        # Trigger check via intraday low against the stop that was in force
+        check_price = curr_low if (not pd.isna(curr_low) and curr_low > 0) else curr_close
+        if check_price > effective_stop:
+            return False, np.nan, next_stop, next_holding, ''
+
+        # Which layer is the binding one at trigger time?
+        _eps = 1e-9 * max(1.0, effective_stop)
+        if effective_stop <= entry_hard + _eps:
+            detail = 'ENTRY_HARD'
+        elif effective_stop <= peak_hard + _eps:
+            detail = 'PEAK_HARD'
+        else:
+            detail = 'CHANDELIER'   # ratcheted chandelier dominates
+
+        # Fill: gap-down -> fill at open; intraday breach -> stop x (1-slippage)
+        _open = curr_open if (not pd.isna(curr_open) and curr_open > 0) else curr_close
+        if _open <= effective_stop:
+            fill   = _open
+            detail = 'GAP_DOWN_OPEN'
+        else:
+            fill = effective_stop * (1.0 - self.stop_slippage_pct)
+        return True, float(fill), float(effective_stop), next_holding, detail
+
+    def _check_stop_exit_legacy(self, stock, curr_close, curr_low, curr_atr,
+                                 curr_open, holding, curr_high=np.nan, high_vol=False):
+        """Pre-2026-10-09 stop check (peak raised by today's high BEFORE today's low is tested). Kept for LEGACY_V1_OVERRIDES / reproduction only."""
         if pd.isna(curr_close) or curr_close <= 0:
             return False, np.nan, holding.get('atr_stop', np.nan), holding, ''
 

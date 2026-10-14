@@ -1,0 +1,164 @@
+SECTOR-FACTOR STRATEGY — V4 TRADING LOGIC
+Indian Equities | Composite Sector Rank (Momentum + Dispersion)
+==================================================
+
+Version note: copy of v3 with ONE change — sector ranking is swapped
+from plain 126-day sector momentum to an equal-weight percentile-rank
+composite of 126-day momentum AND 21-day-average cross-sectional return
+dispersion. Driven by factor-library IC testing: dispersion had the
+lowest correlation with momentum of any strong factor tested (0.28),
+and the composite's ICIR beat both individual components at the 63d and
+126d horizons. Stock rank, universe, regime, entry, exits, and sizing
+are all unchanged from v3.
+
+
+1. UNIVERSE FILTERS
+--------------------
+- Top 1000 stocks by 63-day average dollar volume (rolling mean of price x volume)
+- Minimum price: Rs 10
+- Circuit breaker exclusion: stocks with high == low (locked) on more than 5 of the last 63 days are excluded
+- Corporate action / bad-tick guard: single-day move < -40% or > +300% is nulled out before it feeds any return calculation (sector index, dispersion, portfolio returns)
+
+
+2. MARKET REGIME
+-----------------
+- Benchmark = equal-weight average of all 11 sector indices
+- New entries blocked only when the benchmark has closed below its own 50-day SMA for ALL of the last 5 consecutive days
+- One recovery day above the SMA unblocks entries immediately (HR/VCP convention)
+
+
+3. SECTOR RANKING
+------------------
+- Equal-weight index built per Sector_clean tag (minimum 8 constituent stocks to qualify)
+- Two components, each converted to a cross-sectional percentile rank (0-1) across the 11 sectors, then averaged equally:
+
+    3.1  Momentum          126-day sector index return
+    3.2  Dispersion        21-day rolling average of the daily cross-
+                            sectional standard deviation of constituent
+                            stock returns within the sector
+
+- Composite score = (percentile_rank(Momentum) + percentile_rank(Dispersion)) / 2
+- Top 3 sectors by composite score selected
+- NOTE: composite used RAW (unsmoothed) in this version — see v5 for
+  the smoothed follow-up and why it was needed
+
+
+4. STOCK SELECTION
+-------------------
+Within the top 3 sectors, a stock is a candidate if ALL of the following pass:
+
+  4.1  Trend Gate
+       Price > SMA50 > SMA200
+
+  4.2  Liquidity / Universe
+       Must pass the universe filter (Section 1) on the same bar
+
+  4.3  Stock Rank
+       Ranked within its sector by a 10-day rolling average of
+       (close / 252-day rolling high) — smoothed proximity to its own
+       52-week high. Higher (closer to the high) ranks better.
+       Top 2 stocks per sector selected.
+
+
+5. ENTRY SIGNAL
+-----------------
+Trend gate (4.1) is always required. One additional timing mode is
+active per run (four are coded, only "momentum" is currently enabled
+in ENTRY_MODES):
+
+  Trend Only        No timing trigger beyond rank + trend
+  Breakout          Close > highest close of the prior 20 trading days
+  Momentum          20-day return > 0                        <- ACTIVE
+  Breakout+Momentum Both of the above must be true
+
+Entry execution: filled at next day's open price (T+1 open).
+New entries only evaluated on rebalance days (every 5 trading days).
+
+
+6. POSITION SIZING
+--------------------
+- Equal weight: 1 / max_positions
+- Max positions = 3 sectors x 2 stocks = 6
+- No risk-based or ATR-based sizing
+
+
+7. EXIT LOGIC
+---------------
+Checked every bar for all held positions:
+
+  7.1  Stop Loss (daily)
+       Prior close <= entry price x (1 - 12%)
+
+  7.2  Trend Failure (daily)
+       Prior close < SMA200
+
+  7.3  Sector Rank Decline (weekly, rebalance days only)
+       Exit if the position's sector is no longer in the top 3 by
+       composite score
+
+  7.4  Stock Rank Decline (weekly, rebalance days only)
+       Exit if the stock is no longer top 2 within its (still top-ranked) sector
+
+  7.5  End of Data
+       Any open position closed out at the end of the backtest window
+
+Exit execution: filled at next day's open price (T+1 open).
+
+
+8. BACKTEST REPORTING WINDOW
+------------------------------
+- START_DATE / END_DATE slice the reported equity curve, metrics, and
+  trade log to a specific period
+- Factors (SMA200, 252d high, sector composite, etc.) always use the
+  FULL loaded price history for lookback regardless of this window, so
+  indicator warmup at the window's start is unaffected
+- Currently set to 2015-01-01 -> 2025-12-31
+
+
+==================================================
+PARAMETERS SUMMARY
+==================================================
+  Universe
+    Min price                    Rs 10
+    Dollar volume window         63 days (mean)
+    Universe size                Top 1000
+    Circuit breaker max          5 days in 63-day window
+    Bad-tick guard                <-40% / >+300% single-day move
+
+  Regime
+    Benchmark SMA                 50
+    Benchmark streak max          5 consecutive days below SMA
+
+  Sector Ranking
+    Rank factor                   50/50 blend: 126d momentum + 21d dispersion (percentile ranks)
+    Sectors selected               Top 3
+    Min constituents per sector    8
+    Smoothing                      None (raw composite -- see v5)
+
+  Stock Selection
+    Trend gate                    Price > SMA50 > SMA200
+    Rank factor                   Close / 252d high, 10-day smoothed
+    Stocks per sector             Top 2
+
+  Entry
+    Active mode                   Momentum (20d return > 0)
+    Rebalance cadence             Every 5 trading days
+    Execution                     T+1 open
+
+  Exits
+    Stop loss                     12% below entry
+    Trend failure                 Close < SMA200
+    Sector rank decline           Checked weekly
+    Stock rank decline            Checked weekly
+    Execution                     T+1 open
+
+  Sizing
+    Method                        Equal weight
+    Max positions                 6 (3 sectors x 2 stocks)
+
+  Warmup
+    260 trading days before first trade allowed
+
+  Reporting window
+    2015-01-01 -> 2025-12-31 (factors still use full history for lookback)
+==================================================
