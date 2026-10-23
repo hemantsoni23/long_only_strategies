@@ -1,0 +1,498 @@
+### T_IC
+<table header-row="true" header-column="true">
+	<tr>
+		<td>**3m IC (NW-t)**</td>
+		<td>**2005–08**</td>
+		<td>**2008–11**</td>
+		<td>**2011–14**</td>
+		<td>**2014–17**</td>
+		<td>**2017–20**</td>
+		<td>**2020–23**</td>
+		<td>**2023–26**</td>
+		<td>**All**</td>
+	</tr>
+	<tr>
+		<td>Residual momentum</td>
+		<td>+0.096 (t 2.7)</td>
+		<td>+0.090 (t 1.3)</td>
+		<td>+0.107 (t 2.0)</td>
+		<td>+0.097 (t 2.4)</td>
+		<td>+0.114 (t 3.0)</td>
+		<td>+0.053 (t 1.8)</td>
+		<td>+0.052 (t 1.9)</td>
+		<td>+0.087 (t 5.0)</td>
+	</tr>
+	<tr>
+		<td>CSM Absolute</td>
+		<td>+0.075 (t 3.7)</td>
+		<td>+0.044 (t 1.1)</td>
+		<td>+0.077 (t 3.7)</td>
+		<td>+0.036 (t 1.9)</td>
+		<td>+0.071 (t 3.4)</td>
+		<td>+0.028 (t 1.4)</td>
+		<td>+0.022 (t 1.5)</td>
+		<td>+0.050 (t 5.6)</td>
+	</tr>
+	<tr>
+		<td>CSM Batch</td>
+		<td>+0.067 (t 2.7)</td>
+		<td>+0.030 (t 0.7)</td>
+		<td>+0.085 (t 3.2)</td>
+		<td>+0.046 (t 2.2)</td>
+		<td>+0.077 (t 3.0)</td>
+		<td>+0.026 (t 1.0)</td>
+		<td>+0.017 (t 1.0)</td>
+		<td>+0.049 (t 4.8)</td>
+	</tr>
+	<tr>
+		<td>CSM Elendel</td>
+		<td>+0.103 (t 3.7)</td>
+		<td>+0.112 (t 4.9)</td>
+		<td>+0.092 (t 3.5)</td>
+		<td>+0.061 (t 3.1)</td>
+		<td>+0.131 (t 6.3)</td>
+		<td>+0.045 (t 2.3)</td>
+		<td>+0.036 (t 1.8)</td>
+		<td>+0.083 (t 9.1)</td>
+	</tr>
+	<tr>
+		<td>CSM Zenith</td>
+		<td>+0.114 (t 4.2)</td>
+		<td>+0.099 (t 2.7)</td>
+		<td>+0.095 (t 2.5)</td>
+		<td>+0.061 (t 2.1)</td>
+		<td>+0.114 (t 3.3)</td>
+		<td>+0.053 (t 2.6)</td>
+		<td>+0.057 (t 2.6)</td>
+		<td>+0.084 (t 7.3)</td>
+	</tr>
+	<tr>
+		<td>CSM Quad</td>
+		<td>–</td>
+		<td>+0.107 (t 5.0)</td>
+		<td>+0.080 (t 5.2)</td>
+		<td>+0.041 (t 2.3)</td>
+		<td>+0.060 (t 2.3)</td>
+		<td>+0.012 (t 0.4)</td>
+		<td>+0.006 (t 0.3)</td>
+		<td>+0.049 (t 5.0)</td>
+	</tr>
+</table>
+### T_DETAIL
+<table header-row="true" header-column="true">
+	<tr>
+		<td>**Strategy**</td>
+		<td>**IC latest 3y**</td>
+		<td>**ICIR**</td>
+		<td>**Hit (IC>0)**</td>
+		<td>**NW-t**</td>
+		<td>**IC all**</td>
+		<td>**ICIR all**</td>
+		<td>**Hit all**</td>
+		<td>**NW-t all**</td>
+	</tr>
+	<tr>
+		<td>Residual momentum</td>
+		<td>+0.052</td>
+		<td>0.43</td>
+		<td>71%</td>
+		<td>1.89</td>
+		<td>+0.087</td>
+		<td>0.46</td>
+		<td>73%</td>
+		<td>4.98</td>
+	</tr>
+	<tr>
+		<td>CSM Absolute</td>
+		<td>+0.022</td>
+		<td>0.31</td>
+		<td>59%</td>
+		<td>1.47</td>
+		<td>+0.050</td>
+		<td>0.47</td>
+		<td>71%</td>
+		<td>5.63</td>
+	</tr>
+	<tr>
+		<td>CSM Batch</td>
+		<td>+0.017</td>
+		<td>0.22</td>
+		<td>59%</td>
+		<td>1.00</td>
+		<td>+0.049</td>
+		<td>0.41</td>
+		<td>67%</td>
+		<td>4.76</td>
+	</tr>
+	<tr>
+		<td>CSM Elendel</td>
+		<td>+0.036</td>
+		<td>0.41</td>
+		<td>62%</td>
+		<td>1.75</td>
+		<td>+0.083</td>
+		<td>0.77</td>
+		<td>78%</td>
+		<td>9.09</td>
+	</tr>
+	<tr>
+		<td>CSM Zenith</td>
+		<td>+0.057</td>
+		<td>0.55</td>
+		<td>71%</td>
+		<td>2.63</td>
+		<td>+0.084</td>
+		<td>0.62</td>
+		<td>76%</td>
+		<td>7.29</td>
+	</tr>
+	<tr>
+		<td>CSM Quad</td>
+		<td>+0.006</td>
+		<td>0.06</td>
+		<td>65%</td>
+		<td>0.33</td>
+		<td>+0.049</td>
+		<td>0.41</td>
+		<td>69%</td>
+		<td>4.98</td>
+	</tr>
+</table>
+### T_H
+<table header-row="true" header-column="true">
+	<tr>
+		<td>**Latest 3y IC (NW-t) · all-history**</td>
+		<td>**1m**</td>
+		<td>**3m**</td>
+		<td>**6m**</td>
+		<td>**12m**</td>
+	</tr>
+	<tr>
+		<td>Residual momentum</td>
+		<td>+0.030 (t 1.2) · all +0.051</td>
+		<td>+0.052 (t 1.9) · all +0.087</td>
+		<td>+0.103 (t 3.5) · all +0.108</td>
+		<td>+0.099 (t 2.0) · all +0.103</td>
+	</tr>
+	<tr>
+		<td>CSM Absolute</td>
+		<td>+0.019 (t 1.3) · all +0.037</td>
+		<td>+0.022 (t 1.5) · all +0.050</td>
+		<td>+0.036 (t 1.6) · all +0.048</td>
+		<td>+0.020 (t 0.5) · all +0.020</td>
+	</tr>
+	<tr>
+		<td>CSM Batch</td>
+		<td>+0.018 (t 1.3) · all +0.044</td>
+		<td>+0.017 (t 1.0) · all +0.049</td>
+		<td>+0.035 (t 1.4) · all +0.043</td>
+		<td>+0.021 (t 0.6) · all +0.016</td>
+	</tr>
+	<tr>
+		<td>CSM Elendel</td>
+		<td>+0.040 (t 2.4) · all +0.051</td>
+		<td>+0.036 (t 1.8) · all +0.083</td>
+		<td>+0.058 (t 2.2) · all +0.089</td>
+		<td>+0.040 (t 1.1) · all +0.066</td>
+	</tr>
+	<tr>
+		<td>CSM Zenith</td>
+		<td>+0.055 (t 3.0) · all +0.056</td>
+		<td>+0.057 (t 2.6) · all +0.084</td>
+		<td>+0.091 (t 5.3) · all +0.090</td>
+		<td>+0.104 (t 5.2) · all +0.077</td>
+	</tr>
+	<tr>
+		<td>CSM Quad</td>
+		<td>+0.013 (t 0.9) · all +0.049</td>
+		<td>+0.006 (t 0.3) · all +0.049</td>
+		<td>+0.026 (t 1.2) · all +0.040</td>
+		<td>+0.002 (t 0.1) · all -0.007</td>
+	</tr>
+</table>
+### T_BASKET
+<table header-row="true" header-column="true">
+	<tr>
+		<td>**Strategy**</td>
+		<td>**Top-N**</td>
+		<td>**Excess / 3m (latest 3y)**</td>
+		<td>**NW-t**</td>
+		<td>**Months beating universe**</td>
+		<td>**Pick accuracy***</td>
+		<td>**Excess all**</td>
+		<td>**NW-t all**</td>
+		<td>**Accuracy all**</td>
+	</tr>
+	<tr>
+		<td>Residual momentum</td>
+		<td>40</td>
+		<td>+1.34%</td>
+		<td>1.5</td>
+		<td>62%</td>
+		<td>53%</td>
+		<td>+2.54%</td>
+		<td>4.3</td>
+		<td>56%</td>
+	</tr>
+	<tr>
+		<td>CSM Absolute</td>
+		<td>25</td>
+		<td>-0.50%</td>
+		<td>-0.5</td>
+		<td>47%</td>
+		<td>48%</td>
+		<td>+1.42%</td>
+		<td>3.0</td>
+		<td>53%</td>
+	</tr>
+	<tr>
+		<td>CSM Batch</td>
+		<td>30</td>
+		<td>-0.40%</td>
+		<td>-0.5</td>
+		<td>41%</td>
+		<td>50%</td>
+		<td>+1.10%</td>
+		<td>2.4</td>
+		<td>54%</td>
+	</tr>
+	<tr>
+		<td>CSM Elendel</td>
+		<td>15</td>
+		<td>+0.80%</td>
+		<td>0.6</td>
+		<td>53%</td>
+		<td>54%</td>
+		<td>+2.26%</td>
+		<td>3.9</td>
+		<td>56%</td>
+	</tr>
+	<tr>
+		<td>CSM Zenith</td>
+		<td>15</td>
+		<td>+0.31%</td>
+		<td>0.3</td>
+		<td>50%</td>
+		<td>56%</td>
+		<td>+0.91%</td>
+		<td>1.7</td>
+		<td>56%</td>
+	</tr>
+	<tr>
+		<td>CSM Quad</td>
+		<td>15</td>
+		<td>+0.16%</td>
+		<td>0.1</td>
+		<td>53%</td>
+		<td>50%</td>
+		<td>+1.31%</td>
+		<td>2.2</td>
+		<td>52%</td>
+	</tr>
+</table>
+### T_EV
+<table header-row="true" header-column="true">
+	<tr>
+		<td>**20d excess (NW-t)**</td>
+		<td>**2005–08**</td>
+		<td>**2008–11**</td>
+		<td>**2011–14**</td>
+		<td>**2014–17**</td>
+		<td>**2017–20**</td>
+		<td>**2020–23**</td>
+		<td>**2023–26**</td>
+		<td>**All**</td>
+	</tr>
+	<tr>
+		<td>HR breakout vs market</td>
+		<td>+1.88% (t 2.7) n=1156</td>
+		<td>+0.86% (t -0.3) n=902</td>
+		<td>+1.72% (t 3.2) n=1124</td>
+		<td>+0.99% (t 1.9) n=1463</td>
+		<td>+1.57% (t 1.4) n=1162</td>
+		<td>-0.01% (t -0.6) n=1353</td>
+		<td>+0.91% (t 2.4) n=1404</td>
+		<td>+1.06% (t 1.9) n=8768</td>
+	</tr>
+	<tr>
+		<td>HR breakout vs trend-peers</td>
+		<td>+0.30% (t 0.7) n=1156</td>
+		<td>+0.64% (t 1.8) n=902</td>
+		<td>+0.44% (t 1.7) n=1124</td>
+		<td>+0.34% (t 0.4) n=1463</td>
+		<td>+0.27% (t 0.2) n=1162</td>
+		<td>-0.65% (t -2.1) n=1353</td>
+		<td>+0.22% (t 1.3) n=1404</td>
+		<td>+0.16% (t 1.2) n=8768</td>
+	</tr>
+	<tr>
+		<td>VCP vs market</td>
+		<td>–</td>
+		<td>–</td>
+		<td>+3.07% (t 2.8) n=255</td>
+		<td>+2.11% (t 2.1) n=442</td>
+		<td>+3.38% (t 1.9) n=279</td>
+		<td>+1.05% (t 0.2) n=476</td>
+		<td>+1.39% (t 1.1) n=540</td>
+		<td>+2.22% (t 4.0) n=2278</td>
+	</tr>
+	<tr>
+		<td>VCP vs trend-peers</td>
+		<td>–</td>
+		<td>–</td>
+		<td>+1.47% (t 0.7) n=255</td>
+		<td>+0.87% (t 0.7) n=442</td>
+		<td>+1.69% (t -0.1) n=279</td>
+		<td>+0.55% (t 0.2) n=476</td>
+		<td>+0.26% (t -0.3) n=540</td>
+		<td>+1.13% (t 1.2) n=2278</td>
+	</tr>
+</table>
+### T_EVH
+<table header-row="true" header-column="true">
+	<tr>
+		<td>**Latest 3y excess vs market (NW-t) · all**</td>
+		<td>**5d**</td>
+		<td>**10d**</td>
+		<td>**20d**</td>
+		<td>**40d**</td>
+		<td>**60d**</td>
+	</tr>
+	<tr>
+		<td>HR breakout</td>
+		<td>+0.04% (t 0.2) · all +0.22%</td>
+		<td>+0.53% (t 2.2) · all +0.69%</td>
+		<td>+0.91% (t 2.4) · all +1.06%</td>
+		<td>+1.60% (t 2.4) · all +2.11%</td>
+		<td>+1.92% (t 2.2) · all +2.91%</td>
+	</tr>
+	<tr>
+		<td>VCP</td>
+		<td>+0.09% (t -0.6) · all +0.63%</td>
+		<td>+0.32% (t -0.5) · all +1.42%</td>
+		<td>+1.39% (t 1.1) · all +2.22%</td>
+		<td>+1.57% (t 0.7) · all +3.33%</td>
+		<td>+1.29% (t 0.9) · all +4.20%</td>
+	</tr>
+</table>
+### T_EVHIT
+<table header-row="true" header-column="true">
+	<tr>
+		<td>**Event accuracy: % of signals beating baseline (20d)**</td>
+		<td>**Latest 3y**</td>
+		<td>**All history**</td>
+	</tr>
+	<tr>
+		<td>HR breakout vs market</td>
+		<td>48%</td>
+		<td>49%</td>
+	</tr>
+	<tr>
+		<td>HR breakout vs trend-peers</td>
+		<td>46%</td>
+		<td>46%</td>
+	</tr>
+	<tr>
+		<td>VCP vs market</td>
+		<td>49%</td>
+		<td>50%</td>
+	</tr>
+	<tr>
+		<td>VCP vs trend-peers</td>
+		<td>44%</td>
+		<td>46%</td>
+	</tr>
+</table>
+### T_RET
+<table header-row="true" header-column="true">
+	<tr>
+		<td>**Faithful-booked returns**</td>
+		<td>**CAGR**</td>
+		<td>**Nifty 500 (price)**</td>
+		<td>**Excess**</td>
+		<td>**Sharpe (rf=0)**</td>
+		<td>**Max DD**</td>
+		<td>**Excess NW-t**</td>
+	</tr>
+	<tr>
+		<td>CSM Elendel · latest 3y</td>
+		<td>-0.3%</td>
+		<td>+12.1%</td>
+		<td>-12.4%</td>
+		<td>0.07</td>
+		<td>-37%</td>
+		<td>-1.4</td>
+	</tr>
+	<tr>
+		<td>CSM Elendel · prior 3y</td>
+		<td>+38.7%</td>
+		<td>+25.0%</td>
+		<td>+13.7%</td>
+		<td>2.08</td>
+		<td>-19%</td>
+		<td>1.2</td>
+	</tr>
+	<tr>
+		<td>CSM Elendel · all</td>
+		<td>+11.3%</td>
+		<td>+16.4%</td>
+		<td>-5.1%</td>
+		<td>0.81</td>
+		<td>-39%</td>
+		<td>-1.5</td>
+	</tr>
+	<tr>
+		<td>CSM Zenith · latest 3y</td>
+		<td>+5.4%</td>
+		<td>+12.1%</td>
+		<td>-6.7%</td>
+		<td>0.42</td>
+		<td>-32%</td>
+		<td>-0.8</td>
+	</tr>
+	<tr>
+		<td>CSM Zenith · prior 3y</td>
+		<td>+25.4%</td>
+		<td>+25.0%</td>
+		<td>+0.4%</td>
+		<td>1.56</td>
+		<td>-24%</td>
+		<td>0.0</td>
+	</tr>
+	<tr>
+		<td>CSM Zenith · all</td>
+		<td>+13.1%</td>
+		<td>+15.5%</td>
+		<td>-2.4%</td>
+		<td>1.05</td>
+		<td>-32%</td>
+		<td>-0.9</td>
+	</tr>
+	<tr>
+		<td>CSM Quad · latest 3y</td>
+		<td>-4.8%</td>
+		<td>+12.1%</td>
+		<td>-16.9%</td>
+		<td>-0.26</td>
+		<td>-44%</td>
+		<td>-1.9</td>
+	</tr>
+	<tr>
+		<td>CSM Quad · prior 3y</td>
+		<td>+12.5%</td>
+		<td>+25.0%</td>
+		<td>-12.5%</td>
+		<td>0.83</td>
+		<td>-36%</td>
+		<td>-1.1</td>
+	</tr>
+	<tr>
+		<td>CSM Quad · all</td>
+		<td>+7.8%</td>
+		<td>+11.1%</td>
+		<td>-3.3%</td>
+		<td>0.60</td>
+		<td>-44%</td>
+		<td>-0.9</td>
+	</tr>
+</table>
