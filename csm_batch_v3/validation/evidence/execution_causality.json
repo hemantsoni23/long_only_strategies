@@ -1,0 +1,42 @@
+{
+  "stop_order": {
+    "same_known_open": 100,
+    "later_low_90": {
+      "reason": "REBAL_EXIT",
+      "exit_price": 100.0,
+      "holdings_next_day": 1
+    },
+    "later_low_80": {
+      "reason": "HARD_STOP_HIT",
+      "exit_price": 84.745,
+      "holdings_next_day": 0
+    },
+    "result": "FAIL"
+  },
+  "mask_at_open": {
+    "same_known_open": 100,
+    "no_large_close_jump": {
+      "event_count": 0,
+      "open_used_on_day": 100.0,
+      "entry_price": 100.0
+    },
+    "close_later_500": {
+      "event_count": 2,
+      "open_used_on_day": 90.0,
+      "entry_price": 90.0
+    },
+    "result": "FAIL"
+  },
+  "circuit_at_open": {
+    "same_known_open": 100,
+    "later_range_nonzero": {
+      "held_on_entry_day": 1,
+      "entry_date": "2024-01-03"
+    },
+    "later_range_zero": {
+      "held_on_entry_day": 0,
+      "entry_date": "2024-01-04"
+    },
+    "result": "FAIL"
+  }
+}

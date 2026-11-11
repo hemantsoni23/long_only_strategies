@@ -1,0 +1,163 @@
+# Random Matrix Theory and Financial Correlations
+
+Laurent Laloux, Pierre Cizeau, Marc Potters, and Jean-Philippe Bouchaud. Undated seven-page local manuscript, with a World Scientific / Mathematical Models and Methods in Applied Sciences header. Its references include 1999 articles and describe an English book translation as forthcoming in spring 2000. Those clues date the version approximately; the supplied PDF does not establish its publication year. [Source PDF](<../../Finance/CizeauLalouxPotters_  Random Matrix Theory and Financial Correlations.pdf>).
+
+## Why this matters
+
+Portfolio optimization magnifies covariance-estimation errors. A covariance matrix that looks plausible entry by entry can contain small eigenvalues produced mostly by finite-sample noise. Inverting it gives those directions large weights, turning a statistical accident into an apparently low-risk portfolio. This paper proposes using the eigenvalue distribution of an independent-return null model to identify a broad region of unreliable sample eigenvalues. Replacing their individual values with a common value reduces this source of optimization error.
+
+The contribution combines three things: a random-matrix benchmark for financial correlation spectra, a concrete spectral cleaning rule, and a two-period portfolio experiment. The experiment illustrates a substantial reduction in the gap between predicted and subsequently measured volatility. It is deliberately conducted with perfect knowledge of future mean returns, however. It isolates a covariance-estimation problem and does not demonstrate an implementable return-forecasting strategy.
+
+The paper's most useful distinction is between a covariance matrix's overall fit to historical observations and its reliability after inversion. Even a well-conditioned sample matrix can give unstable optimized portfolios. The smallest eigenvalues and their eigenvectors deserve particular attention because an optimizer finds them attractive precisely when their estimated risk is unusually low.
+
+## Data matrix, portfolio objective, and the null model
+
+Let $N$ denote the number of assets and $T$ the number of observations. The paper subtracts each asset's average price change and rescales its observations to unit volatility. Write the resulting $N\times T$ matrix as $M$, with $M_{it}=\delta x_i(t)$. Its empirical correlation matrix is
+
+$$
+C=\frac{1}{T}MM^\top,\qquad
+C_{ij}=\frac{1}{T}\sum_{t=1}^T\delta x_i(t)\delta x_j(t).
+$$
+
+This is equation (0.1), PDF page 2. The normalization gives approximately, or exactly under the stated sample convention, $C_{ii}=1$ and $\operatorname{tr}C=N$. Dividing by $T$ is the source convention, rather than an unbiased $T-1$ covariance estimator. A later sentence on that page calls $M$ a $T\times N$ matrix; the dimensions above are the ones consistent with the printed product $MM^\top$ being an $N\times N$ asset matrix.
+
+At the beginning of the paper, $C$ also denotes a covariance matrix in the portfolio objective. With allocation vector $w$ and expected-return vector $\mu$, expected portfolio return and variance are
+
+$$
+R_P=w^\top\mu,\qquad \sigma_P^2=w^\top Cw.
+$$
+
+For assets whose raw volatilities differ, a cleaned correlation matrix must be converted back into a covariance matrix using a volatility scale matrix: $\Sigma=D_\sigma C D_\sigma$. Using a correlation matrix directly in the objective is equivalent to working in standardized asset units. The paper does not fully document that conversion in its experiment, so a reproduction must state which units it uses.
+
+For an eigen-decomposition $C=V\Lambda V^\top$, inversion weights eigenvectors by $1/\lambda_k$. Thus an error that pushes a small eigenvalue downward has a disproportionate influence on the computed portfolio. The argument is about the interaction of estimation and optimization, not merely about whether an individual sample correlation is statistically significant.
+
+The null model assumes that the entries of $M$ are independent, identically distributed, mean-zero random variables with variance $\sigma^2$. Under Gaussian entries the resulting sample covariance is a Wishart matrix. The limiting spectral law has a wider range of applicability under suitable moment conditions, but independent non-Gaussian entries do not literally give the same finite-sample Wishart distribution.
+
+Let $Q=T/N\geq1$ remain fixed as $N,T$ grow. The empirical eigenvalue density is normalized to total mass one:
+
+$$
+\rho_C(\lambda)=\frac{1}{N}\frac{dn(\lambda)}{d\lambda}.
+$$
+
+The limiting density and its support, equation (0.3), are
+
+$$
+\rho_C(\lambda)=
+\frac{Q}{2\pi\sigma^2}
+\frac{\sqrt{(\lambda_+-\lambda)(\lambda-\lambda_-)}}{\lambda},
+\qquad \lambda_-\leq\lambda\leq\lambda_+,
+$$
+
+$$
+\lambda_\pm=\sigma^2\left(1\pm Q^{-1/2}\right)^2.
+$$
+
+These are eigenvalues of a covariance matrix with no genuine cross-asset correlation. The distribution therefore describes the spurious spread generated by a finite observation window. An identity population correlation matrix need not produce sample eigenvalues close to one when $T$ is only a few times $N$.
+
+When $Q>1$, the lower support edge is positive. When $Q=1$, it reaches zero and the density diverges proportionally to $\lambda^{-1/2}$ near zero. Both endpoints are asymptotic boundaries, not inviolable finite-sample cutoffs. The paper explicitly notes the possibility of observations beyond the edges for finite $N$ and points to more refined edge-distribution results. It does not implement a specified significance level for classifying an outlier.
+
+There is a mathematical shortcut on PDF page 3 that should not be reproduced literally. The text relates the $Q=1$ formula to a semicircle law for the eigenvalues of a square iid matrix $M$ and then squares those eigenvalues. A general iid $M$ is not symmetric: its eigenvalues need not be real, and the eigenvalues of $MM^\top$ are its squared singular values, not its squared eigenvalues. A correct connection uses the singular-value distribution, whose positive half has the quarter-circle form in this special case, or its symmetrization. This is a derived correction to the explanation, not a change to the sample-covariance density used by the paper.
+
+## Empirical spectrum and what the fitted parameters mean
+
+The reported universe contains $N=406$ S&P 500 stocks observed over $T=1309$ daily observations during 1991–1996. Therefore $Q=1309/406\approx3.224$, printed as 3.22. The source calls the observations daily price variations. It does not provide a vendor, exact endpoints, constituent-selection rule, corporate-action treatment, delisting policy, missing-value procedure, or an unambiguous distinction between simple and logarithmic returns. These omissions matter when trying to recreate the spectrum exactly.
+
+Figure 1, PDF page 3, compares a smoothed empirical eigenvalue density to two versions of the null density. Its inset includes the dominant market eigenvalue. The largest eigenvalue is about 25 times the unit-variance null model's upper edge, and its eigenvector has roughly equal components across stocks. This is a clear rejection of complete independence. It is not a claim that the entire financial correlation matrix is random.
+
+The first refinement removes the market contribution from the variance available to the noise background. The text reports a residual scale around $\sigma^2=0.85$. It prints $1-\lambda_{\max}/N$ while referring to removal of the dominant empirical eigenvalue. The coherent interpretation is $1-\lambda_1/N$, where $\lambda_1$ is that empirical market eigenvalue; $\lambda_{\max}$ elsewhere denotes the much smaller theoretical upper edge. Using the theoretical edge in the subtraction would not give 0.85. This is a notation repair inferred from the argument and its numerical value.
+
+A second fit treats the background scale as adjustable. The reported best fit uses $\sigma^2=0.74$ with $Q=3.22$. About 94% of empirical eigenvalues lie in the part of the spectrum described by this bulk distribution; the largest 6% exceed the upper edge. With these rounded parameters the theoretical band runs approximately from 0.145 to 1.795. Those numbers can be recomputed directly from the endpoint formula; they are not separate measurements reported in a table.
+
+The source does not specify the density-smoothing bandwidth, fitting loss, optimization algorithm, or a confidence interval for 0.74. It also remarks that a slightly smaller effective $Q$ could improve the fit because volatility correlations reduce effective independent information. It provides no fitted effective-$Q$ estimate. A reproduction should consequently distinguish the descriptive fit in Figure 1 from a formally calibrated hypothesis test.
+
+The phrases “74% of total variance” and “26% of total volatility” require care. The matrix trace adds variances, not volatilities. Moreover, the variance scale of a unit-mass limiting density and the observed fraction of eigenvalues inside a fitted band are different quantities. If exactly 94% of eigenvalues had mean exactly 0.74, their trace contribution would be approximately $0.94\times0.74=0.6956$ of the unit-diagonal total, rather than exactly 74%. The paper does not give the individual eigenvalues needed to reconcile these rounded descriptions. Its 74/26 language should be retained as the authors' approximate variance attribution, not turned into an exact accounting identity.
+
+Agreement with the bulk spectrum is evidence of an important sampling-noise component. It does not prove that every eigenvector inside the band has no economic content. Weak population factors can be hidden by noise, and volatility dependence or heavy tails can alter the relevant null distribution. Conversely, a sample eigenvalue outside an asymptotic boundary is not automatically a persistent, tradable factor.
+
+## A precise reconstruction of the cleaning operator
+
+Diagonalize the empirical matrix and identify a noise-band set $B$. Let $K$ contain the eigenvectors retained as informative, principally those above the fitted upper edge. Set
+
+$$
+\bar\lambda_B=\frac{1}{|B|}\sum_{k\in B}\lambda_k,
+\qquad
+\widetilde C=
+\sum_{k\in K}\lambda_kv_kv_k^\top+
+\bar\lambda_B\sum_{k\in B}v_kv_k^\top.
+$$
+
+This is the explicit operator corresponding to the source's instruction to replace the restriction to the noise subspace by a multiple of the identity while preserving the total trace. It is not an instruction to replace the whole matrix by the identity, nor to zero every off-diagonal correlation.
+
+Within the noisy subspace, the different sample eigenvalues become indistinguishable. The operator also becomes invariant to a rotation of the basis within that subspace. Provided the retained eigenvalues and their average are nonnegative, the cleaned matrix remains positive semidefinite. If they are strictly positive, it can be inverted. The trace is exactly preserved because $|B|\bar\lambda_B=\sum_{k\in B}\lambda_k$.
+
+Replacing eigenvalues does not generally preserve each diagonal entry. Even if $C$ is a unit-diagonal correlation matrix, $\widetilde C$ may not be. One optional implementation is to rescale it using its diagonal, producing $D^{-1/2}\widetilde C D^{-1/2}$ with $D_{ii}=\widetilde C_{ii}$. That step changes the spectrum and is not specified in the source. It should be disclosed as an additional modeling choice rather than silently attributed to the authors.
+
+The experiment divides the observations into two approximately equal periods. A reconstruction should estimate the band using the training period's $Q$, around 1.61, rather than reuse the full-sample value 3.22. The source does not state the precise split of 1309 observations or the half-sample fitted scale. Applying the full-sample cutoff to half-sample eigenvalues would understate the amount of sampling noise.
+
+For a conventional fully invested, unconstrained mean-variance implementation, specify $A=[\mathbf1,\mu]$, $b=(1,r_*)^\top$, and solve
+
+$$
+\min_w w^\top\Sigma w
+\quad\text{subject to}\quad A^\top w=b.
+$$
+
+When inverses exist and the constraints are independent, its solution is
+
+$$
+w_*=\Sigma^{-1}A
+(A^\top\Sigma^{-1}A)^{-1}b.
+$$
+
+This formula supplies a reproducible normalization for the efficient frontier. The paper itself says to minimize variance at a given expected return but does not fully list budget, short-sale, leverage, or weight constraints. If only $\mu^\top w=r_*$ is imposed, the solution instead is $w_*=r_*\Sigma^{-1}\mu/(\mu^\top\Sigma^{-1}\mu)$. An exact recreation of Figure 2 needs that ambiguity resolved; adopting the conventional budget constraint is a stated reconstruction assumption.
+
+## The two-period experiment and its actual findings
+
+The authors estimate a correlation matrix in the first half of the sample, clean it, and form families of optimized portfolios. They repeat the optimization using the uncleaned empirical matrix as the baseline. Both approaches use the mean returns actually observed in the second half as their expected-return inputs. The source explicitly calls this perfect prediction.
+
+For each chosen target return, a reproducible comparison would hold the optimized weights fixed and calculate two quantities:
+
+$$
+\widehat\sigma_P=\sqrt{w^\top\widehat\Sigma_1w},
+\qquad
+\sigma_{P,2}=\sqrt{w^\top\widehat\Sigma_2w}.
+$$
+
+For cleaned portfolios, the prediction uses the cleaned first-period matrix. Evaluation uses the second-period empirical covariance in consistent units. The future mean vector is common to both methods, so the comparison is designed to expose covariance-induced risk errors. It contains look-ahead information and cannot serve as an ordinary out-of-sample trading test.
+
+Figure 2 plots return against volatility, not variance. The leftmost dotted frontier is the risk predicted using the raw first-period matrix; the rightmost short-dashed frontier is the subsequently observed risk of those portfolios. The caption describes a risk underestimate by a factor of about three. The central solid and long-dashed curves are the corresponding predictions and realizations after cleaning; their gap is about a factor of 1.5.
+
+These factors refer to volatility. If interpreted as exact ratios, they would imply variance ratios of nine and 2.25 respectively, but those squared quantities are derived illustrations, not independently reported table entries. The displayed axes label “Risk” and “Return” without providing enough information to establish annualization, percentage conventions, or the exact meaning of every numerical coordinate. Reading precise return or Sharpe-ratio values from that plot would exceed its documentation.
+
+Cleaning therefore reduces a large risk-estimation error in this exercise, but it does not eliminate it. The authors explain the remaining gap partly through the optimizer's tendency to select unusually low measured risk and partly through genuine time variation in correlations. They report that exchanging the two subperiods produces nearly identical frontiers. That reversal is a robustness observation for these two blocks, not a many-window rolling experiment with a sampling distribution.
+
+There are no transaction costs, turnover estimates, execution lags, borrow costs, market-impact assumptions, or net trading returns reported. The paper does not compare spectral cleaning with diagonal shrinkage, factor-model covariance estimators, modern nonlinear shrinkage, or a simple equal-weight allocation. Its supported comparison is with the raw empirical covariance/correlation input under the chosen optimization experiment.
+
+## Eigenvector stability
+
+Figure 3 studies how eigenvectors change across the two periods. It pairs the $n$th eigenvector in one period with the $n$th in the other and examines their scalar-product overlap. The leading directions have appreciable overlap, which declines with rank. Around rank ten, near the half-period noise-band edge, the overlap reaches the scale $1/\sqrt N$.
+
+With $N=406$, that scale is approximately 0.0496. For two independent uniformly oriented unit vectors in $N$ dimensions, the signed overlap has mean zero and root-mean-square $1/\sqrt N$. Its expected absolute value is approximately $\sqrt{2/(\pi N)}$, about 0.0396 here. These are different summaries. The paper uses $1/\sqrt N$ as the noise scale; it does not present a formal overlap test.
+
+Eigenvector signs are arbitrary. A literal signed dot product can change sign solely because an eigensolver chooses the opposite orientation. The nonnegative plotted overlaps therefore require a sign convention or an absolute-value interpretation, but the text does not specify which. A reconstruction should report $|v_{n,1}^\top v_{n,2}|$ or explicitly align signs before plotting.
+
+Rank matching also becomes unstable when nearby eigenvalues cross or form a nearly degenerate cluster. A subspace-overlap statistic would avoid some of that sensitivity, but it is an extension rather than the source procedure. The figure nevertheless supports the narrower conclusion that dominant sample directions are more stable across these two periods than most of the bulk directions.
+
+The roughly ten stable directions in the half-sample comparison need not equal 6% of 406 from the full-sample spectrum. The observation lengths, noise edges, and estimation uncertainty differ. Treating the two counts as interchangeable would conflate distinct experiments.
+
+## Reproduction plan and remaining uncertainty
+
+A faithful implementation begins with a documented stock panel, demeaning and volatility normalization conventions, and a fixed two-block split. It should save both the raw and standardized observations. It then computes eigenvalues with a symmetric eigensolver, verifies the trace and positive semidefiniteness, and records the training ratio $T_1/N$.
+
+For the descriptive full-period result, plot the smoothed empirical spectrum and overlay the density at the reported full-sample parameters. Keep the market eigenvalue visible in a separate scale or inset. Report the empirical fraction above the chosen edge and the actual trace contribution of that set; do not infer one from the other.
+
+For the portfolio comparison, fit or explicitly choose the training-period bulk model, replace noise-band eigenvalues by their average, and document any diagonal renormalization or volatility rescaling. Calculate raw and cleaned portfolios over an identical target-return grid, using the second-block sample means only to reproduce the authors' oracle-mean design. Record the constraints and any numerical regularization. Evaluate both sets with the same second-block covariance estimator.
+
+Useful checks include preservation of trace by the spectral replacement, invariance of the bulk operator to rotations within its eigenspace, agreement between direct quadratic-form variances and realized linear portfolio returns under the same centering convention, and separation of volatility ratios from variance ratios. None requires inventing data absent from the source.
+
+An additional genuinely predictive experiment would estimate mean returns using information available at formation, roll the training window, and incorporate turnover and costs. That would answer a different question. It should be presented alongside, rather than substituted for, the paper's controlled covariance experiment.
+
+The source supplies the conceptual estimator and its key numerical illustration but not enough inputs for exact replication of its figures. In particular, the data panel, detailed split, spectral fitting procedure, portfolio constraints, and risk-axis units remain unresolved. There are no standard errors or confidence intervals supporting a universal factor-of-two reduction in risk-estimation error.
+
+## Source map
+
+PDF pages 1–2 set out the portfolio motivation, standardized data matrix, and limiting density. Pages 3–4 contain Figure 1, the 406-stock/1309-day design, fitted scales, spectral cleaning, and the explicit use of future mean returns. Page 5 contains Figures 2 and 3, including the volatility ratios and eigenvector overlaps. Page 6 interprets the two-period comparison and summarizes the spectrum. Pages 6–7 contain the references; there is no separate appendix in this local version.

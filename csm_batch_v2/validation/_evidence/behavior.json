@@ -1,0 +1,28 @@
+{
+  "stop_prior_peak": {
+    "same_day_triggered": false,
+    "next_day_triggered": true,
+    "next_day_stop": 120.0,
+    "next_day_fill": 110.0
+  },
+  "force_vs_standing": {
+    "fired": true,
+    "standing_hard_stop": 85,
+    "reported_stop": 40.0,
+    "reported_fill": 39.88,
+    "reason": "FORCE_EXIT"
+  },
+  "missing_open": {
+    "current_open_missing": true,
+    "filled_open": 100.0
+  },
+  "guard": {
+    "raw_ranked": 30,
+    "positive_momentum": 0,
+    "old_weights_retained": 30
+  },
+  "listing_age": {
+    "eligible_below_252": 0,
+    "eligible_at_or_above_252": 8
+  }
+}

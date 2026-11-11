@@ -1,0 +1,13 @@
+{
+  "before_files": 5205,
+  "after_files": 5205,
+  "added": 0,
+  "removed": 0,
+  "metadata_changed": 1020,
+  "filters_unchanged": true,
+  "filters_sha256": "56bcd2b84c0b7aac3a8e599bdbb463c33948fabca134cbe9282670ec64e0ce10",
+  "strategy_unchanged": true,
+  "backtest_unchanged": true,
+  "strategy_sha256": "f483945a6a84c1efa508a3398e4a82744791d41a114f4e506a0b6a246a82d6ab",
+  "backtest_sha256": "575036b2aa07a2db55e418eb80cf5436a6fae6cba4174c91be4f1c0f5afb3b49"
+}

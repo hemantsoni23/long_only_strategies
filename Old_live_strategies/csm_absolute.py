@@ -256,6 +256,68 @@ class IndividualMomentumStrategy:
 
         return price_mask & liquidity_mask & circuit_mask & trend_mask & crash_mask
 
+    def trend_crash_guard(
+        benchmark_close: pd.Series,
+        sma_window: int = 200,
+    ) -> bool | None:
+        """Trigger when the latest benchmark close is below its 200-day SMA."""
+        close = benchmark_close.dropna().sort_index()
+
+        if len(close) < sma_window:
+            return None
+
+        latest_close = close.iloc[-1]
+        sma = close.rolling(sma_window).mean().iloc[-1]
+
+        return bool(latest_close < sma)
+    
+    def volatility_crash_guard(
+        benchmark_close: pd.Series,
+        vol_window: int = 21,
+        threshold_percentile: float = 0.95,
+        threshold_min_periods: int = 126,
+        threshold_floor: float | None = None,
+    ) -> bool | None:
+        """
+        Trigger when benchmark volatility exceeds its historical threshold.
+
+        threshold_floor is optional. For example, 0.026 means the threshold
+        cannot fall below 2.6% daily return volatility.
+        """
+        close = benchmark_close.dropna().sort_index()
+
+        # Daily benchmark returns.
+        benchmark_returns = close.pct_change(fill_method=None)
+
+        # Match CSM Batch: use volatility calculated through the previous bar.
+        benchmark_volatility = (
+            benchmark_returns
+            .rolling(vol_window)
+            .std()
+            .shift(1)
+        )
+
+        # The threshold grows as more volatility history becomes available.
+        panic_threshold = (
+            benchmark_volatility
+            .expanding(min_periods=threshold_min_periods)
+            .quantile(threshold_percentile)
+        )
+
+        if threshold_floor is not None:
+            panic_threshold = panic_threshold.clip(lower=threshold_floor)
+
+        if benchmark_volatility.empty or panic_threshold.empty:
+            return None
+
+        latest_volatility = benchmark_volatility.iloc[-1]
+        latest_threshold = panic_threshold.iloc[-1]
+
+        if pd.isna(latest_volatility) or pd.isna(latest_threshold):
+            return None
+
+        return bool(latest_volatility > latest_threshold)
+
     def get_positions(self):
         """
         STRICT TOP-N CONCENTRATION
@@ -709,10 +771,11 @@ class IndividualMomentumStrategy:
         crash_guard_fired = False
 
         # ── STEP C: Crash Guard — SMA-200 regime ──────────────────────────────
-        if (benchmark_close is not None and benchmark_sma200 is not None
-                and benchmark_close < benchmark_sma200):
-            crash_guard_fired = True
+        crash_guard_fired = self.volatility_crash_guard(benchmark_close)
+        # crash_guard_fired = self.trend_crash_guard(benchmark_close)
 
+        if crash_guard_fired:
+            print("Volatility crash guard fired: benchmark volatility is unusually high")
             for ticker, pos in portfolio.items():
                 bar        = live_data.get(ticker, {})
                 _close     = float(bar.get('close', np.nan))
@@ -771,6 +834,8 @@ class IndividualMomentumStrategy:
                 'crash_guard_fired' : True,
                 'high_vol'          : False,
             }
+
+
 
         # ── STEP E: Per-stock three-layer stop check ───────────────────────────
         for ticker, pos in portfolio.items():

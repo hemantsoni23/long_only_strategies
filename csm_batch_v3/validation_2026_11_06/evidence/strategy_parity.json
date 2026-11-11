@@ -1,0 +1,10 @@
+{
+  "position_dates_equal": true,
+  "position_columns_equal": true,
+  "position_mask_equal": true,
+  "max_target_weight_difference": 0.0,
+  "equity_dates_equal": true,
+  "max_equity_difference": 1.7763568394002505e-15,
+  "equity_rows": 2730,
+  "warmup_weight_max": 0.0
+}

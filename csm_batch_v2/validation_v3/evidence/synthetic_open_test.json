@@ -1,0 +1,17 @@
+{
+  "scheduled_open": 100,
+  "same_signal_and_open": true,
+  "no_later_breach": {
+    "exit_date": "2024-01-04",
+    "reason": "REBAL_EXIT",
+    "exit_price": 100.0,
+    "next_day_weight": 0.5
+  },
+  "later_low_breaches_stop": {
+    "exit_date": "2024-01-04",
+    "reason": "HARD_STOP_HIT",
+    "exit_price": 84.745,
+    "next_day_weight": 0.0
+  },
+  "test": "FAIL"
+}

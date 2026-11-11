@@ -1,0 +1,8 @@
+{
+  "audit_prefix_matches": 5205,
+  "audit_prefix_mismatches": 0,
+  "audit_size_equals_initial": 5039,
+  "audit_size_differs_initial": 166,
+  "initial_byte_boundary_not_newline": 0,
+  "size_changed_since_initial": 743
+}

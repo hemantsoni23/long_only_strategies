@@ -1,38 +1,66 @@
-# residual_momentum_v2 — improved Residual Momentum, read-only on the live engine
+# residual_momentum_v2 — standalone residual momentum research strategy
 
-**What it is.** `ResidualMomentumV2` (`residual_momentum_v2_strategy.py`) subclasses the LIVE
-`ResidualMomentumStrategy`, imported from `Old_live_strategies/residual_momentum_strategy.py`
-— **never copied or edited**. Signal math (CAPM residual momentum + 52w-high composite),
-inverse-vol sizing, the 25%-from-peak breaker, the trend gate, monthly rebalance are all
-inherited unchanged. Three changes, each independently pre-registered and backtested before
-being combined:
+**What it is.** A self-contained target-weight generator and event-driven backtest. It
+contains its strategy engine in `residual_momentum_v2_strategy.py`; it does not
+import the old strategy directory or any other project file. V2 adds the 50–1000
+liquidity rank band, the entry-spike filter and a simulated ETF cash sweep.
 
-1. **Entry-spike filter** — a fresh-entry candidate is skipped (not a forced exit of an
-   existing holding) if its trailing 5-day return sits above the 80th percentile of that
-   month's universe (`STRATEGY_IMPROVEMENT_IDEAS.md` B2; parameters taken from that doc's
-   external evidence, not tuned here).
-2. **Universe band** — moved from rank 1-500 (by trailing-63d turnover) to rank **50-1000**.
-3. **Gold cash sweep** — idle cash is invested in GOLDBEES instead of sitting uninvested.
-   **Explicitly declared on the strategy itself** via `cash_sweep_etf` ('GOLDBEES' default,
-   'SILVERBEES' available but unverified, or `None`), not hidden in a separate script.
+**Live deployment status: not an automated live-trading system.** This package does not
+connect to a broker, reconcile holdings, submit or monitor orders, persist stop state, or
+execute a gold sweep. The backtest uses whole shares and ETF units, but does not model
+settlement delays. Its drawdown and ATR exits only run inside the simulator. A broker-specific execution and reconciliation layer, market calendar and
+operational testing are required before using real money. `get_positions()` returns
+historical target weights, not executable orders. It treats the last available date of
+each month as a month end, including a partial final month, so a live scheduler must
+explicitly verify that the session is the actual final exchange session before using a
+monthly signal.
 
-`ResidualMomentumV2(universe_rank_min=1, universe_top_n=500, spike_filter=False, cash_sweep_etf=None)`
-reproduces the live engine's positions and returns **exactly** (checked in
-`run_residual_momentum_v2.py`'s parity test, max diff 0.0).
+**Historical results below are obsolete research records.** They predate fixes for ETF
+funding, transaction costs, stale fills, cash interest, first-day returns and CAGR. They
+also predate correction of an ETF timestamp shift. Re-run the current code; do not use
+the tables below as current estimates.
 
-## Three-file layout (mirrors `Old_live_strategies`'s own convention)
-- **`residual_momentum_v2_strategy.py`** — strategy core: universe band, entry-spike filter,
-  cash-sweep configuration.
-- **`residual_momentum_v2_backtest.py`** — backtest engine. `backtest_event_driven()` is a
-  drop-in replacement for the live engine's function: delegates to it verbatim (bit-identical)
-  when `cash_sweep_etf is None`, and runs the validated sweep day-loop otherwise. Reuses the
-  live engine's `metrics`/`print_report`/`print_yearly_performance`/`get_trade_log`/
-  `populate_trade_stats`/`print_exit_breakdown` unchanged.
-- **`run_residual_momentum_v2.py`** — orchestrator, mirrors `run_residual_momentum_strategy.py`.
+**Cost and income model.** Stock and ETF orders both use the same assumed 15 bps
+per-side fixed charge plus participation-based impact, subject to a 25%-of-ADV daily
+cap on rebalance and ETF trades. Stop exits use a 75 bps charge and a 5%-of-ADV
+daily cap. This fixed charge is an aggregate assumption for costs, not an itemized or verified
+brokerage, tax and exchange fee schedule. ETF costs and stock costs are reported
+separately. ETF ADV uses previous-session close and volume. Idle cash earns 0%, and the
+runner reports a zero-interest cash comparison over the same period. Dividends are not
+credited; corporate actions need independent verification. Integer fills on adjusted
+historical prices are an approximation of historical share counts. Immediate conversion
+and the absence of settlement delays remain approximations.
 
-All intermediate research scripts that produced the evidence below (band breadth screens,
-exposure instrumentation, cash-sweep variant tests, the rejected graded-gate test) have been
-cleaned up; every number they produced is preserved here.
+## Files and setup
+
+- `residual_momentum_v2_strategy.py`: data loading, signal and target weights; this file
+  can be copied alone into an existing compatible live integration.
+- `residual_momentum_v2_backtest.py`: simulation and reporting.
+- `run_residual_momentum_v2.py`: backtest runner.
+- `requirements.txt`: runtime dependencies; research validation additionally needs
+  `statsmodels`, and optional plotting needs `matplotlib`.
+
+Copy the full directory and install `python3 -m pip install -r requirements.txt`.
+Stock data consists of per-symbol CSVs with `datetime,open,high,low,close,volume`;
+set `RESIDUAL_MOM_DATA_DIR` or pass `--data-dir`. ETF CSVs use
+`timestamp,open,close,volume`; set `RESIDUAL_MOM_ETF_DATA_DIR`. Timestamps are interpreted
+in Asia/Kolkata. Both environment variables must be set before starting Python.
+Without overrides the legacy paths point to the original development machine.
+With no arguments the sweep runner limits its end date to the last ETF bar and selects
+the latest continuous period of ETF data for the default report start. The supplied
+GOLDBEES CSV has no data from 2011 through 2014 and ends on 2026-07-31; with these files
+the default sweep therefore starts in 2015 and ends in July 2026. Individual missing
+ETF sessions are valued at the previous close and no ETF trades are executed on those
+sessions; the runner reports the affected count. Stock orders require a valid same-day
+open; a missing bar cannot trigger a fill. Gaps longer than seven calendar days are rejected, as is extrapolation beyond ETF coverage.
+Explicit `--report-start` and `--data-end` requests are not silently shortened. Use
+`--cash-sweep-etf none` for a stock-only backtest across the available stock history.
+
+Run tests with `python3 -m unittest -v test_standalone` from this directory.
+
+V2 defaults are rank 50–1000, the 5-day 80th-percentile entry-spike filter and
+GOLDBEES sweep. The simulation now differs from the original engine because it enforces
+funding and execution constraints.
 
 ## 1. Universe band: why it changed
 
@@ -121,7 +149,8 @@ doesn't expose:
 - **Practical caveat not modeled by this backtest**: 40 positions × ~2.5% weight ≈ Rs2,500
   each at Rs1 lakh AUM — NSE whole-share constraints mean higher-priced names get 1-2 shares,
   so realized weights will deviate from target more than this continuous-share backtest
-  shows, and fixed per-trade costs (brokerage, STT) could matter more at this size.
+  shows; these historical results used fractional units. Fixed per-trade costs
+  (brokerage, STT) can also matter at this size.
 
 This is why every result from here on is reported at **AUM=Rs1 lakh**, not Rs50cr.
 
@@ -182,18 +211,21 @@ convention gold's much higher return pulls it **ahead** on Sharpe too (1.43 vs 1
   (223→602). Not adopted.
 
 ## Usage
+
+```sh
+export RESIDUAL_MOM_DATA_DIR=/path/to/stock_csvs
+export RESIDUAL_MOM_ETF_DATA_DIR=/path/to/etf_csvs
+python3 run_residual_momentum_v2.py --data-end 2026-07-31
+python3 run_residual_momentum_v2.py --cash-sweep-etf none
+python3 run_residual_momentum_v2.py --cash-sweep-etf SILVERBEES --data-end 2026-07-31
 ```
-python3 run_residual_momentum_v2.py                       # validated default: 50-1000 band,
-                                                            # spike filter on, GOLDBEES sweep,
-                                                            # AUM=Rs1 lakh, report from 2007-04-01
-python3 run_residual_momentum_v2.py --cash-sweep-etf none  # equity-only, back to 2002-01-01
-python3 run_residual_momentum_v2.py --cash-sweep-etf SILVERBEES   # unverified, short history
-```
-Live integration: wherever the live job does
-`from residual_momentum_strategy import ResidualMomentumStrategy`, import `ResidualMomentumV2`
-from `residual_momentum_v2_strategy.py` instead, and
-`backtest_event_driven`/`metrics`/`print_report`/etc. from `residual_momentum_v2_backtest.py`
-instead of `residual_momentum_backtest.py`.
+
+Specify an end date covered by **your** data. Gold and silver ETF data may have
+different coverage. Sweep trade statistics use its own stock sale fills, with partial
+sales recorded separately; end-of-period holdings are marked to market. ETF order counts
+and aggregate costs are displayed, and the strategy object exposes `cash_sweep_trades`
+with each simulated ETF order. Cash-only trade statistics remain approximate for partial
+trims and do not incorporate all trading costs.
 
 ## Caveats
 - Parameters (5-day spike lookback, 0.80 quantile, rank 50-1000) are each independently
@@ -208,5 +240,5 @@ instead of `residual_momentum_backtest.py`.
 - Gold's recent historic bull run (2019-2021, 2024-2025) contributes real return to these
   numbers; some of the edge over cash is genuine diversification, some is this specific
   sample period's commodity cycle — not separable with the data available here.
-- The trade log, win rate, and profit-factor statistics are identical whether or not the gold
-  sweep is active (it only changes how idle cash is invested, never which stocks are traded).
+- Backtested trade logs and win rates depend on how partial exits are counted; the
+  cash-only trade log is approximate. Dividends are not credited.

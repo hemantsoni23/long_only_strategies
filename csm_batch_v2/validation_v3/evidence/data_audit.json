@@ -1,0 +1,117 @@
+{
+  "source": "/Users/hemantsoni/Documents/upstox_data_folder/ohlcv_data",
+  "files": 5205,
+  "first": "2000-01-03",
+  "last": "2026-10-30",
+  "stale_cutoff": "2026-04-30",
+  "last_seen_before_cutoff": 57,
+  "last_seen_pct": 1.095100864553314,
+  "extreme_close_changes": 946,
+  "counts": {
+    "duplicate_dates": 54930,
+    "nonpositive_or_missing": 1008,
+    "out_of_order": 805
+  },
+  "largest_jumps": [
+    {
+      "symbol": "PRIVISCL",
+      "date": "2020-08-21",
+      "return_pct": 368800.00000000006
+    },
+    {
+      "symbol": "AVALON",
+      "date": "2023-04-18",
+      "return_pct": 198900.0
+    },
+    {
+      "symbol": "COHANCE",
+      "date": "2020-03-09",
+      "return_pct": 112250.0
+    },
+    {
+      "symbol": "DECIPHER",
+      "date": "2012-11-12",
+      "return_pct": 89900.0
+    },
+    {
+      "symbol": "RAINBOW",
+      "date": "2022-05-10",
+      "return_pct": 59926.666666666664
+    },
+    {
+      "symbol": "MALLCOM",
+      "date": "2022-02-02",
+      "return_pct": 49262.16216216216
+    },
+    {
+      "symbol": "TARC",
+      "date": "2020-12-18",
+      "return_pct": 44000.0
+    },
+    {
+      "symbol": "KAMOPAINTS",
+      "date": "2023-01-24",
+      "return_pct": 37720.0
+    },
+    {
+      "symbol": "JMFINANCIL",
+      "date": "2006-10-10",
+      "return_pct": 22035.714285714283
+    },
+    {
+      "symbol": "VINEETLAB",
+      "date": "2018-02-07",
+      "return_pct": 21201.666666666668
+    },
+    {
+      "symbol": "ACI",
+      "date": "2022-11-21",
+      "return_pct": 18989.583333333336
+    },
+    {
+      "symbol": "VINEETLAB",
+      "date": "2016-07-01",
+      "return_pct": 17661.111111111113
+    },
+    {
+      "symbol": "VINEETLAB",
+      "date": "2016-06-28",
+      "return_pct": 17208.333333333336
+    },
+    {
+      "symbol": "VINEETLAB",
+      "date": "2016-06-20",
+      "return_pct": 16968.333333333332
+    },
+    {
+      "symbol": "OMNITEX",
+      "date": "2007-02-08",
+      "return_pct": 13488.235294117649
+    },
+    {
+      "symbol": "VINEETLAB",
+      "date": "2017-01-02",
+      "return_pct": 13012.77777777778
+    },
+    {
+      "symbol": "OMNITEX",
+      "date": "2007-02-15",
+      "return_pct": 12864.684014869888
+    },
+    {
+      "symbol": "OMNITEX",
+      "date": "2007-02-01",
+      "return_pct": 12168.141592920352
+    },
+    {
+      "symbol": "OMNITEX",
+      "date": "2007-01-16",
+      "return_pct": 11975.783972125435
+    },
+    {
+      "symbol": "OMNITEX",
+      "date": "2007-01-29",
+      "return_pct": 11262.295081967213
+    }
+  ]
+}

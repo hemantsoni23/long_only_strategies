@@ -1,0 +1,18 @@
+{
+  "before_files": 5205,
+  "after_files": 5205,
+  "added": 0,
+  "removed": 0,
+  "metadata_changed": 0,
+  "strategy_sha256": "57c1171f6541e44a6db72ca65b759ae7196749eb422a95733c0871272ca08ba0",
+  "strategy_unchanged": true,
+  "backtest_sha256": "4de0b12cf908990f99a2cfda898c89d998fd1f6787d1b0e803274ed96b4f963d",
+  "backtest_unchanged": true,
+  "filters_sha256": "56bcd2b84c0b7aac3a8e599bdbb463c33948fabca134cbe9282670ec64e0ce10",
+  "filters_unchanged": true,
+  "etf_source_sha256": "298ecb0afc7314b026050cf4f0e8529b1ac7e78242110d59e71695d6cee0d927",
+  "etf_source_unchanged": true,
+  "etf_copy_sha256": "298ecb0afc7314b026050cf4f0e8529b1ac7e78242110d59e71695d6cee0d927",
+  "etf_copy_unchanged": true,
+  "etf_snapshot_matches_initial_source": true
+}

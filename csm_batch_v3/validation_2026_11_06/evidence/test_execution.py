@@ -1,0 +1,27 @@
+"""Deterministic opening-time tests using the actual v3 functions."""
+import ast,sys,json,os
+from pathlib import Path
+import numpy as np,pandas as pd
+P=Path(__file__).resolve().parent;ROOT=P.parents[1];sys.path.insert(0,str(ROOT));from csm_stock_strategy_v3 import CrossSectionalMomentum
+source=ast.parse((ROOT/'csm_stock_backtest_v3.py').read_text());names={'_trade_row','run_backtest','apply_etf_sweep'};ns={'np':np,'pd':pd,'os':os,'COST_ONE_WAY':.003,'EXIT_REASONS':['REBAL_EXIT','RANK_EXIT','ATR_STOP_HIT','HARD_STOP_HIT','PEAK_STOP_HIT','VOL_STOP_HIT','FORCE_EXIT','CRASH_GUARD','END_OF_PERIOD']};exec(compile(ast.Module(body=[x for x in source.body if isinstance(x,ast.FunctionDef) and x.name in names],type_ignores=[]),str(ROOT/'csm_stock_backtest_v3.py'),'exec'),ns)
+def run_scheduled(low_on_exit):
+ idx=pd.bdate_range('2024-01-02',periods=5);df=lambda x:pd.DataFrame({'X':x},index=idx);p=df([100]*5);h=df([102]*5);lo=df([98,98,low_on_exit,98,98]);op=df([100]*5)
+ s=CrossSectionalMomentum(p,p*1000,h,lo,op,benchmark_series=None,hard_stop_from_entry=.15,use_trailing_stop=False,use_vol_scaled_stop=False,use_crash_guard=False,use_bear_regime_exposure=False,min_hold_days=0,stop_cooldown_days=20,vol_target=1.0)
+ s.positions=df([.5,0,.5,.5,.5]);s.rank_exit_mask=df([False]*5);s.atr=df([2]*5);s._high_vol_threshold_series=None;s._panic_threshold_series=None;s._prepare_stop_indicators(p.resample('ME').last());result=ns['run_backtest'](s);trade=result['trades_df'].iloc[0]
+ return {'exit_date':str(trade.Exit_Date.date()),'reason':trade.Exit_Reason,'exit_price':float(trade.Exit_Price),'next_day_weight':float(result['executed_weights'].iloc[3,0])}
+def run_circuit(locked):
+ idx=pd.bdate_range('2024-01-02',periods=5);df=lambda x:pd.DataFrame({'X':x},index=idx);p=df([100]*5);op=df([100]*5);h=df([102,100 if locked else 102,102,102,102]);lo=df([98,100 if locked else 98,98,98,98]);s=CrossSectionalMomentum(p,p*1000,h,lo,op,benchmark_series=None,use_crash_guard=False,use_bear_regime_exposure=False,vol_target=1.0)
+ s.positions=df([.5]*5);s.rank_exit_mask=df([False]*5);s.atr=df([2]*5);s._high_vol_threshold_series=None;s._panic_threshold_series=None;s._prepare_stop_indicators(p.resample('ME').last());out=ns['run_backtest'](s);t=out['trades_df'].iloc[0]
+ return {'entry_date':str(t.Entry_Date.date()),'day1_weight':float(out['executed_weights'].iloc[1,0])}
+# Isolate the ETF function: end-of-day stock weight/idle differs solely due to a later stop.
+def run_etf(end_idle):
+ idx=pd.bdate_range('2024-01-02',periods=2);idle=pd.Series([.6,end_idle],index=idx);etf={'ret':pd.Series([0.,.10],index=idx),'overnight':pd.Series([0.,.02],index=idx),'ok':pd.Series([True,True],index=idx),'first':idx[0]};out=ns['apply_etf_sweep'](idle,etf,.003)
+ return {'first_day_etf_weight':float(out.etf_w.iloc[0]),'second_day_open_sale_weight':float(.6-min(.6,end_idle)),'second_day_etf_return_contribution':float(out.etf_contrib.iloc[1])}
+def run_integrated(stop_low):
+ idx=pd.bdate_range('2024-01-02',periods=5);p=pd.DataFrame({'A':[100]*5,'B':[100]*5},index=idx);h=p+2;lo=p-2;lo.loc[idx[2],'A']=stop_low;op=p.copy()
+ s=CrossSectionalMomentum(p,p*1000,h,lo,op,benchmark_series=None,hard_stop_from_entry=.15,use_trailing_stop=False,use_vol_scaled_stop=False,use_crash_guard=False,use_bear_regime_exposure=False,min_hold_days=0,stop_cooldown_days=20,vol_target=1.0,corr_guard_threshold=1.0)
+ s.positions=pd.DataFrame({'A':[.4]*5,'B':[0,.4,.4,.4,.4]},index=idx);s.rank_exit_mask=pd.DataFrame(False,index=idx,columns=p.columns);s.atr=p*0+2;s._high_vol_threshold_series=None;s._panic_threshold_series=None;s._prepare_stop_indicators(p.resample('ME').last());out=ns['run_backtest'](s);weights=out['executed_weights'];idle=(1-weights.sum(axis=1)).clip(lower=0);etf={'ret':pd.Series([0.,0.,.10,0.,0.],index=idx),'overnight':pd.Series([0.,0.,.02,0.,0.],index=idx),'ok':pd.Series(True,index=idx),'first':idx[0]};z=ns['apply_etf_sweep'](idle,etf,.003);sale=z.etf_w.iloc[1]-min(z.etf_w.iloc[1],idle.iloc[2]);return {'entry_B_at_open':float(weights.loc[idx[2],'B']),'stock_A_at_close':float(weights.loc[idx[2],'A']),'prior_etf_weight':float(z.etf_w.iloc[1]),'etf_open_sale_weight':float(sale),'etf_daily_contribution':float(z.etf_contrib.iloc[2])}
+a,b=run_scheduled(90),run_scheduled(80);c,d=run_circuit(False),run_circuit(True);e,f=run_etf(.2),run_etf(.6);g,h=run_integrated(90),run_integrated(80)
+r={'scheduled_exit':{'same_known_open':100,'later_low_90':a,'later_low_80':b,'result':'PASS' if a==b else 'FAIL'},'circuit_at_open':{'same_known_open':100,'later_full_day_range_nonzero':c,'later_full_day_range_zero':d,'result':'FAIL' if c!=d else 'PASS'},'etf_open_sale_depends_on_end_of_day_idle':{'same_prior_etf_weight':.6,'same_known_open_and_overnight_return':.02,'no_later_stock_exit_end_idle_20pct':e,'later_stock_exit_end_idle_60pct':f,'result':'FAIL' if e['second_day_open_sale_weight']!=f['second_day_open_sale_weight'] else 'PASS'},'integrated_stock_stop_and_etf_open':{'same_open_stock_buy_B':g['entry_B_at_open'],'later_low_90':g,'later_low_80':h,'result':'FAIL' if g['etf_open_sale_weight']!=h['etf_open_sale_weight'] else 'PASS'}}
+assert r['scheduled_exit']['result']=='PASS' and r['circuit_at_open']['result']=='FAIL' and r['etf_open_sale_depends_on_end_of_day_idle']['result']=='FAIL' and r['integrated_stock_stop_and_etf_open']['result']=='FAIL'
+(P/'execution_tests.json').write_text(json.dumps(r,indent=2));print(json.dumps(r,indent=2))

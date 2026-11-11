@@ -1,0 +1,10 @@
+{
+  "gap_days": 992,
+  "gap_days_etf_weight_positive": 315,
+  "gap_average_etf_weight_pct": 0.0028660694966362926,
+  "gap_max_etf_weight_pct": 0.009025844256049798,
+  "gap_untradable_sale_days": 1,
+  "pre_resume_etf_weight_pct": 1.1102230246251565e-14,
+  "resume_day_etf_contribution_pct": 2.4579564475532068e-15,
+  "method": "Source default 2005\u20132015 warmup-active portfolio; gap exposure may differ from independently flat-start runs."
+}

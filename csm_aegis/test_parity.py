@@ -1,4 +1,4 @@
-"""Parity tests. (1) the module reproduces the validated research engine (decay_check/strategy_engine*.py) bit-for-bit for v1.0, v1.1, v1.2 and for every
+"""Parity tests. (1) the module reproduces the pre-execution-integrity research engine (decay_check/strategy_engine*.py) bit-for-bit for v1.0, v1.1, v1.2 and for every
 optional overlay; (2) the live exit rules (get_exit_signals) reproduce every stop / time / market-gate exit the backtest booked, one close earlier, and never fire
 early; (3) the signals equal the research signal file."""
 import os, sys, pickle, warnings
@@ -10,11 +10,16 @@ import common as C, strategy_engine as SE, strategy_engine2 as SE2
 from csm_aegis_strategy import CSMAegis
 from csm_aegis_backtest import backtest_event_driven
 P = C.load_panels()
-def mk(**kw): return CSMAegis.from_panels(P, **kw).calculate_factors()
+# The reference engines predate raw-bar execution validation. Keep this file as
+# a factor/legacy-booking parity test; test_execution_integrity.py validates the
+# production fill model separately.
+def mk(**kw):
+    kw.setdefault('require_tradable_fill', False)
+    return CSMAegis.from_panels(P, **kw).calculate_factors()
 def cmp(name, S, **ref_kw):
     res = backtest_event_driven(S, log_rejects=False); ref = SE2.run(**ref_kw)
     d = float((res['ret'] - ref['ret']).abs().max()); print(f'{name:58s} max|diff| {d:.2e}  trades {len(res["trades"])} vs {len(ref["trades"])}'); assert d < 1e-12 and len(res['trades']) == len(ref['trades']); return res
-A = mk()                                                              # default = v1.2
+A = mk()                                                              # legacy booking reproduction of v1.2
 # the research file signals_all.pkl built r121 with ffill(limit=5); the module uses limit=10 everywhere. Give the research engine the module's r121 so the abs-momentum test compares like with like.
 SE2.extras()['r121'] = A.r121_me
 # likewise the research signal file stores R1/M3/A1/Ulcer as float32; feed the engine the module's float64 values so rank ties at filter boundaries cannot flip.
@@ -57,9 +62,9 @@ print('liq_mode variants: pools sane for all 8 modes')
 Sa = mk(atr_stops=True); sp = np.array([Sa.stop_pct(Sa.me_idx[k], j) for k in (100, 150, 200, 250) for j in range(0, len(Sa.cols), 40)]); wt = np.clip(0.01 / sp, 0.03, 0.08)
 assert sp.min() >= 0.08 - 1e-12 and sp.max() <= 0.18 + 1e-12 and wt.min() >= 0.0555 and wt.max() <= 0.08 + 1e-12; print(f'atr_stops: stop {sp.min():.3f}-{sp.max():.3f}, weight {wt.min():.3f}-{wt.max():.3f}')
 from csm_aegis_strategy import PRESETS
-pv = CSMAegis.from_panels(P, **PRESETS['v1.2']).calculate_factors()
+pv = CSMAegis.from_panels(P, **PRESETS['v1.2'], require_tradable_fill=False).calculate_factors()
 rv = backtest_event_driven(pv, log_rejects=False)
 assert float((rv['ret'] - res['ret']).abs().max()) < 1e-12
-print('v1.2 preset reproduces the default strategy with zero idle-cash return')
+print('v1.2 preset reproduces legacy booking with zero idle-cash return')
 assert A.get_positions(A.me[-1]).equals(A.latest_picks(A.me[-1])); print('get_positions == latest_picks')
 print('ALL PARITY TESTS PASSED')

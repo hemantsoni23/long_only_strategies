@@ -6,10 +6,11 @@ The daily event loop, booking, reports, output files and command-line runner liv
 
 STRATEGY IN ONE PAGE
 --------------------
-Signal      v1.2: score = z(R1) + z(-Ulcer252) inside the pool.
+Signal      v1.2/v1.3/v1.4: score = z(R1) + z(-Ulcer252) inside the pool.
               R1     residual (beta-stripped) 12m momentum, window [t-252, t-21], vol-scaled (beta: 252d, lagged 1d, vs the EW universe)
               Ulcer  RMS drawdown from the rolling 252d closing high (smooth compounders score high)
-            presets: 'v1.2' (production configuration), 'v1.2_high_return' (R1 + 52w-high proximity, band 200-1000: opt-in), 'v1.1' and 'v1.0' (open fills,
+            presets: 'v1.4_low_dd' (v1.3 plus daily ADX/DMI quality gate and GOLDBEES idle-cash sleeve), 'v1.3' (frozen equity-only comparator), 'v1.2' (frozen comparator),
+            'v1.2_high_return' (R1 + 52w-high proximity, band 200-1000: opt-in), 'v1.1' and 'v1.0' (open fills,
             reproduction only).
 Universe    1. price >= min_price
             2. rank by 63d average rupee volume (prior day) inside [universe_min_rank, universe_max_rank]
@@ -18,30 +19,52 @@ Universe    1. price >= min_price
             5. worst 20% by M3 (largest 1-month single-day spike) removed ("lottery" exclusion)
             (optional) absolute-momentum gate, falling-knife gate
 Selection   month-end close: rank the pool; buy ranks <= top_n; a held name stays until rank > hold_rank (hysteresis) or it leaves the pool.
+            v1.3 additionally rejects fresh five-day price spikes and allows at most two names per Industry_clean label;
+            v1.4 additionally requires ADX(14)>=25 and +DI>-DI for fresh entries.
 Regime      market trend gate: month-end EW market index <= its SMA(mkt_gate_window) -> exit everything, no entries.
             vol-state gate: no NEW entries while 63d benchmark vol > its expanding 85th percentile.
-            optional overlays (default OFF, validated as near-misses/optional): crash guard, vol targeting, regime leverage, corr guard.
+            regime leverage reduces stock exposure in bear/panic states; crash guard, vol targeting and corr guard are optional.
 Entry       fill='close': decided at a close, filled at the NEXT close (the data's open field is not a tradable price);
             names more than ext_x above their SMA-50 are skipped (extension filter); fill='open' adds a gap-up cancel.
+            A fill requires a raw, positive-price OHLC bar with positive volume and no high==low circuit lock; forward-filled closes are indicators/marks only.
 Exits       hard stop -stop from entry | trailing stop -trail from peak close | time stop | rank/pool exit | market gate | (optional) crash guard.
             All triggers use CLOSES; execution is at the next fill. One implementation (check_stop_exit) serves backtest and live.
 Sizing      risk-based: weight = risk_pct_per_trade / stop, clamped to [w_lo, w_hi]; gross <= max_gross of equity.
-Booking     faithful: positions drift, exit day charged, transaction cost is charged per leg, and idle cash earns zero.
+Booking     faithful: positions drift, exit day charged, transaction cost is charged per leg, idle cash earns zero, and fills require raw tradable OHLCV bars.
+Secondary   optional GOLDBEES/SILVERBEES sleeve can sweep idle cash at raw tradable ETF closes. It is an always-on
+            cash sweep (so market-gate/bear/panic cash naturally moves to the ETF), not a conditional hedge. GOLDBEES is
+            the candidate to validate; SILVERBEES has only a short history and is research-only.
 
-Research switches (default OFF, tested and NOT adopted, kept so the tests can be re-run): liq_mode (six OHLCV liquidity filters), atr_stops, chandelier, loss_cooldown,
-min_hold_stops, abs_momentum_gate, falling_knife_gate, quarterly_entries, inverse_vol_sizing, vol_target, regime_leverage, corr_guard, crash_guard, resting_stop, placebo_seed.
+Research switches (mostly default OFF, kept so the tests can be re-run): risk_adjusted_signal, entry_spike_filter, entry_path_filter, entry_turnover_filter, liq_mode (six OHLCV liquidity filters), atr_stops, chandelier, loss_cooldown, stop_cooldown_days,
+min_hold_stops, abs_momentum_gate, falling_knife_gate, quarterly_entries, inverse_vol_sizing, vol_target, corr_guard, crash_guard, resting_stop, placebo_seed. Regime leverage is enabled by the current configuration.
 Pre-registered and validated in decay_check/PREREG.md (Addenda 4-8). Nothing here was tuned beyond what those addenda report; evidence summary in README.md.
 """
 import os
 import glob
+from collections import Counter
 import numpy as np
 import pandas as pd
+
+DEFAULT_INSTRUMENTS_FILE = os.environ.get(
+    "CSM_AEGIS_INSTRUMENTS_FILE",
+    os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "instruments_clean.csv"),
+)
+DEFAULT_SECONDARY_ETF_DIR = os.environ.get(
+    "CSM_AEGIS_ETF_DATA_FOLDER",
+    "/Users/hemantsoni/Documents/upstox_data_folder/gold_silver_ohlcv_data",
+)
+SECONDARY_ETF_CHOICES = (None, "GOLDBEES", "SILVERBEES")
 
 # ══════════════════════════════════════════════════════════════════════════════
 # PRESETS  (keyword overrides for CSMAegis.__init__)
 # ══════════════════════════════════════════════════════════════════════════════
 PRESETS = {
-    "v1.2": dict(selector="R1_ULCER", mkt_gate_window=120, fill="close"),  # production configuration; uninvested cash has no modeled return
+    "v1.3": dict(selector="R1_ULCER", mkt_gate_window=120, fill="close", entry_spike_filter=True, entry_spike_window=5, entry_spike_quantile=0.80, industry_cap=2),
+    # Drawdown-focused promotion from the isolated ADX experiment. The ETF is
+    # real invested capital, not a risk-free/cash-return assumption.
+    "v1.4_low_dd": dict(selector="R1_ULCER", mkt_gate_window=120, fill="close", entry_spike_filter=True, entry_spike_window=5, entry_spike_quantile=0.80, industry_cap=2,
+                          adx_entry_filter=True, adx_window=14, adx_threshold=25.0, adx_require_positive_di=True, secondary_etf="GOLDBEES"),
+    "v1.2": dict(selector="R1_ULCER", mkt_gate_window=120, fill="close"),  # frozen comparator; uninvested cash has no modeled return
     "v1.2_high_return": dict(selector="R1_A1", mkt_gate_window=120, fill="close", universe_min_rank=200),
     "v1.1": dict(selector="R1", mkt_gate_window=150, fill="open"),
     "v1.0": dict(selector="R1", mkt_gate=False, fill="open"),
@@ -56,8 +79,13 @@ def load_data(folder_path, cache_dir=None, min_names=2000):
     Cleaning identical to factor_research/data.py: duplicate dates dropped, non-positive prices -> NaN, any close-to-close move outside
     [-40%, +300%] masks O/H/L/C for that day (un-adjusted splits/bonus/bad prints), calendar days with < 30 live names dropped,
     series cut at the last day with >= min_names live names. Optional parquet cache."""
+    if not folder_path or not os.path.isdir(folder_path):
+        raise FileNotFoundError("Daily OHLCV folder is missing. Set CSM_AEGIS_DATA_FOLDER or pass --data-folder.")
     fields = ("open", "high", "low", "close", "volume")
     if cache_dir and os.path.exists(os.path.join(cache_dir, "close.parquet")):
+        missing_cache = [f for f in fields if not os.path.exists(os.path.join(cache_dir, f"{f}.parquet"))]
+        if missing_cache:
+            raise FileNotFoundError(f"Incomplete panel cache {cache_dir}: missing {', '.join(missing_cache)}")
         P = {f: pd.read_parquet(os.path.join(cache_dir, f"{f}.parquet")).astype("float64") for f in fields}
     else:
         frames = {}
@@ -71,6 +99,8 @@ def load_data(folder_path, cache_dir=None, min_names=2000):
                 df[c] = df[c].mask(df[c] <= 0)
             if len(df):
                 frames[os.path.basename(path)[:-4]] = df.astype("float64")
+        if not frames:
+            raise ValueError("No valid daily OHLCV CSVs found. Each file needs datetime,open,high,low,close,volume columns.")
         P = {f: pd.DataFrame({s: d[f] for s, d in frames.items()}).sort_index() for f in fields}
         keep = P["close"].notna().sum(axis=1) >= 30
         P = {f: d.loc[keep] for f, d in P.items()}
@@ -83,6 +113,8 @@ def load_data(folder_path, cache_dir=None, min_names=2000):
             for f, d in P.items():
                 d.astype("float32").to_parquet(os.path.join(cache_dir, f"{f}.parquet"))
     n_live = P["close"].notna().sum(axis=1)
+    if not (n_live >= min_names).any():
+        raise ValueError(f"No session has the required {min_names} live names; check the panel or lower min_names deliberately.")
     last_ok = n_live[n_live >= min_names].index.max()
     P = {f: d.loc[:last_ok] for f, d in P.items()}
     return P["close"], P["volume"], P["high"], P["low"], P["open"]
@@ -116,6 +148,8 @@ class CSMAegis:
         selector="R1_ULCER",            # 'R1' | 'R1_ULCER' | 'R1_A1'
         beta_window=252, beta_min_periods=200,      # R1 residual beta window (days), lagged 1 day
         r1_window=231, r1_skip=21,                  # R1 sums residuals over [t-252, t-21]
+        risk_adjusted_signal=False, ramom_horizon=12, ramom_fast_alpha=0.50,
+                                                        # research: average lagged-fast-vol-normalized residual returns (RAMOM-style) over the R1 formation window
         ulcer_window=252,
         # ── Universe ────────────────────────────────────────────────────────────
         universe_min_rank=1, universe_max_rank=1000,   # rank by 63d avg rupee volume (prior day)
@@ -128,8 +162,18 @@ class CSMAegis:
         # ── Selection ───────────────────────────────────────────────────────────
         top_n=20, hold_rank=40,
         quarterly_entries=False,        # entries only Jan/Apr/Jul/Oct month-ends (tested: not adopted)
+        industry_cap=0, industry_labels_path=DEFAULT_INSTRUMENTS_FILE, industry_label_seed=None,
+                                                        # research: maximum names per Industry_clean label; 0 disables it
         # ── Entry filters ───────────────────────────────────────────────────────
         extension_filter=True, extension_x=0.25,       # skip names more than 25% above their SMA-50
+        entry_spike_filter=False, entry_spike_window=5, entry_spike_quantile=0.80,
+                                                        # research: fresh entries only; reject a name whose trailing raw-close return is above this eligible-pool percentile
+        entry_path_filter=False, entry_path_quantile=0.80,
+                                                        # research: fresh entries only; reject the most jump-driven eligible price paths (Frog-in-the-Pan ID, same 12m-skip-1m window as R1)
+        entry_turnover_filter=False, turnover_fast_window=21, turnover_slow_window=252, turnover_quantile=0.80,
+                                                        # research: fresh entries only; reject the highest abnormal rupee-turnover names (fast mean / slow median)
+        adx_entry_filter=False, adx_window=14, adx_threshold=25.0, adx_require_positive_di=True,
+                                                        # v1.4 low-DD gate: fresh entries need daily ADX >= threshold and +DI > -DI
         vol_gate=True, vol_gate_pctile=0.85,           # no new entries when 63d benchmark vol > expanding 85th pct (needs 5y of history)
         gap_cancel=0.03,                # fill='open' only: skip if the open gaps up more than this
         # ── Market regime ───────────────────────────────────────────────────────
@@ -141,19 +185,24 @@ class CSMAegis:
         min_hold_stops=False, chandelier=False,        # min-hold 5d / ATR chandelier (tested: not adopted)
         resting_stop=False,             # research only: intraday stop fills
         loss_cooldown=False,            # re-entry cooldown after a losing stop (tested: not adopted)
+        stop_cooldown_days=0,           # research: fixed calendar-day re-entry ban after every STOP_ENTRY/STOP_TRAIL (Zenith/Batch convention)
         # ── Sizing ──────────────────────────────────────────────────────────────
         risk_sizing=True, risk_pct_per_trade=0.01, w_lo=0.03, w_hi=0.08, w_equal=0.05, max_gross=1.0,
         inverse_vol_sizing=False,
-        # ── Risk overlays (default OFF) ─────────────────────────────────────────
+        # ── Risk overlays (regime leverage enabled; other overlays opt-in) ──────
         vol_target=None,                # e.g. 0.15: exposure multiplier = min(1, target / ex-ante 63d vol of current holdings)
-        regime_leverage=False, leverage_bear=0.6, leverage_panic=0.5,
+        regime_leverage=True, leverage_bear=0.6, leverage_panic=0.3,
         corr_guard=False, corr_guard_threshold=0.8,
         crash_guard=False, crash_guard_cooldown=10,
         # ── Execution ───────────────────────────────────────────────────────────
         fill="close",                   # 'close' (v1.2, recommended) | 'open'
+        require_tradable_fill=True,      # raw bar must have price, volume and range; disable only to reproduce legacy research
         transaction_cost=0.003,
         adv_fraction=None,              # cap each position at this share of 63d median rupee volume (capacity)
         execution_delay=0,              # extra days between decision and fill (stress test)
+        secondary_etf=None,             # None | GOLDBEES | SILVERBEES; sweeps all idle cash when its raw ETF bar is tradable
+        secondary_etf_data_dir=DEFAULT_SECONDARY_ETF_DIR,
+        secondary_transaction_cost=None, # defaults to transaction_cost when None
         start="2005-01-01",
         placebo_seed=None,              # research: random picks through the identical wrapper
         initial_capital=1.0,
@@ -167,7 +216,41 @@ class CSMAegis:
         assert selector in ("R1", "R1_ULCER", "R1_A1"), selector
         assert fill in ("close", "open"), fill
         assert liq_mode in ("dv63", "floor20", "floor20_abs", "amihud", "continuity", "cvvol", "cs_spread", "tradability", "tradability_log"), liq_mode
+        assert entry_spike_window >= 1, entry_spike_window
+        assert 0 < entry_spike_quantile < 1, entry_spike_quantile
+        assert 0 < entry_path_quantile < 1, entry_path_quantile
+        assert turnover_fast_window >= 1 and turnover_slow_window >= turnover_fast_window, (turnover_fast_window, turnover_slow_window)
+        assert 0 < turnover_quantile < 1, turnover_quantile
+        assert adx_window >= 2 and adx_threshold >= 0, (adx_window, adx_threshold)
+        assert ramom_horizon >= 2 and ramom_horizon < r1_window, (ramom_horizon, r1_window)
+        assert 0 < ramom_fast_alpha < 1, ramom_fast_alpha
+        assert stop_cooldown_days >= 0, stop_cooldown_days
+        assert industry_cap >= 0, industry_cap
+        assert secondary_etf in SECONDARY_ETF_CHOICES, secondary_etf
+        if secondary_transaction_cost is not None:
+            assert secondary_transaction_cost >= 0, secondary_transaction_cost
+        self.industry_labels = self._load_industry_labels(industry_labels_path, industry_label_seed) if industry_cap else {}
         self._ready = False
+
+    @staticmethod
+    def _load_industry_labels(path, label_seed=None):
+        """Ticker -> Industry_clean. A cap must never silently guess a group.
+
+        `label_seed` is a research-only placebo: it permutes labels while
+        preserving group sizes, and must remain None in a production preset.
+        """
+        if not os.path.exists(path):
+            raise FileNotFoundError(f"industry_cap requires a label file: {path}")
+        labels = pd.read_csv(path, usecols=["trading_symbol", "Industry_clean"])
+        labels = labels.dropna(subset=["trading_symbol", "Industry_clean"]).drop_duplicates("trading_symbol", keep="last")
+        labels["Industry_clean"] = labels["Industry_clean"].astype(str).str.strip()
+        labels = labels[labels["Industry_clean"] != ""]
+        mapping = labels.set_index("trading_symbol")["Industry_clean"].to_dict()
+        if label_seed is not None:
+            tickers = list(mapping)
+            values = np.asarray([mapping[ticker] for ticker in tickers], dtype=object)
+            mapping = dict(zip(tickers, np.random.default_rng(label_seed).permutation(values)))
+        return mapping
 
     # ── construction helpers ────────────────────────────────────────────────────
     @classmethod
@@ -178,6 +261,30 @@ class CSMAegis:
     @classmethod
     def from_panels(cls, panels, **kw):
         return cls(panels["close"], panels["volume"], panels["high"], panels["low"], panels["open"], None, **kw)
+
+    @staticmethod
+    def execution_bar_reason(close, volume, high, low, fill_price):
+        """Return the reason an OHLCV bar cannot support a conservative fill.
+
+        Indicators and portfolio marks may carry a prior close forward, but a
+        broker order needs an observed bar.  A high==low session is treated as
+        a non-fillable circuit lock for either side; this is deliberately
+        conservative because daily OHLCV does not reveal queue priority.
+        """
+        if not (np.isfinite(close) and close > 0 and np.isfinite(fill_price) and fill_price > 0):
+            return "STALE_OR_MISSING_PRICE"
+        if not (np.isfinite(volume) and volume > 0):
+            return "NO_VOLUME"
+        if not (np.isfinite(high) and high > 0 and np.isfinite(low) and low > 0):
+            return "MISSING_OHLC"
+        if high == low:
+            return "CIRCUIT_LOCK"
+        return None
+
+    def fillability_reason(self, i, j, fill="close"):
+        """Raw-bar execution validation for a proposed close/open fill."""
+        fill_price = self.C_RAW[i, j] if fill == "close" else self.O[i, j]
+        return self.execution_bar_reason(self.C_RAW[i, j], self.V[i, j], self.H[i, j], self.L[i, j], fill_price)
 
     # ══════════════════════════════════════════════════════════════════════════
     # FACTORS
@@ -203,7 +310,17 @@ class CSMAegis:
         cov = rr.mul(mk, axis=0).rolling(w, min_periods=mp).mean() - rr.rolling(w, min_periods=mp).mean().mul(mean_m, axis=0)
         beta = cov.div(var_m.replace(0, np.nan), axis=0).shift(1)
         resid = rr.sub(beta.mul(mk, axis=0)).clip(-0.5, 0.5)
-        r1 = resid.rolling(self.r1_window, min_periods=180).sum().shift(self.r1_skip) / resid.rolling(self.r1_window, min_periods=180).std().shift(self.r1_skip)
+        r1_standard = resid.rolling(self.r1_window, min_periods=180).sum().shift(self.r1_skip) / resid.rolling(self.r1_window, min_periods=180).std().shift(self.r1_skip)
+        # RAMOM-style signal engineering: a 12-day residual return is scaled by
+        # a one-day-lagged fast EWMA volatility estimate before aggregation. The
+        # shorter aggregation window keeps the effective formation span equal to
+        # R1's [t-252, t-21] interval. It changes the rank signal only; sizing,
+        # execution, and all gates are untouched.
+        fast_vol = np.sqrt((resid ** 2).ewm(alpha=self.ramom_fast_alpha, adjust=False, min_periods=self.ramom_horizon).mean()).shift(1)
+        ramom_days = resid.rolling(self.ramom_horizon, min_periods=self.ramom_horizon - 2).sum().div(fast_vol)
+        ramom_window = self.r1_window - self.ramom_horizon + 1
+        r1_ramom = ramom_days.rolling(ramom_window, min_periods=max(160, ramom_window - 40)).mean().shift(self.r1_skip)
+        r1 = r1_ramom if self.risk_adjusted_signal else r1_standard
         # Ulcer, 52w-high proximity, M3 -------------------------------------------
         dd = cf / cf.rolling(self.ulcer_window, min_periods=200).max() - 1
         ulcer_neg = -np.sqrt((dd ** 2).rolling(self.ulcer_window, min_periods=200).mean())
@@ -223,6 +340,42 @@ class CSMAegis:
         self.prev_ret_me = np.full_like(cm, np.nan)
         self.prev_ret_me[2:] = cm[1:-1] / cm[:-2] - 1
         self.vol21_me = ret.rolling(21, min_periods=15).std().loc[me].values
+        # Raw close return, available at the signal close.  It intentionally uses
+        # no forward filling: stale/missing prices must not make a name look calm.
+        self.entry_spike_ret_me = close.pct_change(self.entry_spike_window, fill_method=None).loc[me].values
+        # Frog-in-the-Pan information discreteness (Da, Gurun & Warachka):
+        # sign(12m-skip-1m return) * (negative-day share - positive-day share).
+        # Lower values describe a more gradual same-signed path.  Missing/stale
+        # prices do not count as directional days.
+        direction = np.sign(ret)
+        pos_days = (direction > 0).astype(float).rolling(self.r1_window, min_periods=180).sum().shift(self.r1_skip)
+        neg_days = (direction < 0).astype(float).rolling(self.r1_window, min_periods=180).sum().shift(self.r1_skip)
+        path_days = pos_days + neg_days
+        path_return = close.shift(self.r1_skip) / close.shift(self.r1_window + self.r1_skip) - 1
+        path_id = np.sign(path_return) * (neg_days - pos_days) / path_days.replace(0, np.nan)
+        self.entry_path_id_me = path_id.loc[me].values
+        # Abnormal rupee turnover: a stock's recent participation relative to its
+        # own history. This is an attention/crowding proxy, not the universe
+        # liquidity measure (which ranks absolute 63d rupee volume).
+        dvol = close * vol
+        turnover_fast = dvol.rolling(self.turnover_fast_window, min_periods=max(10, self.turnover_fast_window // 2)).mean()
+        turnover_slow = dvol.rolling(self.turnover_slow_window, min_periods=max(126, self.turnover_slow_window // 2)).median()
+        self.entry_turnover_ratio_me = (turnover_fast / turnover_slow.replace(0, np.nan)).loc[me].values
+        # ADX/DMI is a fresh-entry trend-quality confirmation for the low-DD
+        # preset. It uses only completed daily OHLC bars at the signal close.
+        # Existing positions are deliberately not rank-exited if ADX later fades.
+        prior_close = close.ffill(limit=10).shift(1)
+        dmi_tr = pd.concat([(high - low), (high - prior_close).abs(), (low - prior_close).abs()]).groupby(level=0).max()
+        dmi_up, dmi_down = high.diff(), -low.diff()
+        plus_dm = dmi_up.where((dmi_up > dmi_down) & (dmi_up > 0), 0.0).where(high.notna() & low.notna())
+        minus_dm = dmi_down.where((dmi_down > dmi_up) & (dmi_down > 0), 0.0).where(high.notna() & low.notna())
+        dmi_alpha = 1.0 / self.adx_window
+        dmi_atr = dmi_tr.ewm(alpha=dmi_alpha, adjust=False, min_periods=self.adx_window).mean()
+        plus_di = 100 * plus_dm.ewm(alpha=dmi_alpha, adjust=False, min_periods=self.adx_window).mean().div(dmi_atr.replace(0, np.nan))
+        minus_di = 100 * minus_dm.ewm(alpha=dmi_alpha, adjust=False, min_periods=self.adx_window).mean().div(dmi_atr.replace(0, np.nan))
+        dx = 100 * (plus_di - minus_di).abs().div((plus_di + minus_di).replace(0, np.nan))
+        adx = dx.ewm(alpha=dmi_alpha, adjust=False, min_periods=self.adx_window).mean()
+        self.ADX_ME, self.PLUS_DI_ME, self.MINUS_DI_ME = (x.loc[me].values.astype("float32") for x in (adx, plus_di, minus_di))
         # regime series ---------------------------------------------------------------
         bvol = bench_ret.rolling(63).std()
         self.vol_gate_me = (bvol > bvol.expanding(min_periods=1260).quantile(self.vol_gate_pctile)).loc[me].values
@@ -234,8 +387,18 @@ class CSMAegis:
         pc = cf.shift(1)
         tr = pd.concat([(high - low), (high - pc).abs(), (low - pc).abs()]).groupby(level=0).max()
         self.ATR = tr.ewm(com=13, adjust=False, min_periods=14).mean().shift(1).values
-        self.O, self.H, self.L, self.CL = self.opens.values, high.values, low.values, cf.values
-        self.RET = ret.fillna(0.0).values
+        # Raw arrays are exclusively for executable fills.  `CL` retains the
+        # bounded forward fill used by legacy indicators/stops, while `MARK_CL`
+        # and returns carry the last observed close for faithful position marks
+        # across a temporary data gap.
+        mark_close = close.ffill()
+        self.C_RAW, self.V = close.values, vol.values
+        self.O, self.H, self.L, self.CL, self.MARK_CL = self.opens.values, high.values, low.values, cf.values, mark_close.values
+        # Explicit legacy reproduction retains the historical return series for
+        # bit-for-bit parity. The production execution model carries the last
+        # observed mark across a gap so the catch-up move is not discarded.
+        mark_ret = mark_close.pct_change(fill_method=None).fillna(0.0)
+        self.RET = (mark_ret if self.require_tradable_fill else ret.fillna(0.0)).values
         self.ADV = (close * vol).rolling(63, min_periods=21).median().shift(1).values
         self.factors = None            # filled by build_factor_frame()
         self._ready = True
@@ -401,6 +564,31 @@ class CSMAegis:
         if self.quarterly_entries and self.per[k].month not in (1, 4, 7, 10):
             return out
         sma50, px = self.sma50_me[k], self.CL[i]
+        industry_counts = Counter()
+        if self.industry_cap:
+            for held_j in held:
+                # Unlabelled symbols are intentionally their own group. It is
+                # safer than applying a false common sector label.
+                group = self.industry_labels.get(self.cols[held_j], f"__solo__{self.cols[held_j]}")
+                industry_counts[group] += 1
+        spike_cutoff = np.nan
+        if self.entry_spike_filter:
+            spike_pool = self.entry_spike_ret_me[k][elig]
+            spike_pool = spike_pool[np.isfinite(spike_pool)]
+            if len(spike_pool):
+                spike_cutoff = float(np.quantile(spike_pool, self.entry_spike_quantile))
+        path_cutoff = np.nan
+        if self.entry_path_filter:
+            path_pool = self.entry_path_id_me[k][elig]
+            path_pool = path_pool[np.isfinite(path_pool)]
+            if len(path_pool):
+                path_cutoff = float(np.quantile(path_pool, self.entry_path_quantile))
+        turnover_cutoff = np.nan
+        if self.entry_turnover_filter:
+            turnover_pool = self.entry_turnover_ratio_me[k][elig]
+            turnover_pool = turnover_pool[np.isfinite(turnover_pool)]
+            if len(turnover_pool):
+                turnover_cutoff = float(np.quantile(turnover_pool, self.turnover_quantile))
         for j in order[:nvalid]:
             if rank[j] > self.top_n:
                 break
@@ -409,10 +597,46 @@ class CSMAegis:
             if self.extension_filter and np.isfinite(sma50[j]) and px[j] / sma50[j] - 1 > self.extension_x:
                 if reject: reject("EXTENSION", j)
                 continue
-            if self.loss_cooldown and blocked is not None and blocked.get(j, pd.Timestamp(0)) > next_date:
+            # A five-day price spike is a fresh-entry quality filter, not an exit
+            # rule.  Existing holdings keep their normal rank/stop lifecycle.
+            if self.entry_spike_filter and np.isfinite(spike_cutoff) and np.isfinite(self.entry_spike_ret_me[k, j]) and self.entry_spike_ret_me[k, j] > spike_cutoff:
+                if reject: reject("ENTRY_SPIKE", j)
+                continue
+            if self.entry_path_filter and np.isfinite(path_cutoff) and np.isfinite(self.entry_path_id_me[k, j]) and self.entry_path_id_me[k, j] > path_cutoff:
+                if reject: reject("ENTRY_PATH", j)
+                continue
+            if self.entry_turnover_filter and np.isfinite(turnover_cutoff) and np.isfinite(self.entry_turnover_ratio_me[k, j]) and self.entry_turnover_ratio_me[k, j] > turnover_cutoff:
+                if reject: reject("ENTRY_TURNOVER", j)
+                continue
+            group = self.industry_labels.get(self.cols[j], f"__solo__{self.cols[j]}")
+            if self.industry_cap and industry_counts[group] >= self.industry_cap:
+                if reject: reject("INDUSTRY_CAP", j)
+                continue
+            if (self.loss_cooldown or self.stop_cooldown_days > 0) and blocked is not None and blocked.get(j, pd.Timestamp(0)) > next_date:
                 if reject: reject("COOLDOWN", j)
                 continue
+            if self.adx_entry_filter:
+                adx, pdi, mdi = self.ADX_ME[k, j], self.PLUS_DI_ME[k, j], self.MINUS_DI_ME[k, j]
+                if not np.isfinite(adx):
+                    if reject: reject("ADX_UNAVAILABLE", j)
+                    # Preserve the isolated experiment's no-backfill behaviour:
+                    # a rejected top-N candidate consumes its original slot.
+                    if self.industry_cap: industry_counts[group] += 1
+                    slots -= 1
+                    continue
+                if adx < self.adx_threshold:
+                    if reject: reject("ADX_BELOW_THRESHOLD", j)
+                    if self.industry_cap: industry_counts[group] += 1
+                    slots -= 1
+                    continue
+                if self.adx_require_positive_di and (not np.isfinite(pdi) or not np.isfinite(mdi) or pdi <= mdi):
+                    if reject: reject("DMI_NOT_BULLISH", j)
+                    if self.industry_cap: industry_counts[group] += 1
+                    slots -= 1
+                    continue
             out.append((int(j), self.entry_weight(j, k, elig)))
+            if self.industry_cap:
+                industry_counts[group] += 1
             slots -= 1
         return out
 
@@ -474,8 +698,14 @@ class CSMAegis:
     # ══════════════════════════════════════════════════════════════════════════
     # LIVE HELPERS
     # ══════════════════════════════════════════════════════════════════════════
-    def latest_picks(self, asof=None):
-        """Ranked selection table as of the last month-end <= asof: what the strategy would buy at the next fill."""
+    def latest_picks(self, asof=None, held_tickers=None):
+        """Ranked month-end table and portfolio-aware next-entry candidates.
+
+        `held_tickers` is optional. When supplied, the same fresh-entry filters
+        and industry cap used in the backtest are applied after reserving slots
+        for those holdings. Callers should remove names already scheduled for
+        exit before passing the set.
+        """
         if not self._ready:
             self.calculate_factors()
         asof = pd.Timestamp(asof) if asof is not None else self.me[-1]
@@ -483,16 +713,66 @@ class CSMAegis:
         elig, sc = self.score_pool(k)
         order, rank, nvalid = self.rank_pool(sc)
         i = self.me_idx[k]
+        held_tickers = set(held_tickers or ())
+        held = {self.cols.index(ticker) for ticker in held_tickers if ticker in self.cols}
+        entry_rejections = {}
+
+        def capture_rejection(reason, j):
+            entry_rejections.setdefault(int(j), []).append(reason)
+
+        entry_slots = max(0, self.top_n - len(held))
+        selected_entries = {
+            j for j, _weight in self.select_entries(
+                k, i, order, rank, nvalid, entry_slots, held, elig,
+                reject=capture_rejection, blocked={}, next_date=self.dates[min(i + 1, len(self.dates) - 1)]
+            )
+        }
+        spike_cutoff = np.nan
+        if self.entry_spike_filter:
+            spike_pool = self.entry_spike_ret_me[k][elig]
+            spike_pool = spike_pool[np.isfinite(spike_pool)]
+            if len(spike_pool):
+                spike_cutoff = float(np.quantile(spike_pool, self.entry_spike_quantile))
+        path_cutoff = np.nan
+        if self.entry_path_filter:
+            path_pool = self.entry_path_id_me[k][elig]
+            path_pool = path_pool[np.isfinite(path_pool)]
+            if len(path_pool):
+                path_cutoff = float(np.quantile(path_pool, self.entry_path_quantile))
+        turnover_cutoff = np.nan
+        if self.entry_turnover_filter:
+            turnover_pool = self.entry_turnover_ratio_me[k][elig]
+            turnover_pool = turnover_pool[np.isfinite(turnover_pool)]
+            if len(turnover_pool):
+                turnover_cutoff = float(np.quantile(turnover_pool, self.turnover_quantile))
         rows = []
         for rnk, j in enumerate(order[:max(self.top_n * 2, 40)], 1):
             ext = self.CL[i][j] / self.sma50_me[k][j] - 1 if np.isfinite(self.sma50_me[k][j]) else np.nan
+            spike = self.entry_spike_ret_me[k, j]
+            path_id = self.entry_path_id_me[k, j]
+            turnover_ratio = self.entry_turnover_ratio_me[k, j]
+            adx, plus_di, minus_di = self.ADX_ME[k, j], self.PLUS_DI_ME[k, j], self.MINUS_DI_ME[k, j]
             w = self.entry_weight(j, k, elig)
+            reasons = entry_rejections.get(int(j), [])
             rows.append(dict(rank=rnk, ticker=self.cols[j], score=sc[j], r1=self.R1[k][j], ulcer_neg=self.ULC[k][j], a1=self.A1[k][j], close=self.CL[i][j],
-                             ext_vs_sma50=ext, blocked_extension=bool(self.extension_filter and np.isfinite(ext) and ext > self.extension_x), weight=w,
-                             entry_stop=self.CL[i][j] * (1 - self.stop_pct(i, j)), in_top_n=rnk <= self.top_n, in_hold_zone=rnk <= self.hold_rank))
+                             ext_vs_sma50=ext, blocked_extension=bool(self.extension_filter and np.isfinite(ext) and ext > self.extension_x),
+                             spike_return=spike, blocked_entry_spike=bool(self.entry_spike_filter and np.isfinite(spike_cutoff) and np.isfinite(spike) and spike > spike_cutoff),
+                             path_id=path_id, blocked_entry_path=bool(self.entry_path_filter and np.isfinite(path_cutoff) and np.isfinite(path_id) and path_id > path_cutoff), weight=w,
+                             turnover_ratio=turnover_ratio, blocked_entry_turnover=bool(self.entry_turnover_filter and np.isfinite(turnover_cutoff) and np.isfinite(turnover_ratio) and turnover_ratio > turnover_cutoff),
+                             adx=adx, plus_di=plus_di, minus_di=minus_di,
+                             blocked_adx=bool(self.adx_entry_filter and (not np.isfinite(adx) or adx < self.adx_threshold)),
+                             blocked_dmi=bool(self.adx_entry_filter and np.isfinite(plus_di) and np.isfinite(minus_di) and plus_di <= minus_di),
+                             entry_stop=self.CL[i][j] * (1 - self.stop_pct(i, j)), in_top_n=rnk <= self.top_n, in_hold_zone=rnk <= self.hold_rank,
+                             is_held=j in held, selected_new_entry=j in selected_entries,
+                             blocked_industry_cap="INDUSTRY_CAP" in reasons, entry_reject_reason="|".join(reasons)))
         df = pd.DataFrame(rows)
         df.attrs = dict(signal_date=str(self.me[k].date()), pool_size=nvalid, market_gate_off=self.market_gate_off(i),
-                        vol_gate_blocks_new_entries=bool(self.vol_gate and self.vol_gate_me[k]), panic_today=bool(self.panic[i]))
+                        vol_gate_blocks_new_entries=bool(self.vol_gate and self.vol_gate_me[k]), panic_today=bool(self.panic[i]),
+                        entry_spike_filter=self.entry_spike_filter, entry_spike_window=self.entry_spike_window,
+                        adx_entry_filter=self.adx_entry_filter, adx_window=self.adx_window, adx_threshold=self.adx_threshold,
+                        entry_spike_cutoff=spike_cutoff, entry_path_filter=self.entry_path_filter,
+                        entry_path_cutoff=path_cutoff, entry_turnover_filter=self.entry_turnover_filter,
+                        entry_turnover_cutoff=turnover_cutoff, held_count=len(held), entry_slots=entry_slots)
         return df
 
     get_positions = latest_picks        # same name as the other books in Old_live_strategies

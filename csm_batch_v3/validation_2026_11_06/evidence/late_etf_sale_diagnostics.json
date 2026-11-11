@@ -1,0 +1,8 @@
+{
+  "days_with_etf_sale": 552,
+  "days_with_etf_sale_and_stock_stop": 80,
+  "days_with_stock_stop": 715,
+  "untradable_etf_sale_days": 1,
+  "etf_sale_weight_sum_on_stop_days": 4.841813076747821,
+  "interpretation": "Overlap is a candidate exposure, not proof that each historical sale was caused by the later stop."
+}

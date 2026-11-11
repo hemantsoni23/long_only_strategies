@@ -226,3 +226,5 @@ __marimo__/
 output/
 .DS_Store
 results/
+*.zip
+fundamentals_data

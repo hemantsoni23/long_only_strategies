@@ -30,15 +30,13 @@ warnings.filterwarnings("ignore")
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 _V2_DIR = os.path.dirname(_HERE)
-_STRAT_DIR = os.path.join(os.path.dirname(_V2_DIR), "Old_live_strategies")
 sys.path.insert(0, _V2_DIR)
-sys.path.insert(0, _STRAT_DIR)
 
 import numpy as np
 import pandas as pd
 import statsmodels.api as sm
 
-from residual_momentum_strategy import load_data, LOCAL_DIR, _month_end_days, _residual_momentum
+from residual_momentum_v2_strategy import load_data, LOCAL_DIR, _month_end_days, _residual_momentum
 from residual_momentum_v2_strategy import ResidualMomentumV2
 
 OUT_DIR = os.path.join(_HERE, "output")

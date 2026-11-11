@@ -1,0 +1,8 @@
+{
+  "source": "/Users/hemantsoni/Documents/upstox_data_folder/ohlcv_data",
+  "snapshot": "/private/tmp/csm_batch_v3_validation_snapshot/ohlcv",
+  "csv_files": 5205,
+  "cutoff_inclusive": "2026-10-30",
+  "rows_after_cutoff_removed": 10922,
+  "creation": "Source initial byte lengths captured before validation; later-dated rows omitted. Earlier byte-prefix integrity cannot be proven for changes before the audit hash."
+}

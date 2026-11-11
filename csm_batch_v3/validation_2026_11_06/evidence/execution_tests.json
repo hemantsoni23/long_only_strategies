@@ -1,0 +1,63 @@
+{
+  "scheduled_exit": {
+    "same_known_open": 100,
+    "later_low_90": {
+      "exit_date": "2024-01-04",
+      "reason": "REBAL_EXIT",
+      "exit_price": 100.0,
+      "next_day_weight": 0.5
+    },
+    "later_low_80": {
+      "exit_date": "2024-01-04",
+      "reason": "REBAL_EXIT",
+      "exit_price": 100.0,
+      "next_day_weight": 0.5
+    },
+    "result": "PASS"
+  },
+  "circuit_at_open": {
+    "same_known_open": 100,
+    "later_full_day_range_nonzero": {
+      "entry_date": "2024-01-03",
+      "day1_weight": 0.5
+    },
+    "later_full_day_range_zero": {
+      "entry_date": "2024-01-04",
+      "day1_weight": 0.0
+    },
+    "result": "FAIL"
+  },
+  "etf_open_sale_depends_on_end_of_day_idle": {
+    "same_prior_etf_weight": 0.6,
+    "same_known_open_and_overnight_return": 0.02,
+    "no_later_stock_exit_end_idle_20pct": {
+      "first_day_etf_weight": 0.6,
+      "second_day_open_sale_weight": 0.39999999999999997,
+      "second_day_etf_return_contribution": 0.028000000000000004
+    },
+    "later_stock_exit_end_idle_60pct": {
+      "first_day_etf_weight": 0.6,
+      "second_day_open_sale_weight": 0.0,
+      "second_day_etf_return_contribution": 0.06
+    },
+    "result": "FAIL"
+  },
+  "integrated_stock_stop_and_etf_open": {
+    "same_open_stock_buy_B": 0.4,
+    "later_low_90": {
+      "entry_B_at_open": 0.4,
+      "stock_A_at_close": 0.4,
+      "prior_etf_weight": 0.6,
+      "etf_open_sale_weight": 0.4,
+      "etf_daily_contribution": 0.027999999999999997
+    },
+    "later_low_80": {
+      "entry_B_at_open": 0.4,
+      "stock_A_at_close": 0.0,
+      "prior_etf_weight": 0.6,
+      "etf_open_sale_weight": 0.0,
+      "etf_daily_contribution": 0.06
+    },
+    "result": "FAIL"
+  }
+}
