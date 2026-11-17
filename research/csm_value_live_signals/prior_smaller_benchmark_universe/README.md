@@ -1,0 +1,1 @@
+These are the first-pass results, preserved for transparency. They used a smaller market-benchmark universe than the normal CSM Value runner. Use the corrected results in the parent directory for current comparisons.

@@ -1,0 +1,901 @@
+{
+  "counts": {
+    "('main', 'old', 'mismatched_label')": 12,
+    "('main', 'new', 'mismatched_label')": 23,
+    "('main', '2025-03-31', 'added')": 107,
+    "('main', '2025-06-30', 'added')": 95,
+    "('main', '2025-09-30', 'added')": 72,
+    "('main', '2026-03-31', 'added')": 69,
+    "('main', '2026-06-30', 'added')": 66,
+    "('main', '2025-12-31', 'added')": 73
+  },
+  "missing": {
+    "('main', '2026-09-30')": {
+      "blocks": 1127,
+      "symbols": 630
+    },
+    "('main', '2026-03-31')": {
+      "blocks": 2,
+      "symbols": 1
+    },
+    "('main', '2025-12-31')": {
+      "blocks": 2,
+      "symbols": 1
+    },
+    "('main', '2025-09-30')": {
+      "blocks": 2,
+      "symbols": 1
+    },
+    "('main', '2025-03-31')": {
+      "blocks": 10,
+      "symbols": 6
+    },
+    "('main', '2026-06-30')": {
+      "blocks": 2,
+      "symbols": 1
+    },
+    "('main', '2025-06-30')": {
+      "blocks": 2,
+      "symbols": 1
+    },
+    "('sme', '2026-09-30')": {
+      "blocks": 196,
+      "symbols": 123
+    },
+    "('sme', '2026-03-31')": {
+      "blocks": 463,
+      "symbols": 290
+    },
+    "('sme', '2025-09-30')": {
+      "blocks": 448,
+      "symbols": 287
+    },
+    "('sme', '2025-03-31')": {
+      "blocks": 435,
+      "symbols": 284
+    },
+    "('sme', '2026-06-30')": {
+      "blocks": 66,
+      "symbols": 37
+    },
+    "('sme', '2025-12-31')": {
+      "blocks": 56,
+      "symbols": 33
+    },
+    "('sme', '2025-06-30')": {
+      "blocks": 41,
+      "symbols": 25
+    }
+  },
+  "samples": {
+    "('main', '2026-09-30', 'missing')": [
+      [
+        "360ONE",
+        "consolidated",
+        [
+          [
+            "FY2026-27",
+            "Q2",
+            "15-Oct-2026 19:05:15"
+          ]
+        ]
+      ],
+      [
+        "360ONE",
+        "standalone",
+        [
+          [
+            "FY2026-27",
+            "Q2",
+            "15-Oct-2026 19:06:17"
+          ]
+        ]
+      ],
+      [
+        "3IINFOLTD",
+        "consolidated",
+        [
+          [
+            "FY2026-27",
+            "Q2",
+            "29-Oct-2026 20:07:14"
+          ]
+        ]
+      ],
+      [
+        "3IINFOLTD",
+        "standalone",
+        [
+          [
+            "FY2026-27",
+            "Q2",
+            "29-Oct-2026 20:05:17"
+          ]
+        ]
+      ],
+      [
+        "3PLAND",
+        "consolidated",
+        [
+          [
+            "FY2026-27",
+            "Q2",
+            "24-Oct-2026 13:52:19"
+          ]
+        ]
+      ]
+    ],
+    "('main', '2026-03-31', 'missing')": [
+      [
+        "ABCOTS",
+        "consolidated",
+        [
+          [
+            "FY2025-26",
+            "Q4",
+            "27-May-2026 18:03:48"
+          ]
+        ]
+      ],
+      [
+        "ABCOTS",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q4",
+            "27-May-2026 18:01:53"
+          ]
+        ]
+      ]
+    ],
+    "('main', '2025-12-31', 'missing')": [
+      [
+        "ABCOTS",
+        "consolidated",
+        [
+          [
+            "FY2025-26",
+            "Q3",
+            "11-Feb-2026 17:31:49"
+          ]
+        ]
+      ],
+      [
+        "ABCOTS",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q3",
+            "11-Feb-2026 17:29:35"
+          ]
+        ]
+      ]
+    ],
+    "('main', '2025-09-30', 'missing')": [
+      [
+        "ABCOTS",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q2",
+            "12-Nov-2025 17:31:53"
+          ]
+        ]
+      ],
+      [
+        "ABCOTS",
+        "consolidated",
+        [
+          [
+            "FY2025-26",
+            "Q2",
+            "22-JAN-2026 12:06:59"
+          ]
+        ]
+      ]
+    ],
+    "('main', '2025-03-31', 'missing')": [
+      [
+        "ABCOTS",
+        "standalone",
+        [
+          [
+            "FY2024-25",
+            "Q4",
+            "24-JUL-2025 12:07:03"
+          ]
+        ]
+      ],
+      [
+        "ABCOTS",
+        "consolidated",
+        [
+          [
+            "FY2024-25",
+            "Q4",
+            "24-JUL-2025 12:11:16"
+          ]
+        ]
+      ],
+      [
+        "ASTRON",
+        "standalone",
+        [
+          [
+            "FY2024-25",
+            "Q4",
+            "30-May-2025 13:03:00"
+          ]
+        ]
+      ],
+      [
+        "CHENNPETRO",
+        "standalone",
+        [
+          [
+            "FY2024-25",
+            "Q4",
+            "25-Apr-2025 21:55:45"
+          ]
+        ]
+      ],
+      [
+        "CHENNPETRO",
+        "consolidated",
+        [
+          [
+            "FY2024-25",
+            "Q4",
+            "25-Apr-2025 21:34:23"
+          ]
+        ]
+      ]
+    ],
+    "('main', '2026-06-30', 'missing')": [
+      [
+        "ABCOTS",
+        "standalone",
+        [
+          [
+            "FY2026-27",
+            "Q1",
+            "12-Aug-2026 17:11:06"
+          ]
+        ]
+      ],
+      [
+        "ABCOTS",
+        "consolidated",
+        [
+          [
+            "FY2026-27",
+            "Q1",
+            "12-Aug-2026 17:11:24"
+          ]
+        ]
+      ]
+    ],
+    "('main', '2025-06-30', 'missing')": [
+      [
+        "ABCOTS",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q1",
+            "12-Aug-2025 16:20:47"
+          ]
+        ]
+      ],
+      [
+        "ABCOTS",
+        "consolidated",
+        [
+          [
+            "FY2025-26",
+            "Q1",
+            "12-Aug-2025 16:23:10"
+          ]
+        ]
+      ]
+    ],
+    "('main', 'old', 'mismatched_label')": [
+      [
+        "ACCELYA",
+        "FY2024-25",
+        "Q3",
+        "standalone",
+        "2025-03-31",
+        4
+      ],
+      [
+        "ACCELYA",
+        "FY2024-25",
+        "Q3",
+        "consolidated",
+        "2025-03-31",
+        4
+      ],
+      [
+        "ACCELYA",
+        "FY2024-25",
+        "Q4",
+        "standalone",
+        "2025-06-30",
+        5
+      ],
+      [
+        "ACCELYA",
+        "FY2024-25",
+        "Q4",
+        "consolidated",
+        "2025-06-30",
+        5
+      ],
+      [
+        "GILLETTE",
+        "FY2024-25",
+        "Q3",
+        "standalone",
+        "2025-03-31",
+        4
+      ],
+      [
+        "PGHL",
+        "FY2024-25",
+        "Q3",
+        "standalone",
+        "2025-03-31",
+        4
+      ],
+      [
+        "SIEMENS",
+        "FY2024-25",
+        "Q2",
+        "standalone",
+        "2025-03-31",
+        4
+      ],
+      [
+        "SIEMENS",
+        "FY2024-25",
+        "Q2",
+        "consolidated",
+        "2025-03-31",
+        4
+      ],
+      [
+        "SIEMENS",
+        "FY2024-25",
+        "Q3",
+        "standalone",
+        "2025-06-30",
+        5
+      ],
+      [
+        "SIEMENS",
+        "FY2024-25",
+        "Q3",
+        "consolidated",
+        "2025-06-30",
+        5
+      ],
+      [
+        "SIEMENS",
+        "FY2024-25",
+        "Q4",
+        "standalone",
+        "2025-09-30",
+        6
+      ],
+      [
+        "SIEMENS",
+        "FY2024-25",
+        "Q4",
+        "consolidated",
+        "2025-09-30",
+        6
+      ]
+    ],
+    "('main', 'new', 'mismatched_label')": [
+      [
+        "ACCELYA",
+        "FY2024-25",
+        "Q3",
+        "standalone",
+        "2025-03-31",
+        4
+      ],
+      [
+        "ACCELYA",
+        "FY2024-25",
+        "Q3",
+        "consolidated",
+        "2025-03-31",
+        4
+      ],
+      [
+        "ACCELYA",
+        "FY2024-25",
+        "Q4",
+        "standalone",
+        "2025-06-30",
+        5
+      ],
+      [
+        "ACCELYA",
+        "FY2024-25",
+        "Q4",
+        "consolidated",
+        "2025-06-30",
+        5
+      ],
+      [
+        "ASTRON",
+        "FY2024-25",
+        "Q4",
+        "standalone",
+        "2025-06-30",
+        5
+      ],
+      [
+        "ASTRON",
+        "FY2024-25",
+        "Q4",
+        "consolidated",
+        "2025-06-30",
+        5
+      ],
+      [
+        "CHENNPETRO",
+        "FY2024-25",
+        "Q4",
+        "standalone",
+        "2025-06-30",
+        5
+      ],
+      [
+        "CHENNPETRO",
+        "FY2024-25",
+        "Q4",
+        "consolidated",
+        "2025-06-30",
+        5
+      ],
+      [
+        "GILLETTE",
+        "FY2024-25",
+        "Q3",
+        "standalone",
+        "2025-03-31",
+        4
+      ],
+      [
+        "GILLETTE",
+        "FY2024-25",
+        "Q4",
+        "standalone",
+        "2025-06-30",
+        5
+      ],
+      [
+        "INFOBEAN",
+        "FY2024-25",
+        "Q4",
+        "standalone",
+        "2025-06-30",
+        5
+      ],
+      [
+        "INFOBEAN",
+        "FY2024-25",
+        "Q4",
+        "consolidated",
+        "2025-06-30",
+        5
+      ]
+    ],
+    "('sme', '2026-09-30', 'missing')": [
+      [
+        "AATMAJ",
+        "standalone",
+        [
+          [
+            "FY2026-27",
+            "Q2",
+            "29-Oct-2026 22:44:38"
+          ]
+        ]
+      ],
+      [
+        "ACCENTMIC",
+        "standalone",
+        [
+          [
+            "FY2026-27",
+            "Q2",
+            "14-Oct-2026 17:29:33"
+          ]
+        ]
+      ],
+      [
+        "ACCORD",
+        "standalone",
+        [
+          [
+            "FY2026-27",
+            "Q2",
+            "05-Nov-2026 19:50:54"
+          ]
+        ]
+      ],
+      [
+        "ADDICTIVE",
+        "standalone",
+        [
+          [
+            "FY2026-27",
+            "Q2",
+            "04-Nov-2026 23:52:59"
+          ]
+        ]
+      ],
+      [
+        "ADDICTIVE",
+        "consolidated",
+        [
+          [
+            "FY2026-27",
+            "Q2",
+            "04-Nov-2026 23:54:39"
+          ]
+        ]
+      ]
+    ],
+    "('sme', '2026-03-31', 'missing')": [
+      [
+        "AATMAJ",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q4",
+            "15-May-2026 18:24:30"
+          ]
+        ]
+      ],
+      [
+        "ACCENTMIC",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q4",
+            "12-May-2026 16:37:51"
+          ]
+        ]
+      ],
+      [
+        "ACCORD",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q4",
+            "04-May-2026 18:00:30"
+          ]
+        ]
+      ],
+      [
+        "ADDICTIVE",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q4",
+            "09-Sep-2026 16:01:11"
+          ]
+        ]
+      ],
+      [
+        "ADDICTIVE",
+        "consolidated",
+        [
+          [
+            "FY2025-26",
+            "Q4",
+            "30-May-2026 00:01:19"
+          ]
+        ]
+      ]
+    ],
+    "('sme', '2025-09-30', 'missing')": [
+      [
+        "AATMAJ",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q2",
+            "20-Jan-2026 17:56:57"
+          ]
+        ]
+      ],
+      [
+        "ACCENTMIC",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q2",
+            "14-Oct-2025 18:07:56"
+          ]
+        ]
+      ],
+      [
+        "ACCORD",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q2",
+            "13-Nov-2025 11:34:47"
+          ]
+        ]
+      ],
+      [
+        "AESTHETIK",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q2",
+            "14-Nov-2025 20:12:19"
+          ]
+        ]
+      ],
+      [
+        "AESTHETIK",
+        "consolidated",
+        [
+          [
+            "FY2025-26",
+            "Q2",
+            "14-Nov-2025 20:13:04"
+          ]
+        ]
+      ]
+    ],
+    "('sme', '2025-03-31', 'missing')": [
+      [
+        "AATMAJ",
+        "standalone",
+        [
+          [
+            "FY2024-25",
+            "Q4",
+            "13-Jun-2025 17:53:53"
+          ]
+        ]
+      ],
+      [
+        "ACCENTMIC",
+        "standalone",
+        [
+          [
+            "FY2024-25",
+            "Q4",
+            "12-May-2025 16:29:43"
+          ]
+        ]
+      ],
+      [
+        "ACCORD",
+        "standalone",
+        [
+          [
+            "FY2024-25",
+            "Q4",
+            "29-Jun-2025 03:00:38"
+          ]
+        ]
+      ],
+      [
+        "AESTHETIK",
+        "standalone",
+        [
+          [
+            "FY2024-25",
+            "Q4",
+            "14-Jun-2025 18:19:01"
+          ]
+        ]
+      ],
+      [
+        "AESTHETIK",
+        "consolidated",
+        [
+          [
+            "FY2024-25",
+            "Q4",
+            "31-May-2025 00:54:55"
+          ]
+        ]
+      ]
+    ],
+    "('sme', '2026-06-30', 'missing')": [
+      [
+        "ADDICTIVE",
+        "standalone",
+        [
+          [
+            "FY2026-27",
+            "Q1",
+            "08-Aug-2026 20:42:05"
+          ]
+        ]
+      ],
+      [
+        "ADDICTIVE",
+        "consolidated",
+        [
+          [
+            "FY2026-27",
+            "Q1",
+            "08-Aug-2026 20:48:31"
+          ]
+        ]
+      ],
+      [
+        "AISL",
+        "standalone",
+        [
+          [
+            "FY2026-27",
+            "Q1",
+            "14-Aug-2026 18:11:00"
+          ]
+        ]
+      ],
+      [
+        "AISL",
+        "consolidated",
+        [
+          [
+            "FY2026-27",
+            "Q1",
+            "14-Aug-2026 18:12:20"
+          ]
+        ]
+      ],
+      [
+        "ALLETEC",
+        "standalone",
+        [
+          [
+            "FY2026-27",
+            "Q1",
+            "14-Aug-2026 18:36:33"
+          ]
+        ]
+      ]
+    ],
+    "('sme', '2025-12-31', 'missing')": [
+      [
+        "AISL",
+        "consolidated",
+        [
+          [
+            "FY2025-26",
+            "Q3",
+            "12-Feb-2026 19:48:05"
+          ]
+        ]
+      ],
+      [
+        "AISL",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q3",
+            "12-Feb-2026 19:42:58"
+          ]
+        ]
+      ],
+      [
+        "ALLETEC",
+        "consolidated",
+        [
+          [
+            "FY2025-26",
+            "Q3",
+            "13-Feb-2026 17:39:44"
+          ]
+        ]
+      ],
+      [
+        "ALLETEC",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q3",
+            "13-Feb-2026 17:38:36"
+          ]
+        ]
+      ],
+      [
+        "ALPEXSOLAR",
+        "consolidated",
+        [
+          [
+            "FY2025-26",
+            "Q3",
+            "09-Feb-2026 19:19:36"
+          ]
+        ]
+      ]
+    ],
+    "('sme', '2025-06-30', 'missing')": [
+      [
+        "AISL",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q1",
+            "23-Sep-2025 13:39:31"
+          ]
+        ]
+      ],
+      [
+        "AISL",
+        "consolidated",
+        [
+          [
+            "FY2025-26",
+            "Q1",
+            "23-Sep-2025 13:40:14"
+          ]
+        ]
+      ],
+      [
+        "ALLETEC",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q1",
+            "04-Aug-2025 17:31:09"
+          ]
+        ]
+      ],
+      [
+        "ALLETEC",
+        "consolidated",
+        [
+          [
+            "FY2025-26",
+            "Q1",
+            "04-Aug-2025 17:32:10"
+          ]
+        ]
+      ],
+      [
+        "ALPEXSOLAR",
+        "standalone",
+        [
+          [
+            "FY2025-26",
+            "Q1",
+            "11-Aug-2025 17:51:12"
+          ]
+        ]
+      ]
+    ]
+  }
+}

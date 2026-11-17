@@ -1,0 +1,18 @@
+{
+  "prefix": "2023-12-29",
+  "tolerance": 1e-10,
+  "modes": {
+    "value": {
+      "factors": 1.7763568394002505e-15,
+      "positions": 0.0,
+      "executed_weights": 1.3877787807814457e-17,
+      "net_returns": 1.3877787807814457e-17
+    },
+    "experimental": {
+      "factors": 0.0,
+      "positions": 0.0,
+      "executed_weights": 4.85722573273506e-17,
+      "net_returns": 2.0816681711721685e-17
+    }
+  }
+}

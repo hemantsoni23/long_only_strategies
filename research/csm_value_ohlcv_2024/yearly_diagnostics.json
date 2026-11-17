@@ -1,0 +1,98 @@
+[
+  {
+    "candidate": "baseline",
+    "year": 2019,
+    "total_return": 0.027188085081623514,
+    "max_drawdown": -0.04788713546751777,
+    "turnover": 1.8570854400000003,
+    "average_exposure": 0.2276386614084508
+  },
+  {
+    "candidate": "baseline",
+    "year": 2020,
+    "total_return": 0.2002632615238238,
+    "max_drawdown": -0.13137203827962862,
+    "turnover": 5.02097152,
+    "average_exposure": 0.37752089142857137
+  },
+  {
+    "candidate": "baseline",
+    "year": 2021,
+    "total_return": 0.440974252945711,
+    "max_drawdown": -0.07624433165043432,
+    "turnover": 4.780641501940702,
+    "average_exposure": 0.475592533994991
+  },
+  {
+    "candidate": "baseline",
+    "year": 2022,
+    "total_return": 0.03608598993428602,
+    "max_drawdown": -0.1386779791485061,
+    "turnover": 5.327028216690211,
+    "average_exposure": 0.39128748100980926
+  },
+  {
+    "candidate": "baseline",
+    "year": 2023,
+    "total_return": 0.3884727573274702,
+    "max_drawdown": -0.049591469621049655,
+    "turnover": 3.4275712,
+    "average_exposure": 0.47497979577235766
+  },
+  {
+    "candidate": "baseline",
+    "year": 2024,
+    "total_return": 0.141634601479103,
+    "max_drawdown": -0.10179410915169507,
+    "turnover": 5.38335682164468,
+    "average_exposure": 0.44496116357571697
+  },
+  {
+    "candidate": "momentum_6_1",
+    "year": 2019,
+    "total_return": 0.0611179546436702,
+    "max_drawdown": -0.026780577277407902,
+    "turnover": 1.4780569600000004,
+    "average_exposure": 0.2335350445070424
+  },
+  {
+    "candidate": "momentum_6_1",
+    "year": 2020,
+    "total_return": 0.18492977859196924,
+    "max_drawdown": -0.1252971479747158,
+    "turnover": 4.85902848,
+    "average_exposure": 0.3707085155555555
+  },
+  {
+    "candidate": "momentum_6_1",
+    "year": 2021,
+    "total_return": 0.5619615645267457,
+    "max_drawdown": -0.08881279281805232,
+    "turnover": 5.3147831276178525,
+    "average_exposure": 0.48188755727122207
+  },
+  {
+    "candidate": "momentum_6_1",
+    "year": 2022,
+    "total_return": 0.02048848477719245,
+    "max_drawdown": -0.19612605032886055,
+    "turnover": 7.349640118407924,
+    "average_exposure": 0.3767972404882336
+  },
+  {
+    "candidate": "momentum_6_1",
+    "year": 2023,
+    "total_return": 0.35590987508341576,
+    "max_drawdown": -0.04893007505120073,
+    "turnover": 4.3728140799999995,
+    "average_exposure": 0.4712800338211382
+  },
+  {
+    "candidate": "momentum_6_1",
+    "year": 2024,
+    "total_return": 0.039775661738920665,
+    "max_drawdown": -0.08936934853636624,
+    "turnover": 5.879145441245548,
+    "average_exposure": 0.41914858754150575
+  }
+]

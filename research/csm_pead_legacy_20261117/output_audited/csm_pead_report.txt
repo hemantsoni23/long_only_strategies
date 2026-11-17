@@ -1,0 +1,116 @@
+Loading 2300 files from /Users/hemantsoni/Documents/upstox_data_folder/ohlcv_data...
+Loaded  Prices:(6678, 2300)  Volumes:(6678, 2300)  Highs:(6678, 2300)  Lows:(6678, 2300)  Opens:(6678, 2300)
+[Data] Corporate-action mask: 254 (ticker, day) cells with a 1-day move outside [-40%, +300%] -- masked to NaN
+PEAD Confirmed-Drift initialised | signal: SUE & EAR both top 30% of trailing 120d liquid events (pool>=150)
+  No liquidity-rank cutoff, price>20.0, circuit<=5/63d | 20 slots (1/20 each), hold 60d, entry window 5d, hard stop 15% | cost 0.30% one-way, cash 6.5%
+  events 16,283 | with valid SUE & EAR & liquid 13,830 | BUY signals 1,811 (2020-08-11 .. 2024-11-26)
+[Logs] /Users/hemantsoni/Documents/long_only_strategies/csm_pead/output_audited/csm_pead_daily_log.csv  (1076 rows)
+[Trade Log] 357 trades | Wins: 224 | Losses: 132 | Win Rate: 62.7%
+[Trade Log] Worst trade: -22.81%  Best trade: 122.00%
+[Trade Log] Exit reasons: {'TIME_STOP': 275, 'STOP_HIT': 82}
+[Trade Log] Exit details: {'HOLD_EXPIRED': 275, 'GAP_DOWN_OPEN': 60, 'ENTRY_HARD': 22}
+
+[Logs] /Users/hemantsoni/Documents/long_only_strategies/csm_pead/output_audited/csm_pead_trade_log.csv  (357 trades from 2020-09-01)
+
+======================================
+  CSM PEAD Confirmed-Drift  —  PERFORMANCE REPORT
+  (2020-09-01 → 2024-12-31, mode=event_driven)
+======================================
+
+── Portfolio Metrics ─────────────────
+  CAGR              :    46.98%
+  Total Return      :   430.17%
+  Ann Volatility    :    20.99%
+  Max Drawdown      :   -26.01%
+  Avg Drawdown      :    -2.84%  (71 episodes; mean of each episode's own trough)
+  Avg DD (underwater):   -7.45%  (mean depth on days actually below the running peak)
+  Sharpe Ratio      :     1.968
+  Sortino Ratio     :     2.722
+  Calmar Ratio      :     1.806
+  Final Portfolio   : ₹  530,174.07
+
+── Win Rate (3 views) ────────────────
+  Daily Win Rate    :    60.41%
+  Monthly Win Rate  :    76.47%
+  Trade Win Rate    :    62.75%  (357 trades)
+
+── Trade Statistics ──────────────────
+  Total Trades      :      357
+  Avg Trade Return  :    10.32%
+  Median Trade Ret  :     6.84%
+  Best Trade        :   122.00%
+  Worst Trade       :   -22.81%
+  Avg Win  (trade)  :    23.81%
+  Avg Loss (trade)  : -  12.49%
+  Payoff Ratio      :     1.907  (avg win / avg loss)
+  Profit Factor (%) :     3.236  (equal-weighted)
+  Profit Factor (₹) :     2.510  (rupee-weighted)
+  Avg Holding Days  :     77.5  (calendar)
+  Avg Trading Days  :     52.7  (exchange sessions)
+  Avg Stop Pct      :    15.00%  (initial ATR stop at entry)
+  Avg MAE           :    -9.80%  (max adverse excursion)
+  Avg MFE           :    27.21%  (max favorable excursion)
+
+── Exit Breakdown (Reason → Detail) ──
+                             N  AvgPnL
+Exit_Reason Exit_Detail               
+STOP_HIT    ENTRY_HARD      22  -14.20
+            GAP_DOWN_OPEN   60  -17.59
+TIME_STOP   HOLD_EXPIRED   275   18.38
+
+── Entry Reason Breakdown ────────────
+                  N  AvgPnL  WinRate
+Entry_Reason                        
+PEAD_CONFIRMED  357   10.32    62.75
+
+── Regime At Entry Breakdown ─────────
+                   N  AvgPnL
+Regime_At_Entry             
+BEAR               4   12.57
+BULL             295   11.11
+HIGH_VOL          44    4.92
+PANIC             14   10.13
+
+── Turnover ──────────────────────────
+  Ann Turnover      :   830.89%  (actual modeled trade value / portfolio value)
+
+================================================
+  Yearly Returns  +  Drawdown
+================================================
+Year   |   Return |  Yr MaxDD |  Yr AvgDD
+------------------------------------------------
+2020   |   32.02% |    -5.53% |    -1.66%
+2021   |  125.50% |    -8.00% |    -2.18%
+2022   |   -4.45% |   -26.01% |   -14.06%
+2023   |   61.15% |   -20.76% |    -8.82%
+2024   |   15.65% |   -12.80% |    -3.93%
+================================================
+  (Yr MaxDD: worst drawdown-from-all-time-peak TOUCHED during the
+   year, not reset each Jan 1. Yr AvgDD: mean depth on days the
+   year was actually underwater -- 0.00% means it stayed at highs.)
+[Graphics] Saved  →  /Users/hemantsoni/Documents/long_only_strategies/csm_pead/output_audited/csm_pead_performance.png
+[Graphics] Saved  →  /Users/hemantsoni/Documents/long_only_strategies/csm_pead/output_audited/csm_pead_heatmap.png
+
+====================================================================
+ EVENT-LEVEL IC / ICIR  —  CSM PEAD Confirmed-Drift  (SPEARMAN, filing-month cross-sections)
+====================================================================
+  Events used          : 13,523  (liquid universe, valid SUE & EAR, 2020-09-01 → 2024-12-31)
+
+  Signal: SUE
+   Horizon     IC Mean      ICIR    Hit%   NW-t   months
+    20d      +0.0289     0.266     67%  +1.68   39
+    40d      +0.0523     0.559     68%  +3.49   38
+    60d      +0.0741     0.769     84%  +4.93   37
+
+  Signal: EAR
+   Horizon     IC Mean      ICIR    Hit%   NW-t   months
+    20d      +0.0698     0.843     79%  +5.34   39
+    40d      +0.0721     0.753     79%  +4.71   38
+    60d      +0.0666     0.737     81%  +4.80   37
+
+  Signal: PEAD score
+   Horizon     IC Mean      ICIR    Hit%   NW-t   months
+    20d      +0.0486     0.503     85%  +3.18   39
+    40d      +0.0662     0.739     74%  +4.62   38
+    60d      +0.0702     0.814     81%  +4.92   37
+====================================================================

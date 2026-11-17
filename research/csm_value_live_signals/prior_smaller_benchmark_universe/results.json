@@ -1,0 +1,220 @@
+{
+  "cutoff": "2024-12-31",
+  "development_start": "2019-06-03",
+  "development_end": "2021-12-31",
+  "selection": "highest development Calmar, then Sharpe, then value baseline",
+  "candidates": [
+    "value",
+    "value_a3",
+    "value_q5",
+    "value_elendel",
+    "value_zenith",
+    "value_quad",
+    "value_earnings_quality"
+  ],
+  "benchmarks": [
+    "ohlcv_elendel_common",
+    "ohlcv_elendel_universe"
+  ],
+  "selected": "value_elendel",
+  "development": [
+    {
+      "candidate": "value",
+      "cagr": 0.24960545605043793,
+      "max_drawdown": -0.13137203827962773,
+      "calmar": 1.8999892162679874,
+      "sharpe": 1.9945686191972838,
+      "annual_turnover": 4.520530374972231,
+      "mean_exposure": 0.3822537429762582,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.027188085081623514,
+        "2020": 0.2002632615238238,
+        "2021": 0.440974252945711
+      }
+    },
+    {
+      "candidate": "value_a3",
+      "cagr": 0.2704583142372592,
+      "max_drawdown": -0.13225202394928082,
+      "calmar": 2.045022118837146,
+      "sharpe": 2.0609272651602524,
+      "annual_turnover": 4.505806770807807,
+      "mean_exposure": 0.3742097900107697,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.0018306110891583849,
+        "2020": 0.18978157081161484,
+        "2021": 0.5554575063593312
+      }
+    },
+    {
+      "candidate": "value_q5",
+      "cagr": 0.26392220672003575,
+      "max_drawdown": -0.1275126668473563,
+      "calmar": 2.0697724645346294,
+      "sharpe": 2.1015303728494183,
+      "annual_turnover": 4.535536404763668,
+      "mean_exposure": 0.38990889983580357,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.08839177660685782,
+        "2020": 0.15472618062968801,
+        "2021": 0.4557209871075738
+      }
+    },
+    {
+      "candidate": "value_elendel",
+      "cagr": 0.3300164821565015,
+      "max_drawdown": -0.13055561970269491,
+      "calmar": 2.5277845787720565,
+      "sharpe": 2.432263008832991,
+      "annual_turnover": 4.358038927257568,
+      "mean_exposure": 0.3836911312645821,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.06890930681853669,
+        "2020": 0.1905377976946505,
+        "2021": 0.6396459571151565
+      }
+    },
+    {
+      "candidate": "value_zenith",
+      "cagr": 0.28976759193030177,
+      "max_drawdown": -0.12220685364619721,
+      "calmar": 2.371123904140532,
+      "sharpe": 2.2508983342258126,
+      "annual_turnover": 4.353642580385129,
+      "mean_exposure": 0.3776847768426466,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.06570729843484391,
+        "2020": 0.20482637051819075,
+        "2021": 0.5012491627120153
+      }
+    },
+    {
+      "candidate": "value_quad",
+      "cagr": 0.28081924523015744,
+      "max_drawdown": -0.123608361016321,
+      "calmar": 2.271846685137089,
+      "sharpe": 2.0898080451059844,
+      "annual_turnover": 4.276066590205361,
+      "mean_exposure": 0.38086349630340355,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.0610436938353589,
+        "2020": 0.19181151337103053,
+        "2021": 0.4971877507258251
+      }
+    },
+    {
+      "candidate": "value_earnings_quality",
+      "cagr": 0.22922950261361064,
+      "max_drawdown": -0.11949407382002242,
+      "calmar": 1.918333648569616,
+      "sharpe": 1.8541169899567556,
+      "annual_turnover": 4.3437503911401825,
+      "mean_exposure": 0.38115675269543237,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.009797124105148436,
+        "2020": 0.2217888256718923,
+        "2021": 0.3801876406003004
+      }
+    },
+    {
+      "candidate": "ohlcv_elendel_common",
+      "cagr": 0.3771806295575961,
+      "max_drawdown": -0.08383778578999002,
+      "calmar": 4.498933577544821,
+      "sharpe": 3.251679986425336,
+      "annual_turnover": 4.0786360428025485,
+      "mean_exposure": 0.38911918853582556,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.049044715478242074,
+        "2020": 0.3639954862974999,
+        "2021": 0.5953586002469604
+      }
+    },
+    {
+      "candidate": "ohlcv_elendel_universe",
+      "cagr": 0.35536165185245006,
+      "max_drawdown": -0.07925065374653473,
+      "calmar": 4.484021709006892,
+      "sharpe": 3.06842154686186,
+      "annual_turnover": 4.737603745732484,
+      "mean_exposure": 0.40734171813084114,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": -0.0018189841866104173,
+        "2020": 0.41022555309541375,
+        "2021": 0.5562514900138453
+      }
+    }
+  ],
+  "warning": "2022\u20132024 and strategy ideas have been researched before; no pristine holdout.",
+  "previously_examined_2022_2024": [
+    {
+      "candidate": "value",
+      "cagr": 0.1803227989043008,
+      "max_drawdown": -0.1386779791485061,
+      "calmar": 1.3002987209036159,
+      "sharpe": 1.5951850709328284,
+      "annual_turnover": 4.724509163816852,
+      "mean_exposure": 0.4369847305259572,
+      "max_positions": 10,
+      "annual_returns": {
+        "2022": 0.03608598993428602,
+        "2023": 0.3884727573274702,
+        "2024": 0.141634601479103
+      }
+    },
+    {
+      "candidate": "value_elendel",
+      "cagr": 0.135231681622497,
+      "max_drawdown": -0.20725394864123337,
+      "calmar": 0.652492666649211,
+      "sharpe": 1.1503152991129288,
+      "annual_turnover": 4.949111091049405,
+      "mean_exposure": 0.42132424397280444,
+      "max_positions": 10,
+      "annual_returns": {
+        "2022": -0.019374895386566893,
+        "2023": 0.3749728476580907,
+        "2024": 0.08403085256604226
+      }
+    },
+    {
+      "candidate": "ohlcv_elendel_common",
+      "cagr": 0.15988770645357087,
+      "max_drawdown": -0.17071968309053698,
+      "calmar": 0.9365510968572872,
+      "sharpe": 1.4109355858170998,
+      "annual_turnover": 5.833794627228984,
+      "mean_exposure": 0.44236104568956197,
+      "max_positions": 10,
+      "annual_returns": {
+        "2022": -0.06475249521726478,
+        "2023": 0.32778688630749553,
+        "2024": 0.25518548821988185
+      }
+    },
+    {
+      "candidate": "ohlcv_elendel_universe",
+      "cagr": 0.15148326000185364,
+      "max_drawdown": -0.1686979180053828,
+      "calmar": 0.8979557174915467,
+      "sharpe": 1.3585445620032979,
+      "annual_turnover": 6.165381529598157,
+      "mean_exposure": 0.4444077964423526,
+      "max_positions": 10,
+      "annual_returns": {
+        "2022": -0.02116638023590145,
+        "2023": 0.3035874604788824,
+        "2024": 0.19526064458922332
+      }
+    }
+  ]
+}

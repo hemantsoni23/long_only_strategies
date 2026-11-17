@@ -1,0 +1,56 @@
+[
+  {
+    "symbol": "HDFCBANK",
+    "source_url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_BANKING_1421434_21042025050837_WEB.xml",
+    "broadcast_Date": "21-Apr-2025 17:08:39",
+    "submission_type": "Original",
+    "updater_result": "ValueError: No usable income statement in HDFCBANK.xml",
+    "RevenueFromOperations": null,
+    "InterestEarned": "774601100000",
+    "ProfitLossForThePeriod": "176161400000",
+    "ProfitLossFromOrdinaryActivitiesAfterTax": "176161400000"
+  },
+  {
+    "symbol": "SBIN",
+    "source_url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_BANKING_1431206_03052025061046_WEB.xml",
+    "broadcast_Date": "03-May-2025 18:10:46",
+    "submission_type": "Original",
+    "updater_result": "ValueError: No usable income statement in SBIN.xml",
+    "RevenueFromOperations": null,
+    "InterestEarned": "1196661800000",
+    "ProfitLossForThePeriod": "186425900000",
+    "ProfitLossFromOrdinaryActivitiesAfterTax": "186425900000"
+  },
+  {
+    "symbol": "ICICIBANK",
+    "source_url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_BANKING_1420312_19042025092146_WEB.xml",
+    "broadcast_Date": "19-Apr-2025 21:21:52",
+    "submission_type": "Original",
+    "updater_result": "ValueError: No usable income statement in ICICIBANK.xml",
+    "RevenueFromOperations": null,
+    "InterestEarned": "424308000000",
+    "ProfitLossForThePeriod": "126295800000",
+    "ProfitLossFromOrdinaryActivitiesAfterTax": "126295800000"
+  },
+  {
+    "symbol": "PFC",
+    "all_march_2026_consolidated_versions": [
+      {
+        "qe_Date": "31-MAR-2026",
+        "consolidated": "Consolidated",
+        "broadcast_Date": null,
+        "revised_Date": "21-AUG-2026 16:11:05",
+        "type_Sub": "Revision",
+        "xbrl": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_NBFC_INDAS_1716806_21082026041106_WEB.xml"
+      },
+      {
+        "qe_Date": "31-MAR-2026",
+        "consolidated": "Consolidated",
+        "broadcast_Date": "13-May-2026 19:18:09",
+        "revised_Date": null,
+        "type_Sub": "Original",
+        "xbrl": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_NBFC_INDAS_1666633_13052026071813_WEB.xml"
+      }
+    ]
+  }
+]

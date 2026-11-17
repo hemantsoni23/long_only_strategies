@@ -1,0 +1,3921 @@
+{
+  "symbol": "CMRSL",
+  "company_name": "CYBER MEDIA RESEARCH & SERVICES LIMITED",
+  "isin": null,
+  "generated_at": "2026-11-10T11:13:25",
+  "source": "NSE official corporate filings (XBRL) \u2014 Financial Results (Reg 33) + Shareholding Pattern (Reg 31), fetched via the nse python package v3.2.1 hitting nseindia.com / nsearchives.nseindia.com directly. No third-party/paid data used.",
+  "data_notes": [
+    "Field names are standardized (see SCHEMA.md) \u2014 mapped from whichever raw XBRL tag that filing's taxonomy vintage uses, so the same field name works across all years/companies.",
+    "Any real financial fact not yet in the canonical map is kept under 'other_facts' on the same block rather than dropped \u2014 this is a standardized schema, not a lossy one.",
+    "Balance sheet and cash flow are only disclosed by SEBI LODR at half-year (Q2) and full-year (Q4/Annual) filings \u2014 Q1/Q3 having none is expected, not missing data.",
+    "cash_flow under each quarter is YEAR-TO-DATE cumulative as filed (H1 for Q2, full year for Q4/Annual), never single-quarter \u2014 see its own 'period' field.",
+    "'annual' is the separately-filed AUDITED full-year result, distinct from the Q4 quarterly filing \u2014 both kept since they can differ.",
+    "fii_holding_pct/dii_holding_pct are summed from category sub-fields whose names vary by taxonomy vintage (including a real SEBI taxonomy typo, 'Catergory', in older filings) \u2014 the full raw 'categories' dict is always kept alongside for verification.",
+    "dii_holding_pct falls back to summing Mutual Funds/Banks/Insurance/Pension Fund categories individually when a filing has no single 'InstitutionsDomestic' aggregate tag (older filings) \u2014 treat as an approximation for those years.",
+    "Dividend-per-share, analyst estimates, and peer/sector data are not present \u2014 none exist in these 2 official sources (see REQUIRED_FIELDS.md / DATA_SOURCES.md)."
+  ],
+  "fiscal_years": {
+    "FY2023-24": {
+      "quarters": {
+        "Q4": {
+          "consolidated": {
+            "filed_date": "28-MAY-2024 16:59:09",
+            "audited_status": "Audited",
+            "income_statement": {
+              "revenue_from_operations": 224451000,
+              "other_income": 2450000,
+              "total_income": 226901000,
+              "cost_of_materials_consumed": 174531000,
+              "purchases_of_stock_in_trade": 0,
+              "changes_in_inventories": 0,
+              "employee_benefit_expense": 17864000,
+              "finance_costs": 1741000,
+              "depreciation_amortisation": 706000,
+              "other_expenses": 4996000,
+              "total_expenses": 199838000,
+              "profit_before_exceptional_and_tax": 27063000,
+              "exceptional_items": -7770000,
+              "profit_before_tax": 19293000,
+              "current_tax": 4517000,
+              "deferred_tax": -162000,
+              "total_tax_expense": 4355000,
+              "net_profit": 13181000,
+              "net_profit_attributable_to_owners": 0,
+              "net_profit_attributable_to_minority_interest": 0,
+              "other_comprehensive_income": 221000,
+              "total_comprehensive_income": 13402000,
+              "paid_up_equity_share_capital": 29280000,
+              "face_value_per_share": 10,
+              "basic_eps": 4.5,
+              "diluted_eps": 4.5,
+              "debt_equity_ratio": null,
+              "debt_service_coverage_ratio": null,
+              "interest_service_coverage_ratio": null,
+              "other_facts": {
+                "ReportingQuarter": "Yearly",
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": -1757000,
+                "ProfitLossForPeriodFromContinuingOperations": 13181000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "BasicEarningsLossPerShareFromContinuingOperations": 4.5,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 4.5,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "SegmentRevenue": 224451000,
+                "SegmentRevenueFromOperations": 224451000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 21035000,
+                "SegmentFinanceCosts": 1741000,
+                "SegmentProfitBeforeTax": 19294000,
+                "SegmentAssets": 404241000
+              }
+            },
+            "period": {
+              "start": "2024-01-01",
+              "end": "2024-03-31"
+            },
+            "cash_flow": {
+              "cash_flow_operating": -50238000,
+              "cash_flow_investing": 11843000,
+              "cash_flow_financing": 4150000,
+              "capex": 2080000,
+              "other_facts": {
+                "RevenueFromOperations": 873278000,
+                "OtherIncome": 7615000,
+                "Income": 880893000,
+                "CostOfMaterialsConsumed": 730290000,
+                "PurchasesOfStockInTrade": 0,
+                "ChangesInInventoriesOfFinishedGoodsWorkInProgressAndStockInTrade": 0,
+                "EmployeeBenefitExpense": 68584000,
+                "FinanceCosts": 8081000,
+                "DepreciationDepletionAndAmortisationExpense": 2795000,
+                "OtherExpenses": 14041000,
+                "Expenses": 823791000,
+                "ProfitBeforeExceptionalItemsAndTax": 57102000,
+                "ExceptionalItemsBeforeTax": -7770000,
+                "ProfitBeforeTax": 49332000,
+                "CurrentTax": 10239000,
+                "DeferredTax": 432000,
+                "TaxExpense": 10671000,
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": -2792000,
+                "ProfitLossForPeriodFromContinuingOperations": 35869000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ProfitLossForPeriod": 35869000,
+                "OtherComprehensiveIncomeNetOfTaxes": -229000,
+                "ComprehensiveIncomeForThePeriod": 35640000,
+                "ProfitOrLossAttributableToOwnersOfParent": 0,
+                "ProfitOrLossAttributableToNonControllingInterests": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "PaidUpValueOfEquityShareCapital": 29280000,
+                "FaceValueOfEquityShareCapital": 10,
+                "ReserveExcludingRevaluationReserves": 0,
+                "BasicEarningsLossPerShareFromContinuingOperations": 12.25,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 12.25,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 12.25,
+                "DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 12.25,
+                "SegmentRevenue": 873277000,
+                "SegmentRevenueFromOperations": 873277000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 57413000,
+                "SegmentFinanceCosts": 8081000,
+                "SegmentProfitBeforeTax": 49332000,
+                "AdjustmentsForFinanceCosts": 0,
+                "AdjustmentsForDecreaseIncreaseInInventories": 0,
+                "AdjustmentsForDecreaseIncreaseInTradeReceivablesCurrent": -107726000,
+                "AdjustmentsForDecreaseIncreaseInTradeReceivablesNoncurrent": 0,
+                "AdjustmentsForDecreaseIncreaseInOtherCurrentAssets": -5925000,
+                "AdjustmentsForDecreaseIncreaseInOtherNoncurrentAssets": 0,
+                "AdjustmentsForOtherFinancialAssetsNoncurrent": 0,
+                "AdjustmentsForOtherFinancialAssetsCurrent": 0,
+                "AdjustmentsForOtherBankBalances": 0,
+                "AdjustmentsForIncreaseDecreaseInTradePayablesCurrent": 14322000,
+                "AdjustmentsForIncreaseDecreaseInTradePayablesNoncurrent": 0,
+                "AdjustmentsForIncreaseDecreaseInOtherCurrentLiabilities": 3146000,
+                "AdjustmentsForIncreaseDecreaseInOtherNoncurrentLiabilities": 0,
+                "AdjustmentsForDepreciationAndAmortisationExpense": 2795000,
+                "AdjustmentsForImpairmentLossReversalOfImpairmentLossRecognisedInProfitOrLoss": 0,
+                "AdjustmentsForProvisionsCurrent": 1785000,
+                "AdjustmentsForProvisionsNoncurrent": 0,
+                "AdjustmentsForOtherFinancialLiabilitiesCurrent": 0,
+                "AdjustmentsForOtherFinancialLiabilitiesNoncurrent": 0,
+                "AdjustmentsForUnrealisedForeignExchangeLossesGains": 0,
+                "AdjustmentsForDividendIncome": 0,
+                "AdjustmentsForInterestIncome": 7449000,
+                "AdjustmentsForSharebasedPayments": 0,
+                "AdjustmentsForFairValueGainsLosses": -37000,
+                "AdjustmentsForUndistributedProfitsOfAssociates": 0,
+                "OtherAdjustmentsForWhichCashEffectsAreInvestingOrFinancingCashFlow": 13464000,
+                "OtherAdjustmentsToReconcileProfitLoss": -13464000,
+                "OtherAdjustmentsForNoncashItems": 7852000,
+                "ShareOfProfitAndLossFromPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+                "AdjustmentsForReconcileProfitLoss": -91237000,
+                "CashFlowsFromUsedInOperations": -41905000,
+                "DividendsReceivedClassifiedAsOperatingActivities": 0,
+                "InterestPaidClassifiedAsOperatingActivities": 0,
+                "InterestReceivedClassifiedAsOperatingActivities": 0,
+                "IncomeTaxesPaidRefundClassifiedAsOperatingActivities": 8333000,
+                "OtherInflowsOutflowsOfCashClassifiedAsOperatingActivities": 0,
+                "CashFlowsFromLosingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+                "CashFlowsUsedInObtainingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+                "OtherCashReceiptsFromSalesOfEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+                "OtherCashPaymentsToAcquireEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+                "OtherCashReceiptsFromSalesOfInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+                "OtherCashPaymentsToAcquireInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+                "CashReceiptsFromShareOfProfitsOfPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+                "CashPaymentForInvestmentInPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+                "ProceedsFromSalesOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities": 8000,
+                "ProceedsFromSalesOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+                "PurchaseOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfIntangibleAssetsUnderDevelopment": 0,
+                "PurchaseOfIntangibleAssetsUnderDevelopment": 0,
+                "ProceedsFromSalesOfGoodwillClassifiedAsInvestingActivities": 0,
+                "PurchaseOfGoodwillClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfIntangibleAssetsClassifiedAsInvestingActivities": 37000,
+                "PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities": 0,
+                "ProceedsFromBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+                "PurchaseOfBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+                "PurchaseOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+                "CashAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": -6429000,
+                "CashReceiptsFromRepaymentOfAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": 0,
+                "CashPaymentsForFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+                "CashReceiptsFromFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+                "DividendsReceivedClassifiedAsInvestingActivities": 0,
+                "InterestReceivedClassifiedAsInvestingActivities": 7449000,
+                "IncomeTaxesPaidRefundClassifiedAsInvestingActivities": 0,
+                "OtherInflowsOutflowsOfCashClassifiedAsInvestingActivities": 0,
+                "ProceedsFromGovernmentGrantsClassifiedAsInvestingActivities": 0,
+                "ProceedsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+                "PaymentsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+                "ProceedsFromIssuingSharesClassifiedAsFinancingActivities": 0,
+                "ProceedsFromIssuingOtherEquityInstruments": 0,
+                "PaymentsToAcquireOrRedeemEntitysShares": 0,
+                "PaymentsOfOtherEquityInstruments": 0,
+                "ProceedsFromExerciseOfStockOptions": 0,
+                "ProceedsFromIssuingDebenturesNotesBondsEtc": 0,
+                "ProceedsFromBorrowingsClassifiedAsFinancingActivities": 18087000,
+                "RepaymentsOfBorrowingsClassifiedAsFinancingActivities": 0,
+                "PaymentsOfFinanceLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+                "PaymentsOfLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+                "DividendsPaidClassifiedAsFinancingActivities": 5856000,
+                "InterestPaidClassifiedAsFinancingActivities": 8081000,
+                "IncomeTaxesPaidRefundClassifiedAsFinancingActivities": 0,
+                "OtherInflowsOutflowsOfCashClassifiedAsFinancingActivities": 0,
+                "IncreaseDecreaseInCashAndCashEquivalentsBeforeEffectOfExchangeRateChanges": -34245000,
+                "EffectOfExchangeRateChangesOnCashAndCashEquivalents": 58000,
+                "IncreaseDecreaseInCashAndCashEquivalents": -34187000,
+                "CashAndCashEquivalentsCashFlowStatement": 75965000
+              },
+              "period": {
+                "start": "2023-04-01",
+                "end": "2024-03-31"
+              },
+              "note": "year-to-date cumulative as filed, not single-quarter"
+            },
+            "segment_breakdown": [
+              {
+                "label": "Digital Service",
+                "revenue": 873277000,
+                "profit_before_tax_and_finance_costs": 57413000,
+                "finance_costs": null,
+                "assets": 404241000,
+                "liabilities": 255289000
+              }
+            ]
+          },
+          "standalone": {
+            "filed_date": "28-MAY-2024 17:02:33",
+            "audited_status": "Audited",
+            "income_statement": {
+              "revenue_from_operations": 149726000,
+              "other_income": 2345000,
+              "total_income": 152071000,
+              "cost_of_materials_consumed": 103060000,
+              "purchases_of_stock_in_trade": 0,
+              "changes_in_inventories": 0,
+              "employee_benefit_expense": 17864000,
+              "finance_costs": 1740000,
+              "depreciation_amortisation": 706000,
+              "other_expenses": 4636000,
+              "total_expenses": 128006000,
+              "profit_before_exceptional_and_tax": 24065000,
+              "exceptional_items": -7770000,
+              "profit_before_tax": 16295000,
+              "current_tax": 4265000,
+              "deferred_tax": -162000,
+              "total_tax_expense": 4103000,
+              "net_profit": 10436000,
+              "net_profit_attributable_to_owners": null,
+              "net_profit_attributable_to_minority_interest": null,
+              "other_comprehensive_income": 221000,
+              "total_comprehensive_income": 10657000,
+              "paid_up_equity_share_capital": 29280000,
+              "face_value_per_share": 10,
+              "basic_eps": 3.56,
+              "diluted_eps": 3.56,
+              "debt_equity_ratio": null,
+              "debt_service_coverage_ratio": null,
+              "interest_service_coverage_ratio": null,
+              "other_facts": {
+                "ReportingQuarter": "Yearly",
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": -1756000,
+                "ProfitLossForPeriodFromContinuingOperations": 10436000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "BasicEarningsLossPerShareFromContinuingOperations": 3.56,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 3.56,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "SegmentRevenue": 149725000,
+                "SegmentRevenueFromOperations": 149725000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 25805000,
+                "SegmentFinanceCosts": 1740000,
+                "SegmentProfitBeforeTax": 24065000,
+                "SegmentAssets": 327606000
+              }
+            },
+            "period": {
+              "start": "2024-01-01",
+              "end": "2024-03-31"
+            },
+            "cash_flow": {
+              "cash_flow_operating": -14725000,
+              "cash_flow_investing": 11660000,
+              "cash_flow_financing": 4150000,
+              "capex": 2080000,
+              "other_facts": {
+                "RevenueFromOperations": 557327000,
+                "OtherIncome": 7355000,
+                "Income": 564682000,
+                "CostOfMaterialsConsumed": 425532000,
+                "PurchasesOfStockInTrade": 0,
+                "ChangesInInventoriesOfFinishedGoodsWorkInProgressAndStockInTrade": 0,
+                "EmployeeBenefitExpense": 68584000,
+                "FinanceCosts": 8081000,
+                "DepreciationDepletionAndAmortisationExpense": 2795000,
+                "OtherExpenses": 12867000,
+                "Expenses": 517859000,
+                "ProfitBeforeExceptionalItemsAndTax": 46823000,
+                "ExceptionalItemsBeforeTax": -7770000,
+                "ProfitBeforeTax": 39053000,
+                "CurrentTax": 9405000,
+                "DeferredTax": 432000,
+                "TaxExpense": 9837000,
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": -2757000,
+                "ProfitLossForPeriodFromContinuingOperations": 26459000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ProfitLossForPeriod": 26459000,
+                "OtherComprehensiveIncomeNetOfTaxes": -229000,
+                "ComprehensiveIncomeForThePeriod": 26230000,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "PaidUpValueOfEquityShareCapital": 29280000,
+                "FaceValueOfEquityShareCapital": 10,
+                "ReserveExcludingRevaluationReserves": 0,
+                "BasicEarningsLossPerShareFromContinuingOperations": 9.04,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 9.04,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 9.04,
+                "DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 9.04,
+                "SegmentRevenue": 557327000,
+                "SegmentRevenueFromOperations": 557327000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 54903000,
+                "SegmentFinanceCosts": 8081000,
+                "SegmentProfitBeforeTax": 46822000,
+                "AdjustmentsForFinanceCosts": 0,
+                "AdjustmentsForDecreaseIncreaseInInventories": 0,
+                "AdjustmentsForDecreaseIncreaseInTradeReceivablesCurrent": -62040000,
+                "AdjustmentsForDecreaseIncreaseInTradeReceivablesNoncurrent": 0,
+                "AdjustmentsForDecreaseIncreaseInOtherCurrentAssets": -403000,
+                "AdjustmentsForDecreaseIncreaseInOtherNoncurrentAssets": 0,
+                "AdjustmentsForOtherFinancialAssetsNoncurrent": 0,
+                "AdjustmentsForOtherFinancialAssetsCurrent": 0,
+                "AdjustmentsForOtherBankBalances": 0,
+                "AdjustmentsForIncreaseDecreaseInTradePayablesCurrent": 7958000,
+                "AdjustmentsForIncreaseDecreaseInTradePayablesNoncurrent": 0,
+                "AdjustmentsForIncreaseDecreaseInOtherCurrentLiabilities": 3349000,
+                "AdjustmentsForIncreaseDecreaseInOtherNoncurrentLiabilities": 0,
+                "AdjustmentsForDepreciationAndAmortisationExpense": 2795000,
+                "AdjustmentsForImpairmentLossReversalOfImpairmentLossRecognisedInProfitOrLoss": 0,
+                "AdjustmentsForProvisionsCurrent": 1704000,
+                "AdjustmentsForProvisionsNoncurrent": 0,
+                "AdjustmentsForOtherFinancialLiabilitiesCurrent": 0,
+                "AdjustmentsForOtherFinancialLiabilitiesNoncurrent": 0,
+                "AdjustmentsForUnrealisedForeignExchangeLossesGains": 0,
+                "AdjustmentsForDividendIncome": 0,
+                "AdjustmentsForInterestIncome": 7241000,
+                "AdjustmentsForSharebasedPayments": 0,
+                "AdjustmentsForFairValueGainsLosses": -37000,
+                "AdjustmentsForUndistributedProfitsOfAssociates": 0,
+                "OtherAdjustmentsForWhichCashEffectsAreInvestingOrFinancingCashFlow": -12594000,
+                "OtherAdjustmentsToReconcileProfitLoss": 12594000,
+                "OtherAdjustmentsForNoncashItems": 7852000,
+                "ShareOfProfitAndLossFromPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+                "AdjustmentsForReconcileProfitLoss": -46063000,
+                "CashFlowsFromUsedInOperations": -7010000,
+                "DividendsReceivedClassifiedAsOperatingActivities": 0,
+                "InterestPaidClassifiedAsOperatingActivities": 0,
+                "InterestReceivedClassifiedAsOperatingActivities": 0,
+                "IncomeTaxesPaidRefundClassifiedAsOperatingActivities": 7715000,
+                "OtherInflowsOutflowsOfCashClassifiedAsOperatingActivities": 0,
+                "CashFlowsFromLosingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+                "CashFlowsUsedInObtainingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+                "OtherCashReceiptsFromSalesOfEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+                "OtherCashPaymentsToAcquireEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+                "OtherCashReceiptsFromSalesOfInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+                "OtherCashPaymentsToAcquireInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+                "CashReceiptsFromShareOfProfitsOfPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+                "CashPaymentForInvestmentInPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+                "ProceedsFromSalesOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities": 70000,
+                "ProceedsFromSalesOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+                "PurchaseOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfIntangibleAssetsUnderDevelopment": 0,
+                "PurchaseOfIntangibleAssetsUnderDevelopment": 0,
+                "ProceedsFromSalesOfGoodwillClassifiedAsInvestingActivities": 0,
+                "PurchaseOfGoodwillClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfIntangibleAssetsClassifiedAsInvestingActivities": 0,
+                "PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities": 0,
+                "ProceedsFromBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+                "PurchaseOfBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+                "PurchaseOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+                "CashAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": -6429000,
+                "CashReceiptsFromRepaymentOfAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": 0,
+                "CashPaymentsForFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+                "CashReceiptsFromFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+                "DividendsReceivedClassifiedAsInvestingActivities": 0,
+                "InterestReceivedClassifiedAsInvestingActivities": 7241000,
+                "IncomeTaxesPaidRefundClassifiedAsInvestingActivities": 0,
+                "OtherInflowsOutflowsOfCashClassifiedAsInvestingActivities": 0,
+                "ProceedsFromGovernmentGrantsClassifiedAsInvestingActivities": 0,
+                "ProceedsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+                "PaymentsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+                "ProceedsFromIssuingSharesClassifiedAsFinancingActivities": 0,
+                "ProceedsFromIssuingOtherEquityInstruments": 0,
+                "PaymentsToAcquireOrRedeemEntitysShares": 0,
+                "PaymentsOfOtherEquityInstruments": 0,
+                "ProceedsFromExerciseOfStockOptions": 0,
+                "ProceedsFromIssuingDebenturesNotesBondsEtc": 0,
+                "ProceedsFromBorrowingsClassifiedAsFinancingActivities": 18087000,
+                "RepaymentsOfBorrowingsClassifiedAsFinancingActivities": 0,
+                "PaymentsOfFinanceLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+                "PaymentsOfLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+                "DividendsPaidClassifiedAsFinancingActivities": 8081000,
+                "InterestPaidClassifiedAsFinancingActivities": 5856000,
+                "IncomeTaxesPaidRefundClassifiedAsFinancingActivities": 0,
+                "OtherInflowsOutflowsOfCashClassifiedAsFinancingActivities": 0,
+                "IncreaseDecreaseInCashAndCashEquivalentsBeforeEffectOfExchangeRateChanges": 1085000,
+                "EffectOfExchangeRateChangesOnCashAndCashEquivalents": 0,
+                "IncreaseDecreaseInCashAndCashEquivalents": 1085000,
+                "CashAndCashEquivalentsCashFlowStatement": 24927000
+              },
+              "period": {
+                "start": "2023-04-01",
+                "end": "2024-03-31"
+              },
+              "note": "year-to-date cumulative as filed, not single-quarter"
+            },
+            "segment_breakdown": [
+              {
+                "label": "Digital Services",
+                "revenue": 557327000,
+                "profit_before_tax_and_finance_costs": 54903000,
+                "finance_costs": null,
+                "assets": 327606000,
+                "liabilities": 200484000
+              }
+            ]
+          },
+          "shareholding": {
+            "as_of": "2024-03-31",
+            "submission_date": "18-APR-2024",
+            "promoter_holding_pct": 42.42,
+            "public_holding_pct": 57.58,
+            "fii_holding_pct": 3.77,
+            "dii_holding_pct": 0,
+            "promoter_pledge_flag": false,
+            "significant_beneficial_owners": null,
+            "categories": {
+              "IndividualsOrHinduUndividedFamily": {
+                "num_shares": 124460,
+                "pct_of_total_shares": 4.25,
+                "num_shareholders": 2,
+                "pct_voting_rights": 4.25
+              },
+              "CentralGovernmentOrStateGovernmentS": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "IndianFinancialInstitutionsOrBanks": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherIndianShareholders": {
+                "num_shares": 1117600,
+                "pct_of_total_shares": 38.17,
+                "num_shareholders": 1,
+                "pct_voting_rights": 38.17
+              },
+              "Indian": {
+                "num_shares": 1242060,
+                "pct_of_total_shares": 42.42,
+                "num_shareholders": 3,
+                "pct_voting_rights": 42.42
+              },
+              "NonResidentIndividualsOrForeignIndividuals": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignGovernment": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignInstitutions": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignPortfolioInvestor": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherForeignShareholders": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Foreign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingOfPromoterAndPromoterGroup": {
+                "num_shares": 1242060,
+                "pct_of_total_shares": 42.42,
+                "num_shareholders": 3,
+                "pct_voting_rights": 42.42
+              },
+              "MutualFundsOrUti": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "VentureCapitalFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AlternativeInvestmentFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Banks": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InsuranceCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ProvidentFundsOrPensionFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AssetReconstructionCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SovereignWealthFundsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "NBFCsRegisteredWithRbi": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherFinancialInstitutions": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherInstitutionsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignDirectInvestment": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignVentureCapitalInvestors": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SovereignWealthFundsForeign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeignPortfolioInvestorCatergoryOne": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeignPortfolioInvestorCatergoryTwo": {
+                "num_shares": 110400,
+                "pct_of_total_shares": 3.77,
+                "num_shareholders": 1,
+                "pct_voting_rights": 3.77
+              },
+              "OverseasDepositories": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherInstitutionsForeign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeign": {
+                "num_shares": 110400,
+                "pct_of_total_shares": 3.77,
+                "num_shareholders": 1,
+                "pct_voting_rights": 3.77
+              },
+              "CentralGovernmentOrPresidentOfIndia": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "StateGovernmentsOrGovernors": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingByCompaniesOrBodiesCorporatewhereCentralOrStateGovernmentIsPromoter": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Goverments": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AssociateCompaniesOrSubsidiaries": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "DirectorsAndDirectorsRelatives": {
+                "num_shares": 119900,
+                "pct_of_total_shares": 4.09,
+                "num_shareholders": 2,
+                "pct_voting_rights": 4.09
+              },
+              "KeyManagerialPersonnel": {
+                "num_shares": 6300,
+                "pct_of_total_shares": 0.22,
+                "num_shareholders": 1,
+                "pct_voting_rights": 0.22
+              },
+              "RelativesOfPromotersOtherThanPromoterGroup": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "TrustsWhereAnyPersonBelongingToPromoterAndPromoterGroupIsisTrusteeOrBeneficiaryOrAuthorOfTrust": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InvestorEducationAndProtectionFund": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh": {
+                "num_shares": 679560,
+                "pct_of_total_shares": 23.21,
+                "num_shareholders": 318,
+                "pct_voting_rights": 23.21
+              },
+              "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh": {
+                "num_shares": 398400,
+                "pct_of_total_shares": 13.61,
+                "num_shareholders": 9,
+                "pct_voting_rights": 13.61
+              },
+              "NonResidentIndians": {
+                "num_shares": 19600,
+                "pct_of_total_shares": 0.67,
+                "num_shareholders": 9,
+                "pct_voting_rights": 0.67
+              },
+              "ForeignNationals": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "BodiesCorporate": {
+                "num_shares": 152100,
+                "pct_of_total_shares": 5.19,
+                "num_shareholders": 13,
+                "pct_voting_rights": 5.19
+              },
+              "OtherNonInstitutions": {
+                "num_shares": 199680,
+                "pct_of_total_shares": 6.82,
+                "num_shareholders": 35,
+                "pct_voting_rights": 6.82
+              },
+              "NonInstitutions": {
+                "num_shares": 1575540,
+                "pct_of_total_shares": 53.81,
+                "num_shareholders": 387,
+                "pct_voting_rights": 53.81
+              },
+              "PublicShareholding": {
+                "num_shares": 1685940,
+                "pct_of_total_shares": 57.58,
+                "num_shareholders": 388,
+                "pct_voting_rights": 57.58
+              },
+              "CustodianOrDRHolder": {
+                "num_shares": 0,
+                "pct_of_total_shares": null,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "EmployeeBenefitsTrusts": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SharesHeldByNonPromoterNonPublicShareholders": {
+                "num_shares": 0,
+                "pct_of_total_shares": null,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingPattern": {
+                "num_shares": 2928000,
+                "pct_of_total_shares": 100,
+                "num_shareholders": 391,
+                "pct_voting_rights": 100
+              }
+            }
+          }
+        },
+        "Q3": {
+          "standalone": {
+            "filed_date": "07-FEB-2024 11:03:20",
+            "audited_status": "Unaudited",
+            "income_statement": {
+              "revenue_from_operations": 131056000,
+              "other_income": 1543000,
+              "total_income": 132599000,
+              "cost_of_materials_consumed": 95770000,
+              "purchases_of_stock_in_trade": 0,
+              "changes_in_inventories": 0,
+              "employee_benefit_expense": 19313000,
+              "finance_costs": 2910000,
+              "depreciation_amortisation": 706000,
+              "other_expenses": 4660000,
+              "total_expenses": 123359000,
+              "profit_before_exceptional_and_tax": 9240000,
+              "exceptional_items": 0,
+              "profit_before_tax": 9240000,
+              "current_tax": 2605000,
+              "deferred_tax": -210000,
+              "total_tax_expense": 2395000,
+              "net_profit": 6845000,
+              "net_profit_attributable_to_owners": null,
+              "net_profit_attributable_to_minority_interest": null,
+              "other_comprehensive_income": -150000,
+              "total_comprehensive_income": 6695000,
+              "paid_up_equity_share_capital": 29280000,
+              "face_value_per_share": 10,
+              "basic_eps": 2.34,
+              "diluted_eps": 2.34,
+              "debt_equity_ratio": null,
+              "debt_service_coverage_ratio": null,
+              "interest_service_coverage_ratio": null,
+              "other_facts": {
+                "ReportingQuarter": "Third quarter",
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": 0,
+                "ProfitLossForPeriodFromContinuingOperations": 6845000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "BasicEarningsLossPerShareFromContinuingOperations": 2.34,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 2.34,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "SegmentRevenue": 131056000,
+                "SegmentRevenueFromOperations": 131056000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 12149000,
+                "SegmentFinanceCosts": 2910000,
+                "SegmentProfitBeforeTax": 9239000,
+                "SegmentAssets": 310173000
+              }
+            },
+            "period": {
+              "start": "2023-10-01",
+              "end": "2023-12-31"
+            },
+            "cash_flow": {
+              "cash_flow_operating": null,
+              "cash_flow_investing": null,
+              "cash_flow_financing": null,
+              "capex": null,
+              "other_facts": {
+                "RevenueFromOperations": 407601000,
+                "OtherIncome": 5010000,
+                "Income": 412611000,
+                "CostOfMaterialsConsumed": 322472000,
+                "PurchasesOfStockInTrade": 0,
+                "ChangesInInventoriesOfFinishedGoodsWorkInProgressAndStockInTrade": 0,
+                "EmployeeBenefitExpense": 50721000,
+                "FinanceCosts": 6340000,
+                "DepreciationDepletionAndAmortisationExpense": 2089000,
+                "OtherExpenses": 8231000,
+                "Expenses": 389853000,
+                "ProfitBeforeExceptionalItemsAndTax": 22758000,
+                "ExceptionalItemsBeforeTax": 0,
+                "ProfitBeforeTax": 22758000,
+                "CurrentTax": 5140000,
+                "DeferredTax": 595000,
+                "TaxExpense": 5735000,
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": -1000000,
+                "ProfitLossForPeriodFromContinuingOperations": 16023000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ProfitLossForPeriod": 16023000,
+                "OtherComprehensiveIncomeNetOfTaxes": -450000,
+                "ComprehensiveIncomeForThePeriod": 15573000,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "PaidUpValueOfEquityShareCapital": 29280000,
+                "FaceValueOfEquityShareCapital": 10,
+                "BasicEarningsLossPerShareFromContinuingOperations": 5.47,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 5.47,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 5.47,
+                "DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 5.47,
+                "SegmentRevenue": 407601000,
+                "SegmentRevenueFromOperations": 407601000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 29098000,
+                "SegmentFinanceCosts": 6340000,
+                "SegmentProfitBeforeTax": 22758000
+              },
+              "period": {
+                "start": "2023-04-01",
+                "end": "2023-12-31"
+              },
+              "note": "year-to-date cumulative as filed, not single-quarter"
+            },
+            "segment_breakdown": [
+              {
+                "label": "Digital Services",
+                "revenue": 407601000,
+                "profit_before_tax_and_finance_costs": 29098000,
+                "finance_costs": null,
+                "assets": 310173000,
+                "liabilities": 193546000
+              }
+            ]
+          },
+          "consolidated": {
+            "filed_date": "07-FEB-2024 11:00:39",
+            "audited_status": "Unaudited",
+            "income_statement": {
+              "revenue_from_operations": 215174000,
+              "other_income": 1698000,
+              "total_income": 216872000,
+              "cost_of_materials_consumed": 177117000,
+              "purchases_of_stock_in_trade": 0,
+              "changes_in_inventories": 0,
+              "employee_benefit_expense": 19313000,
+              "finance_costs": 2910000,
+              "depreciation_amortisation": 706000,
+              "other_expenses": 5200000,
+              "total_expenses": 205246000,
+              "profit_before_exceptional_and_tax": 11626000,
+              "exceptional_items": 0,
+              "profit_before_tax": 11626000,
+              "current_tax": 2829000,
+              "deferred_tax": -210000,
+              "total_tax_expense": 2619000,
+              "net_profit": 8971000,
+              "net_profit_attributable_to_owners": null,
+              "net_profit_attributable_to_minority_interest": null,
+              "other_comprehensive_income": -150000,
+              "total_comprehensive_income": 8821000,
+              "paid_up_equity_share_capital": 29280000,
+              "face_value_per_share": 10,
+              "basic_eps": 3.06,
+              "diluted_eps": 3.06,
+              "debt_equity_ratio": null,
+              "debt_service_coverage_ratio": null,
+              "interest_service_coverage_ratio": null,
+              "other_facts": {
+                "ReportingQuarter": "Third quarter",
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": -36000,
+                "ProfitLossForPeriodFromContinuingOperations": 8971000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "BasicEarningsLossPerShareFromContinuingOperations": 3.06,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 3.06,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "SegmentRevenue": 215174000,
+                "SegmentRevenueFromOperations": 215174000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 14536000,
+                "SegmentFinanceCosts": 2910000,
+                "SegmentProfitBeforeTax": 11626000,
+                "SegmentAssets": 407792000
+              }
+            },
+            "period": {
+              "start": "2023-10-01",
+              "end": "2023-12-31"
+            },
+            "cash_flow": {
+              "cash_flow_operating": null,
+              "cash_flow_investing": null,
+              "cash_flow_financing": null,
+              "capex": null,
+              "other_facts": {
+                "RevenueFromOperations": 648826000,
+                "OtherIncome": 5165000,
+                "Income": 653991000,
+                "CostOfMaterialsConsumed": 555759000,
+                "PurchasesOfStockInTrade": 0,
+                "ChangesInInventoriesOfFinishedGoodsWorkInProgressAndStockInTrade": 0,
+                "EmployeeBenefitExpense": 50721000,
+                "FinanceCosts": 6340000,
+                "DepreciationDepletionAndAmortisationExpense": 2089000,
+                "OtherExpenses": 9045000,
+                "Expenses": 623954000,
+                "ProfitBeforeExceptionalItemsAndTax": 30037000,
+                "ExceptionalItemsBeforeTax": 0,
+                "ProfitBeforeTax": 30037000,
+                "CurrentTax": 5723000,
+                "DeferredTax": 595000,
+                "TaxExpense": 6318000,
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": -1036000,
+                "ProfitLossForPeriodFromContinuingOperations": 22683000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ProfitLossForPeriod": 22683000,
+                "OtherComprehensiveIncomeNetOfTaxes": -450000,
+                "ComprehensiveIncomeForThePeriod": 22233000,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "PaidUpValueOfEquityShareCapital": 29280000,
+                "FaceValueOfEquityShareCapital": 10,
+                "BasicEarningsLossPerShareFromContinuingOperations": 7.75,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 7.75,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 7.75,
+                "DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 7.75,
+                "SegmentRevenue": 648826000,
+                "SegmentRevenueFromOperations": 648826000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 36379000,
+                "SegmentFinanceCosts": 6340000,
+                "SegmentProfitBeforeTax": 30039000
+              },
+              "period": {
+                "start": "2023-04-01",
+                "end": "2023-12-31"
+              },
+              "note": "year-to-date cumulative as filed, not single-quarter"
+            },
+            "segment_breakdown": [
+              {
+                "label": "Digital Services",
+                "revenue": 648826000,
+                "profit_before_tax_and_finance_costs": 36379000,
+                "finance_costs": null,
+                "assets": 407792000,
+                "liabilities": 272152000
+              }
+            ]
+          },
+          "shareholding": {
+            "as_of": "2023-12-31",
+            "submission_date": "09-JAN-2024",
+            "promoter_holding_pct": 42.23,
+            "public_holding_pct": 57.77,
+            "fii_holding_pct": 3.77,
+            "dii_holding_pct": 0,
+            "promoter_pledge_flag": false,
+            "significant_beneficial_owners": null,
+            "categories": {
+              "IndividualsOrHinduUndividedFamily": {
+                "num_shares": 118860,
+                "pct_of_total_shares": 4.06,
+                "num_shareholders": 2,
+                "pct_voting_rights": 4.06
+              },
+              "CentralGovernmentOrStateGovernmentS": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "IndianFinancialInstitutionsOrBanks": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherIndianShareholders": {
+                "num_shares": 1117600,
+                "pct_of_total_shares": 38.17,
+                "num_shareholders": 1,
+                "pct_voting_rights": 38.17
+              },
+              "Indian": {
+                "num_shares": 1236460,
+                "pct_of_total_shares": 42.23,
+                "num_shareholders": 3,
+                "pct_voting_rights": 42.23
+              },
+              "NonResidentIndividualsOrForeignIndividuals": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignGovernment": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignInstitutions": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignPortfolioInvestor": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherForeignShareholders": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Foreign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingOfPromoterAndPromoterGroup": {
+                "num_shares": 1236460,
+                "pct_of_total_shares": 42.23,
+                "num_shareholders": 3,
+                "pct_voting_rights": 42.23
+              },
+              "MutualFundsOrUti": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "VentureCapitalFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AlternativeInvestmentFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Banks": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InsuranceCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ProvidentFundsOrPensionFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AssetReconstructionCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SovereignWealthFundsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "NBFCsRegisteredWithRbi": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherFinancialInstitutions": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherInstitutionsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignDirectInvestment": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignVentureCapitalInvestors": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SovereignWealthFundsForeign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeignPortfolioInvestorCatergoryOne": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeignPortfolioInvestorCatergoryTwo": {
+                "num_shares": 110400,
+                "pct_of_total_shares": 3.77,
+                "num_shareholders": 1,
+                "pct_voting_rights": 3.77
+              },
+              "OverseasDepositories": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherInstitutionsForeign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeign": {
+                "num_shares": 110400,
+                "pct_of_total_shares": 3.77,
+                "num_shareholders": 1,
+                "pct_voting_rights": 3.77
+              },
+              "CentralGovernmentOrPresidentOfIndia": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "StateGovernmentsOrGovernors": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingByCompaniesOrBodiesCorporatewhereCentralOrStateGovernmentIsPromoter": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Goverments": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AssociateCompaniesOrSubsidiaries": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "DirectorsAndDirectorsRelatives": {
+                "num_shares": 106300,
+                "pct_of_total_shares": 3.63,
+                "num_shareholders": 2,
+                "pct_voting_rights": 3.63
+              },
+              "KeyManagerialPersonnel": {
+                "num_shares": 6300,
+                "pct_of_total_shares": 0.22,
+                "num_shareholders": 1,
+                "pct_voting_rights": 0.22
+              },
+              "RelativesOfPromotersOtherThanPromoterGroup": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "TrustsWhereAnyPersonBelongingToPromoterAndPromoterGroupIsisTrusteeOrBeneficiaryOrAuthorOfTrust": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InvestorEducationAndProtectionFund": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh": {
+                "num_shares": 699760,
+                "pct_of_total_shares": 23.9,
+                "num_shareholders": 308,
+                "pct_voting_rights": 23.9
+              },
+              "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh": {
+                "num_shares": 418200,
+                "pct_of_total_shares": 14.28,
+                "num_shareholders": 10,
+                "pct_voting_rights": 14.28
+              },
+              "NonResidentIndians": {
+                "num_shares": 10800,
+                "pct_of_total_shares": 0.37,
+                "num_shareholders": 5,
+                "pct_voting_rights": 0.37
+              },
+              "ForeignNationals": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "BodiesCorporate": {
+                "num_shares": 143300,
+                "pct_of_total_shares": 4.89,
+                "num_shareholders": 15,
+                "pct_voting_rights": 4.89
+              },
+              "OtherNonInstitutions": {
+                "num_shares": 196480,
+                "pct_of_total_shares": 6.71,
+                "num_shareholders": 34,
+                "pct_voting_rights": 6.71
+              },
+              "NonInstitutions": {
+                "num_shares": 1581140,
+                "pct_of_total_shares": 54,
+                "num_shareholders": 375,
+                "pct_voting_rights": 54
+              },
+              "PublicShareholding": {
+                "num_shares": 1691540,
+                "pct_of_total_shares": 57.77,
+                "num_shareholders": 376,
+                "pct_voting_rights": 57.77
+              },
+              "CustodianOrDRHolder": {
+                "num_shares": 0,
+                "pct_of_total_shares": null,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "EmployeeBenefitsTrusts": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SharesHeldByNonPromoterNonPublicShareholders": {
+                "num_shares": 0,
+                "pct_of_total_shares": null,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingPattern": {
+                "num_shares": 2928000,
+                "pct_of_total_shares": 100,
+                "num_shareholders": 379,
+                "pct_voting_rights": 100
+              }
+            }
+          }
+        }
+      },
+      "annual": {
+        "consolidated": {
+          "filed_date": "28-MAY-2024 16:59:10",
+          "audited_status": "Audited",
+          "income_statement": {
+            "revenue_from_operations": 873278000,
+            "other_income": 7615000,
+            "total_income": 880893000,
+            "cost_of_materials_consumed": 730290000,
+            "purchases_of_stock_in_trade": 0,
+            "changes_in_inventories": 0,
+            "employee_benefit_expense": 68584000,
+            "finance_costs": 8081000,
+            "depreciation_amortisation": 2795000,
+            "other_expenses": 14041000,
+            "total_expenses": 823791000,
+            "profit_before_exceptional_and_tax": 57102000,
+            "exceptional_items": -7770000,
+            "profit_before_tax": 49332000,
+            "current_tax": 10239000,
+            "deferred_tax": 432000,
+            "total_tax_expense": 10671000,
+            "net_profit": 35869000,
+            "net_profit_attributable_to_owners": 0,
+            "net_profit_attributable_to_minority_interest": 0,
+            "other_comprehensive_income": -229000,
+            "total_comprehensive_income": 35640000,
+            "paid_up_equity_share_capital": 29280000,
+            "face_value_per_share": 10,
+            "basic_eps": 12.25,
+            "diluted_eps": 12.25,
+            "debt_equity_ratio": null,
+            "debt_service_coverage_ratio": null,
+            "interest_service_coverage_ratio": null,
+            "other_facts": {
+              "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": -2792000,
+              "ProfitLossForPeriodFromContinuingOperations": 35869000,
+              "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+              "TaxExpenseOfDiscontinuedOperations": 0,
+              "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+              "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+              "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+              "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+              "ReserveExcludingRevaluationReserves": 0,
+              "BasicEarningsLossPerShareFromContinuingOperations": 12.25,
+              "DilutedEarningsLossPerShareFromContinuingOperations": 12.25,
+              "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+              "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+              "SegmentRevenue": 873277000,
+              "SegmentRevenueFromOperations": 873277000,
+              "SegmentProfitLossBeforeTaxAndFinanceCosts": 57413000,
+              "SegmentFinanceCosts": 8081000,
+              "SegmentProfitBeforeTax": 49332000,
+              "AdjustmentsForFinanceCosts": 0,
+              "AdjustmentsForDecreaseIncreaseInInventories": 0,
+              "AdjustmentsForDecreaseIncreaseInTradeReceivablesCurrent": -107726000,
+              "AdjustmentsForDecreaseIncreaseInTradeReceivablesNoncurrent": 0,
+              "AdjustmentsForDecreaseIncreaseInOtherCurrentAssets": -5925000,
+              "AdjustmentsForDecreaseIncreaseInOtherNoncurrentAssets": 0,
+              "AdjustmentsForOtherFinancialAssetsNoncurrent": 0,
+              "AdjustmentsForOtherFinancialAssetsCurrent": 0,
+              "AdjustmentsForOtherBankBalances": 0,
+              "AdjustmentsForIncreaseDecreaseInTradePayablesCurrent": 14322000,
+              "AdjustmentsForIncreaseDecreaseInTradePayablesNoncurrent": 0,
+              "AdjustmentsForIncreaseDecreaseInOtherCurrentLiabilities": 3146000,
+              "AdjustmentsForIncreaseDecreaseInOtherNoncurrentLiabilities": 0,
+              "AdjustmentsForDepreciationAndAmortisationExpense": 2795000,
+              "AdjustmentsForImpairmentLossReversalOfImpairmentLossRecognisedInProfitOrLoss": 0,
+              "AdjustmentsForProvisionsCurrent": 1785000,
+              "AdjustmentsForProvisionsNoncurrent": 0,
+              "AdjustmentsForOtherFinancialLiabilitiesCurrent": 0,
+              "AdjustmentsForOtherFinancialLiabilitiesNoncurrent": 0,
+              "AdjustmentsForUnrealisedForeignExchangeLossesGains": 0,
+              "AdjustmentsForDividendIncome": 0,
+              "AdjustmentsForInterestIncome": 7449000,
+              "AdjustmentsForSharebasedPayments": 0,
+              "AdjustmentsForFairValueGainsLosses": -37000,
+              "AdjustmentsForUndistributedProfitsOfAssociates": 0,
+              "OtherAdjustmentsForWhichCashEffectsAreInvestingOrFinancingCashFlow": 13464000,
+              "OtherAdjustmentsToReconcileProfitLoss": -13464000,
+              "OtherAdjustmentsForNoncashItems": 7852000,
+              "ShareOfProfitAndLossFromPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+              "AdjustmentsForReconcileProfitLoss": -91237000,
+              "CashFlowsFromUsedInOperations": -41905000,
+              "DividendsReceivedClassifiedAsOperatingActivities": 0,
+              "InterestPaidClassifiedAsOperatingActivities": 0,
+              "InterestReceivedClassifiedAsOperatingActivities": 0,
+              "IncomeTaxesPaidRefundClassifiedAsOperatingActivities": 8333000,
+              "OtherInflowsOutflowsOfCashClassifiedAsOperatingActivities": 0,
+              "CashFlowsFromUsedInOperatingActivities": -50238000,
+              "CashFlowsFromLosingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+              "CashFlowsUsedInObtainingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+              "OtherCashReceiptsFromSalesOfEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+              "OtherCashPaymentsToAcquireEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+              "OtherCashReceiptsFromSalesOfInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+              "OtherCashPaymentsToAcquireInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+              "CashReceiptsFromShareOfProfitsOfPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+              "CashPaymentForInvestmentInPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+              "ProceedsFromSalesOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities": 8000,
+              "PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities": 2080000,
+              "ProceedsFromSalesOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+              "PurchaseOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+              "ProceedsFromSalesOfIntangibleAssetsUnderDevelopment": 0,
+              "PurchaseOfIntangibleAssetsUnderDevelopment": 0,
+              "ProceedsFromSalesOfGoodwillClassifiedAsInvestingActivities": 0,
+              "PurchaseOfGoodwillClassifiedAsInvestingActivities": 0,
+              "ProceedsFromSalesOfIntangibleAssetsClassifiedAsInvestingActivities": 37000,
+              "PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities": 0,
+              "ProceedsFromBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+              "PurchaseOfBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+              "ProceedsFromSalesOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+              "PurchaseOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+              "CashAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": -6429000,
+              "CashReceiptsFromRepaymentOfAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": 0,
+              "CashPaymentsForFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+              "CashReceiptsFromFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+              "DividendsReceivedClassifiedAsInvestingActivities": 0,
+              "InterestReceivedClassifiedAsInvestingActivities": 7449000,
+              "IncomeTaxesPaidRefundClassifiedAsInvestingActivities": 0,
+              "OtherInflowsOutflowsOfCashClassifiedAsInvestingActivities": 0,
+              "ProceedsFromGovernmentGrantsClassifiedAsInvestingActivities": 0,
+              "CashFlowsFromUsedInInvestingActivities": 11843000,
+              "ProceedsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+              "PaymentsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+              "ProceedsFromIssuingSharesClassifiedAsFinancingActivities": 0,
+              "ProceedsFromIssuingOtherEquityInstruments": 0,
+              "PaymentsToAcquireOrRedeemEntitysShares": 0,
+              "PaymentsOfOtherEquityInstruments": 0,
+              "ProceedsFromExerciseOfStockOptions": 0,
+              "ProceedsFromIssuingDebenturesNotesBondsEtc": 0,
+              "ProceedsFromBorrowingsClassifiedAsFinancingActivities": 18087000,
+              "RepaymentsOfBorrowingsClassifiedAsFinancingActivities": 0,
+              "PaymentsOfFinanceLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+              "PaymentsOfLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+              "DividendsPaidClassifiedAsFinancingActivities": 5856000,
+              "InterestPaidClassifiedAsFinancingActivities": 8081000,
+              "IncomeTaxesPaidRefundClassifiedAsFinancingActivities": 0,
+              "OtherInflowsOutflowsOfCashClassifiedAsFinancingActivities": 0,
+              "CashFlowsFromUsedInFinancingActivities": 4150000,
+              "IncreaseDecreaseInCashAndCashEquivalentsBeforeEffectOfExchangeRateChanges": -34245000,
+              "EffectOfExchangeRateChangesOnCashAndCashEquivalents": 58000,
+              "IncreaseDecreaseInCashAndCashEquivalents": -34187000,
+              "CashAndCashEquivalentsCashFlowStatement": 75965000
+            }
+          },
+          "period": {
+            "start": "2023-04-01",
+            "end": "2024-03-31"
+          },
+          "cash_flow": {
+            "cash_flow_operating": -50238000,
+            "cash_flow_investing": 11843000,
+            "cash_flow_financing": 4150000,
+            "capex": 2080000,
+            "other_facts": {
+              "RevenueFromOperations": 873278000,
+              "OtherIncome": 7615000,
+              "Income": 880893000,
+              "CostOfMaterialsConsumed": 730290000,
+              "PurchasesOfStockInTrade": 0,
+              "ChangesInInventoriesOfFinishedGoodsWorkInProgressAndStockInTrade": 0,
+              "EmployeeBenefitExpense": 68584000,
+              "FinanceCosts": 8081000,
+              "DepreciationDepletionAndAmortisationExpense": 2795000,
+              "OtherExpenses": 14041000,
+              "Expenses": 823791000,
+              "ProfitBeforeExceptionalItemsAndTax": 57102000,
+              "ExceptionalItemsBeforeTax": -7770000,
+              "ProfitBeforeTax": 49332000,
+              "CurrentTax": 10239000,
+              "DeferredTax": 432000,
+              "TaxExpense": 10671000,
+              "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": -2792000,
+              "ProfitLossForPeriodFromContinuingOperations": 35869000,
+              "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+              "TaxExpenseOfDiscontinuedOperations": 0,
+              "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+              "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+              "ProfitLossForPeriod": 35869000,
+              "OtherComprehensiveIncomeNetOfTaxes": -229000,
+              "ComprehensiveIncomeForThePeriod": 35640000,
+              "ProfitOrLossAttributableToOwnersOfParent": 0,
+              "ProfitOrLossAttributableToNonControllingInterests": 0,
+              "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+              "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+              "PaidUpValueOfEquityShareCapital": 29280000,
+              "FaceValueOfEquityShareCapital": 10,
+              "ReserveExcludingRevaluationReserves": 0,
+              "BasicEarningsLossPerShareFromContinuingOperations": 12.25,
+              "DilutedEarningsLossPerShareFromContinuingOperations": 12.25,
+              "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+              "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+              "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 12.25,
+              "DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 12.25,
+              "SegmentRevenue": 873277000,
+              "SegmentRevenueFromOperations": 873277000,
+              "SegmentProfitLossBeforeTaxAndFinanceCosts": 57413000,
+              "SegmentFinanceCosts": 8081000,
+              "SegmentProfitBeforeTax": 49332000,
+              "AdjustmentsForFinanceCosts": 0,
+              "AdjustmentsForDecreaseIncreaseInInventories": 0,
+              "AdjustmentsForDecreaseIncreaseInTradeReceivablesCurrent": -107726000,
+              "AdjustmentsForDecreaseIncreaseInTradeReceivablesNoncurrent": 0,
+              "AdjustmentsForDecreaseIncreaseInOtherCurrentAssets": -5925000,
+              "AdjustmentsForDecreaseIncreaseInOtherNoncurrentAssets": 0,
+              "AdjustmentsForOtherFinancialAssetsNoncurrent": 0,
+              "AdjustmentsForOtherFinancialAssetsCurrent": 0,
+              "AdjustmentsForOtherBankBalances": 0,
+              "AdjustmentsForIncreaseDecreaseInTradePayablesCurrent": 14322000,
+              "AdjustmentsForIncreaseDecreaseInTradePayablesNoncurrent": 0,
+              "AdjustmentsForIncreaseDecreaseInOtherCurrentLiabilities": 3146000,
+              "AdjustmentsForIncreaseDecreaseInOtherNoncurrentLiabilities": 0,
+              "AdjustmentsForDepreciationAndAmortisationExpense": 2795000,
+              "AdjustmentsForImpairmentLossReversalOfImpairmentLossRecognisedInProfitOrLoss": 0,
+              "AdjustmentsForProvisionsCurrent": 1785000,
+              "AdjustmentsForProvisionsNoncurrent": 0,
+              "AdjustmentsForOtherFinancialLiabilitiesCurrent": 0,
+              "AdjustmentsForOtherFinancialLiabilitiesNoncurrent": 0,
+              "AdjustmentsForUnrealisedForeignExchangeLossesGains": 0,
+              "AdjustmentsForDividendIncome": 0,
+              "AdjustmentsForInterestIncome": 7449000,
+              "AdjustmentsForSharebasedPayments": 0,
+              "AdjustmentsForFairValueGainsLosses": -37000,
+              "AdjustmentsForUndistributedProfitsOfAssociates": 0,
+              "OtherAdjustmentsForWhichCashEffectsAreInvestingOrFinancingCashFlow": 13464000,
+              "OtherAdjustmentsToReconcileProfitLoss": -13464000,
+              "OtherAdjustmentsForNoncashItems": 7852000,
+              "ShareOfProfitAndLossFromPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+              "AdjustmentsForReconcileProfitLoss": -91237000,
+              "CashFlowsFromUsedInOperations": -41905000,
+              "DividendsReceivedClassifiedAsOperatingActivities": 0,
+              "InterestPaidClassifiedAsOperatingActivities": 0,
+              "InterestReceivedClassifiedAsOperatingActivities": 0,
+              "IncomeTaxesPaidRefundClassifiedAsOperatingActivities": 8333000,
+              "OtherInflowsOutflowsOfCashClassifiedAsOperatingActivities": 0,
+              "CashFlowsFromLosingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+              "CashFlowsUsedInObtainingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+              "OtherCashReceiptsFromSalesOfEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+              "OtherCashPaymentsToAcquireEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+              "OtherCashReceiptsFromSalesOfInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+              "OtherCashPaymentsToAcquireInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+              "CashReceiptsFromShareOfProfitsOfPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+              "CashPaymentForInvestmentInPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+              "ProceedsFromSalesOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities": 8000,
+              "ProceedsFromSalesOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+              "PurchaseOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+              "ProceedsFromSalesOfIntangibleAssetsUnderDevelopment": 0,
+              "PurchaseOfIntangibleAssetsUnderDevelopment": 0,
+              "ProceedsFromSalesOfGoodwillClassifiedAsInvestingActivities": 0,
+              "PurchaseOfGoodwillClassifiedAsInvestingActivities": 0,
+              "ProceedsFromSalesOfIntangibleAssetsClassifiedAsInvestingActivities": 37000,
+              "PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities": 0,
+              "ProceedsFromBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+              "PurchaseOfBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+              "ProceedsFromSalesOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+              "PurchaseOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+              "CashAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": -6429000,
+              "CashReceiptsFromRepaymentOfAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": 0,
+              "CashPaymentsForFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+              "CashReceiptsFromFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+              "DividendsReceivedClassifiedAsInvestingActivities": 0,
+              "InterestReceivedClassifiedAsInvestingActivities": 7449000,
+              "IncomeTaxesPaidRefundClassifiedAsInvestingActivities": 0,
+              "OtherInflowsOutflowsOfCashClassifiedAsInvestingActivities": 0,
+              "ProceedsFromGovernmentGrantsClassifiedAsInvestingActivities": 0,
+              "ProceedsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+              "PaymentsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+              "ProceedsFromIssuingSharesClassifiedAsFinancingActivities": 0,
+              "ProceedsFromIssuingOtherEquityInstruments": 0,
+              "PaymentsToAcquireOrRedeemEntitysShares": 0,
+              "PaymentsOfOtherEquityInstruments": 0,
+              "ProceedsFromExerciseOfStockOptions": 0,
+              "ProceedsFromIssuingDebenturesNotesBondsEtc": 0,
+              "ProceedsFromBorrowingsClassifiedAsFinancingActivities": 18087000,
+              "RepaymentsOfBorrowingsClassifiedAsFinancingActivities": 0,
+              "PaymentsOfFinanceLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+              "PaymentsOfLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+              "DividendsPaidClassifiedAsFinancingActivities": 5856000,
+              "InterestPaidClassifiedAsFinancingActivities": 8081000,
+              "IncomeTaxesPaidRefundClassifiedAsFinancingActivities": 0,
+              "OtherInflowsOutflowsOfCashClassifiedAsFinancingActivities": 0,
+              "IncreaseDecreaseInCashAndCashEquivalentsBeforeEffectOfExchangeRateChanges": -34245000,
+              "EffectOfExchangeRateChangesOnCashAndCashEquivalents": 58000,
+              "IncreaseDecreaseInCashAndCashEquivalents": -34187000,
+              "CashAndCashEquivalentsCashFlowStatement": 75965000
+            },
+            "period": {
+              "start": "2023-04-01",
+              "end": "2024-03-31"
+            },
+            "note": "year-to-date cumulative as filed, not single-quarter"
+          },
+          "segment_breakdown": [
+            {
+              "label": "Digital Service",
+              "revenue": 873277000,
+              "profit_before_tax_and_finance_costs": 57413000,
+              "finance_costs": null,
+              "assets": 404241000,
+              "liabilities": 255289000
+            }
+          ]
+        },
+        "standalone": {
+          "filed_date": "28-MAY-2024 17:02:34",
+          "audited_status": "Audited",
+          "income_statement": {
+            "revenue_from_operations": 557327000,
+            "other_income": 7355000,
+            "total_income": 564682000,
+            "cost_of_materials_consumed": 425532000,
+            "purchases_of_stock_in_trade": 0,
+            "changes_in_inventories": 0,
+            "employee_benefit_expense": 68584000,
+            "finance_costs": 8081000,
+            "depreciation_amortisation": 2795000,
+            "other_expenses": 12867000,
+            "total_expenses": 517859000,
+            "profit_before_exceptional_and_tax": 46823000,
+            "exceptional_items": -7770000,
+            "profit_before_tax": 39053000,
+            "current_tax": 9405000,
+            "deferred_tax": 432000,
+            "total_tax_expense": 9837000,
+            "net_profit": 26459000,
+            "net_profit_attributable_to_owners": null,
+            "net_profit_attributable_to_minority_interest": null,
+            "other_comprehensive_income": -229000,
+            "total_comprehensive_income": 26230000,
+            "paid_up_equity_share_capital": 29280000,
+            "face_value_per_share": 10,
+            "basic_eps": 9.04,
+            "diluted_eps": 9.04,
+            "debt_equity_ratio": null,
+            "debt_service_coverage_ratio": null,
+            "interest_service_coverage_ratio": null,
+            "other_facts": {
+              "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": -2757000,
+              "ProfitLossForPeriodFromContinuingOperations": 26459000,
+              "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+              "TaxExpenseOfDiscontinuedOperations": 0,
+              "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+              "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+              "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+              "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+              "ReserveExcludingRevaluationReserves": 0,
+              "BasicEarningsLossPerShareFromContinuingOperations": 9.04,
+              "DilutedEarningsLossPerShareFromContinuingOperations": 9.04,
+              "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+              "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+              "SegmentRevenue": 557327000,
+              "SegmentRevenueFromOperations": 557327000,
+              "SegmentProfitLossBeforeTaxAndFinanceCosts": 54903000,
+              "SegmentFinanceCosts": 8081000,
+              "SegmentProfitBeforeTax": 46822000,
+              "AdjustmentsForFinanceCosts": 0,
+              "AdjustmentsForDecreaseIncreaseInInventories": 0,
+              "AdjustmentsForDecreaseIncreaseInTradeReceivablesCurrent": -62040000,
+              "AdjustmentsForDecreaseIncreaseInTradeReceivablesNoncurrent": 0,
+              "AdjustmentsForDecreaseIncreaseInOtherCurrentAssets": -403000,
+              "AdjustmentsForDecreaseIncreaseInOtherNoncurrentAssets": 0,
+              "AdjustmentsForOtherFinancialAssetsNoncurrent": 0,
+              "AdjustmentsForOtherFinancialAssetsCurrent": 0,
+              "AdjustmentsForOtherBankBalances": 0,
+              "AdjustmentsForIncreaseDecreaseInTradePayablesCurrent": 7958000,
+              "AdjustmentsForIncreaseDecreaseInTradePayablesNoncurrent": 0,
+              "AdjustmentsForIncreaseDecreaseInOtherCurrentLiabilities": 3349000,
+              "AdjustmentsForIncreaseDecreaseInOtherNoncurrentLiabilities": 0,
+              "AdjustmentsForDepreciationAndAmortisationExpense": 2795000,
+              "AdjustmentsForImpairmentLossReversalOfImpairmentLossRecognisedInProfitOrLoss": 0,
+              "AdjustmentsForProvisionsCurrent": 1704000,
+              "AdjustmentsForProvisionsNoncurrent": 0,
+              "AdjustmentsForOtherFinancialLiabilitiesCurrent": 0,
+              "AdjustmentsForOtherFinancialLiabilitiesNoncurrent": 0,
+              "AdjustmentsForUnrealisedForeignExchangeLossesGains": 0,
+              "AdjustmentsForDividendIncome": 0,
+              "AdjustmentsForInterestIncome": 7241000,
+              "AdjustmentsForSharebasedPayments": 0,
+              "AdjustmentsForFairValueGainsLosses": -37000,
+              "AdjustmentsForUndistributedProfitsOfAssociates": 0,
+              "OtherAdjustmentsForWhichCashEffectsAreInvestingOrFinancingCashFlow": -12594000,
+              "OtherAdjustmentsToReconcileProfitLoss": 12594000,
+              "OtherAdjustmentsForNoncashItems": 7852000,
+              "ShareOfProfitAndLossFromPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+              "AdjustmentsForReconcileProfitLoss": -46063000,
+              "CashFlowsFromUsedInOperations": -7010000,
+              "DividendsReceivedClassifiedAsOperatingActivities": 0,
+              "InterestPaidClassifiedAsOperatingActivities": 0,
+              "InterestReceivedClassifiedAsOperatingActivities": 0,
+              "IncomeTaxesPaidRefundClassifiedAsOperatingActivities": 7715000,
+              "OtherInflowsOutflowsOfCashClassifiedAsOperatingActivities": 0,
+              "CashFlowsFromUsedInOperatingActivities": -14725000,
+              "CashFlowsFromLosingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+              "CashFlowsUsedInObtainingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+              "OtherCashReceiptsFromSalesOfEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+              "OtherCashPaymentsToAcquireEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+              "OtherCashReceiptsFromSalesOfInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+              "OtherCashPaymentsToAcquireInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+              "CashReceiptsFromShareOfProfitsOfPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+              "CashPaymentForInvestmentInPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+              "ProceedsFromSalesOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities": 70000,
+              "PurchaseOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities": 2080000,
+              "ProceedsFromSalesOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+              "PurchaseOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+              "ProceedsFromSalesOfIntangibleAssetsUnderDevelopment": 0,
+              "PurchaseOfIntangibleAssetsUnderDevelopment": 0,
+              "ProceedsFromSalesOfGoodwillClassifiedAsInvestingActivities": 0,
+              "PurchaseOfGoodwillClassifiedAsInvestingActivities": 0,
+              "ProceedsFromSalesOfIntangibleAssetsClassifiedAsInvestingActivities": 0,
+              "PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities": 0,
+              "ProceedsFromBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+              "PurchaseOfBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+              "ProceedsFromSalesOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+              "PurchaseOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+              "CashAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": -6429000,
+              "CashReceiptsFromRepaymentOfAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": 0,
+              "CashPaymentsForFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+              "CashReceiptsFromFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+              "DividendsReceivedClassifiedAsInvestingActivities": 0,
+              "InterestReceivedClassifiedAsInvestingActivities": 7241000,
+              "IncomeTaxesPaidRefundClassifiedAsInvestingActivities": 0,
+              "OtherInflowsOutflowsOfCashClassifiedAsInvestingActivities": 0,
+              "ProceedsFromGovernmentGrantsClassifiedAsInvestingActivities": 0,
+              "CashFlowsFromUsedInInvestingActivities": 11660000,
+              "ProceedsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+              "PaymentsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+              "ProceedsFromIssuingSharesClassifiedAsFinancingActivities": 0,
+              "ProceedsFromIssuingOtherEquityInstruments": 0,
+              "PaymentsToAcquireOrRedeemEntitysShares": 0,
+              "PaymentsOfOtherEquityInstruments": 0,
+              "ProceedsFromExerciseOfStockOptions": 0,
+              "ProceedsFromIssuingDebenturesNotesBondsEtc": 0,
+              "ProceedsFromBorrowingsClassifiedAsFinancingActivities": 18087000,
+              "RepaymentsOfBorrowingsClassifiedAsFinancingActivities": 0,
+              "PaymentsOfFinanceLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+              "PaymentsOfLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+              "DividendsPaidClassifiedAsFinancingActivities": 8081000,
+              "InterestPaidClassifiedAsFinancingActivities": 5856000,
+              "IncomeTaxesPaidRefundClassifiedAsFinancingActivities": 0,
+              "OtherInflowsOutflowsOfCashClassifiedAsFinancingActivities": 0,
+              "CashFlowsFromUsedInFinancingActivities": 4150000,
+              "IncreaseDecreaseInCashAndCashEquivalentsBeforeEffectOfExchangeRateChanges": 1085000,
+              "EffectOfExchangeRateChangesOnCashAndCashEquivalents": 0,
+              "IncreaseDecreaseInCashAndCashEquivalents": 1085000,
+              "CashAndCashEquivalentsCashFlowStatement": 24927000
+            }
+          },
+          "period": {
+            "start": "2023-04-01",
+            "end": "2024-03-31"
+          },
+          "cash_flow": {
+            "cash_flow_operating": -14725000,
+            "cash_flow_investing": 11660000,
+            "cash_flow_financing": 4150000,
+            "capex": 2080000,
+            "other_facts": {
+              "RevenueFromOperations": 557327000,
+              "OtherIncome": 7355000,
+              "Income": 564682000,
+              "CostOfMaterialsConsumed": 425532000,
+              "PurchasesOfStockInTrade": 0,
+              "ChangesInInventoriesOfFinishedGoodsWorkInProgressAndStockInTrade": 0,
+              "EmployeeBenefitExpense": 68584000,
+              "FinanceCosts": 8081000,
+              "DepreciationDepletionAndAmortisationExpense": 2795000,
+              "OtherExpenses": 12867000,
+              "Expenses": 517859000,
+              "ProfitBeforeExceptionalItemsAndTax": 46823000,
+              "ExceptionalItemsBeforeTax": -7770000,
+              "ProfitBeforeTax": 39053000,
+              "CurrentTax": 9405000,
+              "DeferredTax": 432000,
+              "TaxExpense": 9837000,
+              "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": -2757000,
+              "ProfitLossForPeriodFromContinuingOperations": 26459000,
+              "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+              "TaxExpenseOfDiscontinuedOperations": 0,
+              "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+              "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+              "ProfitLossForPeriod": 26459000,
+              "OtherComprehensiveIncomeNetOfTaxes": -229000,
+              "ComprehensiveIncomeForThePeriod": 26230000,
+              "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+              "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+              "PaidUpValueOfEquityShareCapital": 29280000,
+              "FaceValueOfEquityShareCapital": 10,
+              "ReserveExcludingRevaluationReserves": 0,
+              "BasicEarningsLossPerShareFromContinuingOperations": 9.04,
+              "DilutedEarningsLossPerShareFromContinuingOperations": 9.04,
+              "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+              "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+              "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 9.04,
+              "DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 9.04,
+              "SegmentRevenue": 557327000,
+              "SegmentRevenueFromOperations": 557327000,
+              "SegmentProfitLossBeforeTaxAndFinanceCosts": 54903000,
+              "SegmentFinanceCosts": 8081000,
+              "SegmentProfitBeforeTax": 46822000,
+              "AdjustmentsForFinanceCosts": 0,
+              "AdjustmentsForDecreaseIncreaseInInventories": 0,
+              "AdjustmentsForDecreaseIncreaseInTradeReceivablesCurrent": -62040000,
+              "AdjustmentsForDecreaseIncreaseInTradeReceivablesNoncurrent": 0,
+              "AdjustmentsForDecreaseIncreaseInOtherCurrentAssets": -403000,
+              "AdjustmentsForDecreaseIncreaseInOtherNoncurrentAssets": 0,
+              "AdjustmentsForOtherFinancialAssetsNoncurrent": 0,
+              "AdjustmentsForOtherFinancialAssetsCurrent": 0,
+              "AdjustmentsForOtherBankBalances": 0,
+              "AdjustmentsForIncreaseDecreaseInTradePayablesCurrent": 7958000,
+              "AdjustmentsForIncreaseDecreaseInTradePayablesNoncurrent": 0,
+              "AdjustmentsForIncreaseDecreaseInOtherCurrentLiabilities": 3349000,
+              "AdjustmentsForIncreaseDecreaseInOtherNoncurrentLiabilities": 0,
+              "AdjustmentsForDepreciationAndAmortisationExpense": 2795000,
+              "AdjustmentsForImpairmentLossReversalOfImpairmentLossRecognisedInProfitOrLoss": 0,
+              "AdjustmentsForProvisionsCurrent": 1704000,
+              "AdjustmentsForProvisionsNoncurrent": 0,
+              "AdjustmentsForOtherFinancialLiabilitiesCurrent": 0,
+              "AdjustmentsForOtherFinancialLiabilitiesNoncurrent": 0,
+              "AdjustmentsForUnrealisedForeignExchangeLossesGains": 0,
+              "AdjustmentsForDividendIncome": 0,
+              "AdjustmentsForInterestIncome": 7241000,
+              "AdjustmentsForSharebasedPayments": 0,
+              "AdjustmentsForFairValueGainsLosses": -37000,
+              "AdjustmentsForUndistributedProfitsOfAssociates": 0,
+              "OtherAdjustmentsForWhichCashEffectsAreInvestingOrFinancingCashFlow": -12594000,
+              "OtherAdjustmentsToReconcileProfitLoss": 12594000,
+              "OtherAdjustmentsForNoncashItems": 7852000,
+              "ShareOfProfitAndLossFromPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+              "AdjustmentsForReconcileProfitLoss": -46063000,
+              "CashFlowsFromUsedInOperations": -7010000,
+              "DividendsReceivedClassifiedAsOperatingActivities": 0,
+              "InterestPaidClassifiedAsOperatingActivities": 0,
+              "InterestReceivedClassifiedAsOperatingActivities": 0,
+              "IncomeTaxesPaidRefundClassifiedAsOperatingActivities": 7715000,
+              "OtherInflowsOutflowsOfCashClassifiedAsOperatingActivities": 0,
+              "CashFlowsFromLosingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+              "CashFlowsUsedInObtainingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+              "OtherCashReceiptsFromSalesOfEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+              "OtherCashPaymentsToAcquireEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+              "OtherCashReceiptsFromSalesOfInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+              "OtherCashPaymentsToAcquireInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+              "CashReceiptsFromShareOfProfitsOfPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+              "CashPaymentForInvestmentInPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+              "ProceedsFromSalesOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities": 70000,
+              "ProceedsFromSalesOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+              "PurchaseOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+              "ProceedsFromSalesOfIntangibleAssetsUnderDevelopment": 0,
+              "PurchaseOfIntangibleAssetsUnderDevelopment": 0,
+              "ProceedsFromSalesOfGoodwillClassifiedAsInvestingActivities": 0,
+              "PurchaseOfGoodwillClassifiedAsInvestingActivities": 0,
+              "ProceedsFromSalesOfIntangibleAssetsClassifiedAsInvestingActivities": 0,
+              "PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities": 0,
+              "ProceedsFromBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+              "PurchaseOfBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+              "ProceedsFromSalesOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+              "PurchaseOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+              "CashAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": -6429000,
+              "CashReceiptsFromRepaymentOfAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": 0,
+              "CashPaymentsForFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+              "CashReceiptsFromFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+              "DividendsReceivedClassifiedAsInvestingActivities": 0,
+              "InterestReceivedClassifiedAsInvestingActivities": 7241000,
+              "IncomeTaxesPaidRefundClassifiedAsInvestingActivities": 0,
+              "OtherInflowsOutflowsOfCashClassifiedAsInvestingActivities": 0,
+              "ProceedsFromGovernmentGrantsClassifiedAsInvestingActivities": 0,
+              "ProceedsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+              "PaymentsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+              "ProceedsFromIssuingSharesClassifiedAsFinancingActivities": 0,
+              "ProceedsFromIssuingOtherEquityInstruments": 0,
+              "PaymentsToAcquireOrRedeemEntitysShares": 0,
+              "PaymentsOfOtherEquityInstruments": 0,
+              "ProceedsFromExerciseOfStockOptions": 0,
+              "ProceedsFromIssuingDebenturesNotesBondsEtc": 0,
+              "ProceedsFromBorrowingsClassifiedAsFinancingActivities": 18087000,
+              "RepaymentsOfBorrowingsClassifiedAsFinancingActivities": 0,
+              "PaymentsOfFinanceLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+              "PaymentsOfLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+              "DividendsPaidClassifiedAsFinancingActivities": 8081000,
+              "InterestPaidClassifiedAsFinancingActivities": 5856000,
+              "IncomeTaxesPaidRefundClassifiedAsFinancingActivities": 0,
+              "OtherInflowsOutflowsOfCashClassifiedAsFinancingActivities": 0,
+              "IncreaseDecreaseInCashAndCashEquivalentsBeforeEffectOfExchangeRateChanges": 1085000,
+              "EffectOfExchangeRateChangesOnCashAndCashEquivalents": 0,
+              "IncreaseDecreaseInCashAndCashEquivalents": 1085000,
+              "CashAndCashEquivalentsCashFlowStatement": 24927000
+            },
+            "period": {
+              "start": "2023-04-01",
+              "end": "2024-03-31"
+            },
+            "note": "year-to-date cumulative as filed, not single-quarter"
+          },
+          "segment_breakdown": [
+            {
+              "label": "Digital Services",
+              "revenue": 557327000,
+              "profit_before_tax_and_finance_costs": 54903000,
+              "finance_costs": null,
+              "assets": 327606000,
+              "liabilities": 200484000
+            }
+          ]
+        }
+      },
+      "fy_start": "2023-04-01",
+      "fy_end": "2024-03-31"
+    },
+    "FY2024-25": {
+      "quarters": {
+        "Q3": {
+          "standalone": {
+            "filed_date": "11-FEB-2025 17:05:22",
+            "audited_status": "Unaudited",
+            "income_statement": {
+              "revenue_from_operations": 103063000,
+              "other_income": 2208000,
+              "total_income": 105271000,
+              "cost_of_materials_consumed": 72880000,
+              "purchases_of_stock_in_trade": 0,
+              "changes_in_inventories": 0,
+              "employee_benefit_expense": 20603000,
+              "finance_costs": 1973000,
+              "depreciation_amortisation": 280000,
+              "other_expenses": 5530000,
+              "total_expenses": 101266000,
+              "profit_before_exceptional_and_tax": 4005000,
+              "exceptional_items": 0,
+              "profit_before_tax": 4005000,
+              "current_tax": 1099000,
+              "deferred_tax": -94000,
+              "total_tax_expense": 1005000,
+              "net_profit": 3000000,
+              "net_profit_attributable_to_owners": null,
+              "net_profit_attributable_to_minority_interest": null,
+              "other_comprehensive_income": 0,
+              "total_comprehensive_income": 3000000,
+              "paid_up_equity_share_capital": 29280000,
+              "face_value_per_share": 10,
+              "basic_eps": 1.02,
+              "diluted_eps": 1.02,
+              "debt_equity_ratio": null,
+              "debt_service_coverage_ratio": null,
+              "interest_service_coverage_ratio": null,
+              "other_facts": {
+                "ReportingQuarter": "Third quarter",
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": 0,
+                "ProfitLossForPeriodFromContinuingOperations": 3000000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "BasicEarningsLossPerShareFromContinuingOperations": 1.02,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 1.02,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "SegmentRevenue": 103063000,
+                "SegmentRevenueFromOperations": 103063000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 5979000,
+                "SegmentFinanceCosts": 1973000,
+                "SegmentProfitBeforeTax": 4006000,
+                "SegmentAssets": 303775000
+              }
+            },
+            "period": {
+              "start": "2024-10-01",
+              "end": "2024-12-31"
+            },
+            "cash_flow": {
+              "cash_flow_operating": null,
+              "cash_flow_investing": null,
+              "cash_flow_financing": null,
+              "capex": null,
+              "other_facts": {
+                "RevenueFromOperations": 344963000,
+                "OtherIncome": 6309000,
+                "Income": 351272000,
+                "CostOfMaterialsConsumed": 253721000,
+                "PurchasesOfStockInTrade": 0,
+                "ChangesInInventoriesOfFinishedGoodsWorkInProgressAndStockInTrade": 0,
+                "EmployeeBenefitExpense": 63031000,
+                "FinanceCosts": 5529000,
+                "DepreciationDepletionAndAmortisationExpense": 574000,
+                "OtherExpenses": 14617000,
+                "Expenses": 337472000,
+                "ProfitBeforeExceptionalItemsAndTax": 13800000,
+                "ExceptionalItemsBeforeTax": 0,
+                "ProfitBeforeTax": 13800000,
+                "CurrentTax": 3529000,
+                "DeferredTax": -132000,
+                "TaxExpense": 3397000,
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": 0,
+                "ProfitLossForPeriodFromContinuingOperations": 10403000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ProfitLossForPeriod": 10403000,
+                "OtherComprehensiveIncomeNetOfTaxes": 0,
+                "ComprehensiveIncomeForThePeriod": 10403000,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "PaidUpValueOfEquityShareCapital": 29280000,
+                "FaceValueOfEquityShareCapital": 10,
+                "BasicEarningsLossPerShareFromContinuingOperations": 3.55,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 3.55,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 3.55,
+                "DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 3.55,
+                "SegmentRevenue": 344963000,
+                "SegmentRevenueFromOperations": 344963000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 19329000,
+                "SegmentFinanceCosts": 5529000,
+                "SegmentProfitBeforeTax": 13800000
+              },
+              "period": {
+                "start": "2024-04-01",
+                "end": "2024-12-31"
+              },
+              "note": "year-to-date cumulative as filed, not single-quarter"
+            },
+            "segment_breakdown": [
+              {
+                "label": "Digital Services",
+                "revenue": 344963000,
+                "profit_before_tax_and_finance_costs": 19329000,
+                "finance_costs": null,
+                "assets": 303775000,
+                "liabilities": 172237000
+              }
+            ]
+          },
+          "consolidated": {
+            "filed_date": "11-FEB-2025 17:03:48",
+            "audited_status": "Unaudited",
+            "income_statement": {
+              "revenue_from_operations": 209535000,
+              "other_income": 2316000,
+              "total_income": 211851000,
+              "cost_of_materials_consumed": 174769000,
+              "purchases_of_stock_in_trade": 0,
+              "changes_in_inventories": 0,
+              "employee_benefit_expense": 20603000,
+              "finance_costs": 1973000,
+              "depreciation_amortisation": 280000,
+              "other_expenses": 5656000,
+              "total_expenses": 203281000,
+              "profit_before_exceptional_and_tax": 8570000,
+              "exceptional_items": 0,
+              "profit_before_tax": 8570000,
+              "current_tax": 1513000,
+              "deferred_tax": -94000,
+              "total_tax_expense": 1419000,
+              "net_profit": 7151000,
+              "net_profit_attributable_to_owners": 7151000,
+              "net_profit_attributable_to_minority_interest": 0,
+              "other_comprehensive_income": 0,
+              "total_comprehensive_income": 7151000,
+              "paid_up_equity_share_capital": 29280000,
+              "face_value_per_share": 10,
+              "basic_eps": 2.44,
+              "diluted_eps": 2.44,
+              "debt_equity_ratio": null,
+              "debt_service_coverage_ratio": null,
+              "interest_service_coverage_ratio": null,
+              "other_facts": {
+                "ReportingQuarter": "Third quarter",
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": 0,
+                "ProfitLossForPeriodFromContinuingOperations": 7151000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "BasicEarningsLossPerShareFromContinuingOperations": 2.44,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 2.44,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "SegmentRevenue": 209535000,
+                "SegmentRevenueFromOperations": 209535000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 10543000,
+                "SegmentFinanceCosts": 1973000,
+                "SegmentProfitBeforeTax": 8570000,
+                "SegmentAssets": 463876000
+              }
+            },
+            "period": {
+              "start": "2024-10-01",
+              "end": "2024-12-31"
+            },
+            "cash_flow": {
+              "cash_flow_operating": null,
+              "cash_flow_investing": null,
+              "cash_flow_financing": null,
+              "capex": null,
+              "other_facts": {
+                "RevenueFromOperations": 566797000,
+                "OtherIncome": 6626000,
+                "Income": 573423000,
+                "CostOfMaterialsConsumed": 465852000,
+                "PurchasesOfStockInTrade": 0,
+                "ChangesInInventoriesOfFinishedGoodsWorkInProgressAndStockInTrade": 0,
+                "EmployeeBenefitExpense": 63031000,
+                "FinanceCosts": 5529000,
+                "DepreciationDepletionAndAmortisationExpense": 574000,
+                "OtherExpenses": 15328000,
+                "Expenses": 550314000,
+                "ProfitBeforeExceptionalItemsAndTax": 23109000,
+                "ExceptionalItemsBeforeTax": 0,
+                "ProfitBeforeTax": 23109000,
+                "CurrentTax": 4294000,
+                "DeferredTax": -132000,
+                "TaxExpense": 4162000,
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": 0,
+                "ProfitLossForPeriodFromContinuingOperations": 18947000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ProfitLossForPeriod": 18947000,
+                "OtherComprehensiveIncomeNetOfTaxes": 0,
+                "ComprehensiveIncomeForThePeriod": 18947000,
+                "ProfitOrLossAttributableToOwnersOfParent": 18947000,
+                "ProfitOrLossAttributableToNonControllingInterests": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "PaidUpValueOfEquityShareCapital": 29280000,
+                "FaceValueOfEquityShareCapital": 10,
+                "BasicEarningsLossPerShareFromContinuingOperations": 6.47,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 6.47,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 6.47,
+                "DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 6.47,
+                "SegmentRevenue": 566797000,
+                "SegmentRevenueFromOperations": 566797000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 28639000,
+                "SegmentFinanceCosts": 5529000,
+                "SegmentProfitBeforeTax": 23110000
+              },
+              "period": {
+                "start": "2024-04-01",
+                "end": "2024-12-31"
+              },
+              "note": "year-to-date cumulative as filed, not single-quarter"
+            },
+            "segment_breakdown": [
+              {
+                "label": "Digital Services",
+                "revenue": 566797000,
+                "profit_before_tax_and_finance_costs": 28639000,
+                "finance_costs": null,
+                "assets": 463876000,
+                "liabilities": 298270000
+              }
+            ]
+          },
+          "shareholding": {
+            "as_of": "2024-12-31",
+            "submission_date": "17-JAN-2025",
+            "promoter_holding_pct": 42.42,
+            "public_holding_pct": 57.58,
+            "fii_holding_pct": 3.77,
+            "dii_holding_pct": 0,
+            "promoter_pledge_flag": false,
+            "significant_beneficial_owners": null,
+            "categories": {
+              "IndividualsOrHinduUndividedFamily": {
+                "num_shares": 124460,
+                "pct_of_total_shares": 4.25,
+                "num_shareholders": 2,
+                "pct_voting_rights": 4.25
+              },
+              "CentralGovernmentOrStateGovernmentS": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "IndianFinancialInstitutionsOrBanks": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherIndianShareholders": {
+                "num_shares": 1117600,
+                "pct_of_total_shares": 38.17,
+                "num_shareholders": 1,
+                "pct_voting_rights": 38.17
+              },
+              "Indian": {
+                "num_shares": 1242060,
+                "pct_of_total_shares": 42.42,
+                "num_shareholders": 3,
+                "pct_voting_rights": 42.42
+              },
+              "NonResidentIndividualsOrForeignIndividuals": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignGovernment": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignInstitutions": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignPortfolioInvestor": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherForeignShareholders": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Foreign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingOfPromoterAndPromoterGroup": {
+                "num_shares": 1242060,
+                "pct_of_total_shares": 42.42,
+                "num_shareholders": 3,
+                "pct_voting_rights": 42.42
+              },
+              "MutualFundsOrUti": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "VentureCapitalFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AlternativeInvestmentFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Banks": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InsuranceCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ProvidentFundsOrPensionFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AssetReconstructionCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SovereignWealthFundsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "NBFCsRegisteredWithRbi": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherFinancialInstitutions": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherInstitutionsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignDirectInvestment": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignVentureCapitalInvestors": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SovereignWealthFundsForeign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeignPortfolioInvestorCatergoryOne": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeignPortfolioInvestorCatergoryTwo": {
+                "num_shares": 110400,
+                "pct_of_total_shares": 3.77,
+                "num_shareholders": 1,
+                "pct_voting_rights": 3.77
+              },
+              "OverseasDepositories": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherInstitutionsForeign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeign": {
+                "num_shares": 110400,
+                "pct_of_total_shares": 3.77,
+                "num_shareholders": 1,
+                "pct_voting_rights": 3.77
+              },
+              "CentralGovernmentOrPresidentOfIndia": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "StateGovernmentsOrGovernors": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingByCompaniesOrBodiesCorporatewhereCentralOrStateGovernmentIsPromoter": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Goverments": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AssociateCompaniesOrSubsidiaries": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "DirectorsAndDirectorsRelatives": {
+                "num_shares": 119900,
+                "pct_of_total_shares": 4.09,
+                "num_shareholders": 2,
+                "pct_voting_rights": 4.09
+              },
+              "KeyManagerialPersonnel": {
+                "num_shares": 6300,
+                "pct_of_total_shares": 0.22,
+                "num_shareholders": 1,
+                "pct_voting_rights": 0.22
+              },
+              "RelativesOfPromotersOtherThanPromoterGroup": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "TrustsWhereAnyPersonBelongingToPromoterAndPromoterGroupIsisTrusteeOrBeneficiaryOrAuthorOfTrust": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InvestorEducationAndProtectionFund": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh": {
+                "num_shares": 854648,
+                "pct_of_total_shares": 29.19,
+                "num_shareholders": 448,
+                "pct_voting_rights": 29.19
+              },
+              "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh": {
+                "num_shares": 248600,
+                "pct_of_total_shares": 8.49,
+                "num_shareholders": 8,
+                "pct_voting_rights": 8.49
+              },
+              "NonResidentIndians": {
+                "num_shares": 122000,
+                "pct_of_total_shares": 4.17,
+                "num_shareholders": 25,
+                "pct_voting_rights": 4.17
+              },
+              "ForeignNationals": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "BodiesCorporate": {
+                "num_shares": 73700,
+                "pct_of_total_shares": 2.52,
+                "num_shareholders": 16,
+                "pct_voting_rights": 2.52
+              },
+              "OtherNonInstitutions": {
+                "num_shares": 150392,
+                "pct_of_total_shares": 5.14,
+                "num_shareholders": 32,
+                "pct_voting_rights": 5.14
+              },
+              "NonInstitutions": {
+                "num_shares": 1575540,
+                "pct_of_total_shares": 53.81,
+                "num_shareholders": 532,
+                "pct_voting_rights": 53.81
+              },
+              "PublicShareholding": {
+                "num_shares": 1685940,
+                "pct_of_total_shares": 57.58,
+                "num_shareholders": 533,
+                "pct_voting_rights": 57.58
+              },
+              "CustodianOrDRHolder": {
+                "num_shares": 0,
+                "pct_of_total_shares": null,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "EmployeeBenefitsTrusts": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SharesHeldByNonPromoterNonPublicShareholders": {
+                "num_shares": 0,
+                "pct_of_total_shares": null,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingPattern": {
+                "num_shares": 2928000,
+                "pct_of_total_shares": 100,
+                "num_shareholders": 536,
+                "pct_voting_rights": 100
+              }
+            }
+          }
+        },
+        "Q2": {
+          "standalone": {
+            "filed_date": "12-NOV-2024 17:01:30",
+            "audited_status": "Unaudited",
+            "income_statement": {
+              "revenue_from_operations": 112389000,
+              "other_income": 2097000,
+              "total_income": 114486000,
+              "cost_of_materials_consumed": 84000000,
+              "purchases_of_stock_in_trade": 0,
+              "changes_in_inventories": 0,
+              "employee_benefit_expense": 20460000,
+              "finance_costs": 1814000,
+              "depreciation_amortisation": 198000,
+              "other_expenses": 3664000,
+              "total_expenses": 110136000,
+              "profit_before_exceptional_and_tax": 4350000,
+              "exceptional_items": 0,
+              "profit_before_tax": 4350000,
+              "current_tax": 787000,
+              "deferred_tax": 176000,
+              "total_tax_expense": 963000,
+              "net_profit": 3387000,
+              "net_profit_attributable_to_owners": null,
+              "net_profit_attributable_to_minority_interest": null,
+              "other_comprehensive_income": 0,
+              "total_comprehensive_income": 3387000,
+              "paid_up_equity_share_capital": 29280000,
+              "face_value_per_share": 10,
+              "basic_eps": 1.15,
+              "diluted_eps": 1.15,
+              "debt_equity_ratio": null,
+              "debt_service_coverage_ratio": null,
+              "interest_service_coverage_ratio": null,
+              "other_facts": {
+                "ReportingQuarter": "Half yearly",
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": 0,
+                "ProfitLossForPeriodFromContinuingOperations": 3387000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "BasicEarningsLossPerShareFromContinuingOperations": 1.15,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 1.15,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "SegmentRevenue": 112389000,
+                "SegmentRevenueFromOperations": 112389000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 6164000,
+                "SegmentFinanceCosts": 1814000,
+                "SegmentProfitBeforeTax": 4350000,
+                "SegmentAssets": 311626000
+              }
+            },
+            "period": {
+              "start": "2024-07-01",
+              "end": "2024-09-30"
+            },
+            "balance_sheet": {
+              "cash_and_equivalents": 28182000,
+              "current_investments": 0,
+              "non_current_investments": 14667000,
+              "trade_receivables": 151544000,
+              "inventories": 0,
+              "total_current_assets": 204290000,
+              "ppe_net": 3963000,
+              "goodwill": 0,
+              "other_intangible_assets": 77000,
+              "total_assets": 318178000,
+              "trade_payables": 90292000,
+              "short_term_borrowings": 13331000,
+              "total_current_liabilities": 115708000,
+              "long_term_borrowings": 60659000,
+              "total_liabilities": 182208000,
+              "other_equity": 106690000,
+              "total_equity": 135970000,
+              "other_facts": {
+                "LoansNoncurrent": 88629000,
+                "NoncurrentFinancialAssets": 103296000,
+                "DeferredTaxAssetsNet": 6552000,
+                "NoncurrentAssets": 113888000,
+                "BankBalanceOtherThanCashAndCashEquivalents": 0,
+                "LoansCurrent": 2309000,
+                "CurrentFinancialAssets": 182035000,
+                "CurrentTaxAssets": 10965000,
+                "OtherCurrentAssets": 11290000,
+                "EquityShareCapital": 29280000,
+                "EquityAttributableToOwnersOfParent": 135970000,
+                "NoncurrentFinancialLiabilities": 60659000,
+                "ProvisionsNoncurrent": 5841000,
+                "NoncurrentLiabilities": 66500000,
+                "CurrentFinancialLiabilities": 103623000,
+                "OtherCurrentLiabilities": 6659000,
+                "ProvisionsCurrent": 5426000,
+                "EquityAndLiabilities": 318178000,
+                "SegmentLiabilities": 182208000
+              },
+              "as_of": "30-SEP-2024"
+            },
+            "cash_flow": {
+              "cash_flow_operating": 33728000,
+              "cash_flow_investing": -10090000,
+              "cash_flow_financing": -21469000,
+              "capex": 718000,
+              "other_facts": {
+                "RevenueFromOperations": 241900000,
+                "OtherIncome": 4102000,
+                "Income": 246002000,
+                "CostOfMaterialsConsumed": 180841000,
+                "PurchasesOfStockInTrade": 0,
+                "ChangesInInventoriesOfFinishedGoodsWorkInProgressAndStockInTrade": 0,
+                "EmployeeBenefitExpense": 42428000,
+                "FinanceCosts": 3556000,
+                "DepreciationDepletionAndAmortisationExpense": 294000,
+                "OtherExpenses": 9088000,
+                "Expenses": 236207000,
+                "ProfitBeforeExceptionalItemsAndTax": 9795000,
+                "ExceptionalItemsBeforeTax": 0,
+                "ProfitBeforeTax": 9795000,
+                "CurrentTax": 2430000,
+                "DeferredTax": -38000,
+                "TaxExpense": 2392000,
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": 0,
+                "ProfitLossForPeriodFromContinuingOperations": 7403000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ProfitLossForPeriod": 7403000,
+                "OtherComprehensiveIncomeNetOfTaxes": 0,
+                "ComprehensiveIncomeForThePeriod": 7403000,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "PaidUpValueOfEquityShareCapital": 29280000,
+                "FaceValueOfEquityShareCapital": 10,
+                "BasicEarningsLossPerShareFromContinuingOperations": 2.53,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 2.53,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 2.53,
+                "DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 2.53,
+                "SegmentRevenue": 241900000,
+                "SegmentRevenueFromOperations": 241900000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 13350000,
+                "SegmentFinanceCosts": 3556000,
+                "SegmentProfitBeforeTax": 9794000,
+                "AdjustmentsForFinanceCosts": 0,
+                "AdjustmentsForDecreaseIncreaseInInventories": 0,
+                "AdjustmentsForDecreaseIncreaseInTradeReceivablesCurrent": 37439000,
+                "AdjustmentsForDecreaseIncreaseInTradeReceivablesNoncurrent": 0,
+                "AdjustmentsForDecreaseIncreaseInOtherCurrentAssets": 582000,
+                "AdjustmentsForDecreaseIncreaseInOtherNoncurrentAssets": 0,
+                "AdjustmentsForOtherFinancialAssetsNoncurrent": 0,
+                "AdjustmentsForOtherFinancialAssetsCurrent": 0,
+                "AdjustmentsForOtherBankBalances": 0,
+                "AdjustmentsForIncreaseDecreaseInTradePayablesCurrent": -8676000,
+                "AdjustmentsForIncreaseDecreaseInTradePayablesNoncurrent": 0,
+                "AdjustmentsForIncreaseDecreaseInOtherCurrentLiabilities": 1061000,
+                "AdjustmentsForIncreaseDecreaseInOtherNoncurrentLiabilities": 0,
+                "AdjustmentsForDepreciationAndAmortisationExpense": 294000,
+                "AdjustmentsForImpairmentLossReversalOfImpairmentLossRecognisedInProfitOrLoss": 0,
+                "AdjustmentsForProvisionsCurrent": 1370000,
+                "AdjustmentsForProvisionsNoncurrent": 0,
+                "AdjustmentsForOtherFinancialLiabilitiesCurrent": 0,
+                "AdjustmentsForOtherFinancialLiabilitiesNoncurrent": 0,
+                "AdjustmentsForUnrealisedForeignExchangeLossesGains": 0,
+                "AdjustmentsForDividendIncome": 0,
+                "AdjustmentsForInterestIncome": 0,
+                "AdjustmentsForSharebasedPayments": 0,
+                "AdjustmentsForFairValueGainsLosses": 0,
+                "AdjustmentsForUndistributedProfitsOfAssociates": 0,
+                "OtherAdjustmentsForWhichCashEffectsAreInvestingOrFinancingCashFlow": 0,
+                "OtherAdjustmentsToReconcileProfitLoss": 0,
+                "OtherAdjustmentsForNoncashItems": 0,
+                "ShareOfProfitAndLossFromPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+                "AdjustmentsForReconcileProfitLoss": 32070000,
+                "CashFlowsFromUsedInOperations": 41865000,
+                "DividendsReceivedClassifiedAsOperatingActivities": 0,
+                "InterestPaidClassifiedAsOperatingActivities": -3556000,
+                "InterestReceivedClassifiedAsOperatingActivities": -4095000,
+                "IncomeTaxesPaidRefundClassifiedAsOperatingActivities": 7598000,
+                "OtherInflowsOutflowsOfCashClassifiedAsOperatingActivities": 0,
+                "CashFlowsFromLosingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+                "CashFlowsUsedInObtainingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+                "OtherCashReceiptsFromSalesOfEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+                "OtherCashPaymentsToAcquireEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+                "OtherCashReceiptsFromSalesOfInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+                "OtherCashPaymentsToAcquireInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+                "CashReceiptsFromShareOfProfitsOfPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+                "CashPaymentForInvestmentInPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+                "ProceedsFromSalesOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+                "PurchaseOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfIntangibleAssetsUnderDevelopment": 0,
+                "PurchaseOfIntangibleAssetsUnderDevelopment": 0,
+                "ProceedsFromSalesOfGoodwillClassifiedAsInvestingActivities": 0,
+                "PurchaseOfGoodwillClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfIntangibleAssetsClassifiedAsInvestingActivities": 0,
+                "PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities": 0,
+                "ProceedsFromBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+                "PurchaseOfBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+                "PurchaseOfOtherLongTermAssetsClassifiedAsInvestingActivities": 14600000,
+                "CashAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": 0,
+                "CashReceiptsFromRepaymentOfAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": 0,
+                "CashPaymentsForFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+                "CashReceiptsFromFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+                "DividendsReceivedClassifiedAsInvestingActivities": 0,
+                "InterestReceivedClassifiedAsInvestingActivities": 4095000,
+                "IncomeTaxesPaidRefundClassifiedAsInvestingActivities": 0,
+                "OtherInflowsOutflowsOfCashClassifiedAsInvestingActivities": 1133000,
+                "ProceedsFromGovernmentGrantsClassifiedAsInvestingActivities": 0,
+                "ProceedsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+                "PaymentsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+                "ProceedsFromIssuingSharesClassifiedAsFinancingActivities": 0,
+                "ProceedsFromIssuingOtherEquityInstruments": 0,
+                "PaymentsToAcquireOrRedeemEntitysShares": 0,
+                "PaymentsOfOtherEquityInstruments": 0,
+                "ProceedsFromExerciseOfStockOptions": 0,
+                "ProceedsFromIssuingDebenturesNotesBondsEtc": 0,
+                "ProceedsFromBorrowingsClassifiedAsFinancingActivities": -12057000,
+                "RepaymentsOfBorrowingsClassifiedAsFinancingActivities": 0,
+                "PaymentsOfFinanceLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+                "PaymentsOfLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+                "DividendsPaidClassifiedAsFinancingActivities": 5856000,
+                "InterestPaidClassifiedAsFinancingActivities": 3556000,
+                "IncomeTaxesPaidRefundClassifiedAsFinancingActivities": 0,
+                "OtherInflowsOutflowsOfCashClassifiedAsFinancingActivities": 0,
+                "IncreaseDecreaseInCashAndCashEquivalentsBeforeEffectOfExchangeRateChanges": 2169000,
+                "EffectOfExchangeRateChangesOnCashAndCashEquivalents": 0,
+                "IncreaseDecreaseInCashAndCashEquivalents": 2169000,
+                "CashAndCashEquivalentsCashFlowStatement": 26013000
+              },
+              "period": {
+                "start": "2024-04-01",
+                "end": "2024-09-30"
+              },
+              "note": "year-to-date cumulative as filed, not single-quarter"
+            },
+            "segment_breakdown": [
+              {
+                "label": "Digital Services",
+                "revenue": 241900000,
+                "profit_before_tax_and_finance_costs": 13350000,
+                "finance_costs": null,
+                "assets": 311626000,
+                "liabilities": 182208000
+              }
+            ]
+          },
+          "consolidated": {
+            "filed_date": "12-NOV-2024 16:54:11",
+            "audited_status": "Unaudited",
+            "income_statement": {
+              "revenue_from_operations": 176633000,
+              "other_income": 2202000,
+              "total_income": 178835000,
+              "cost_of_materials_consumed": 145452000,
+              "purchases_of_stock_in_trade": 0,
+              "changes_in_inventories": 0,
+              "employee_benefit_expense": 20460000,
+              "finance_costs": 1814000,
+              "depreciation_amortisation": 198000,
+              "other_expenses": 4037000,
+              "total_expenses": 171961000,
+              "profit_before_exceptional_and_tax": 6874000,
+              "exceptional_items": 0,
+              "profit_before_tax": 6874000,
+              "current_tax": 1138000,
+              "deferred_tax": 176000,
+              "total_tax_expense": 1314000,
+              "net_profit": 5560000,
+              "net_profit_attributable_to_owners": 5560000,
+              "net_profit_attributable_to_minority_interest": null,
+              "other_comprehensive_income": 0,
+              "total_comprehensive_income": 5560000,
+              "paid_up_equity_share_capital": 29280000,
+              "face_value_per_share": 10,
+              "basic_eps": 1.9,
+              "diluted_eps": 1.9,
+              "debt_equity_ratio": null,
+              "debt_service_coverage_ratio": null,
+              "interest_service_coverage_ratio": null,
+              "other_facts": {
+                "ReportingQuarter": "Half yearly",
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": 0,
+                "ProfitLossForPeriodFromContinuingOperations": 5560000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "BasicEarningsLossPerShareFromContinuingOperations": 1.9,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 1.9,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "SegmentRevenue": 176633000,
+                "SegmentRevenueFromOperations": 176633000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 8688000,
+                "SegmentFinanceCosts": 1814000,
+                "SegmentProfitBeforeTax": 6874000,
+                "SegmentAssets": 406565000
+              }
+            },
+            "period": {
+              "start": "2024-07-01",
+              "end": "2024-09-30"
+            },
+            "balance_sheet": {
+              "cash_and_equivalents": 37729000,
+              "current_investments": 0,
+              "non_current_investments": 14601000,
+              "trade_receivables": 231776000,
+              "inventories": 0,
+              "total_current_assets": 299295000,
+              "ppe_net": 3963000,
+              "goodwill": 0,
+              "other_intangible_assets": 77000,
+              "total_assets": 413117000,
+              "trade_payables": 151641000,
+              "short_term_borrowings": 13331000,
+              "total_current_liabilities": 180095000,
+              "long_term_borrowings": 60659000,
+              "total_liabilities": 246595000,
+              "other_equity": 137242000,
+              "total_equity": 166522000,
+              "other_facts": {
+                "LoansNoncurrent": 88629000,
+                "NoncurrentFinancialAssets": 103230000,
+                "DeferredTaxAssetsNet": 6552000,
+                "NoncurrentAssets": 113822000,
+                "BankBalanceOtherThanCashAndCashEquivalents": 0,
+                "LoansCurrent": 2309000,
+                "CurrentFinancialAssets": 271814000,
+                "CurrentTaxAssets": 10965000,
+                "OtherCurrentAssets": 16516000,
+                "EquityShareCapital": 29280000,
+                "EquityAttributableToOwnersOfParent": 166522000,
+                "NoncurrentFinancialLiabilities": 60659000,
+                "ProvisionsNoncurrent": 5841000,
+                "NoncurrentLiabilities": 66500000,
+                "CurrentFinancialLiabilities": 164972000,
+                "OtherCurrentLiabilities": 9050000,
+                "ProvisionsCurrent": 6073000,
+                "EquityAndLiabilities": 413117000,
+                "SegmentLiabilities": 406565000
+              },
+              "as_of": "30-SEP-2024"
+            },
+            "cash_flow": {
+              "cash_flow_operating": 23164000,
+              "cash_flow_investing": -9881000,
+              "cash_flow_financing": -21469000,
+              "capex": 718000,
+              "other_facts": {
+                "RevenueFromOperations": 357262000,
+                "OtherIncome": 4311000,
+                "Income": 361573000,
+                "CostOfMaterialsConsumed": 291083000,
+                "PurchasesOfStockInTrade": 0,
+                "ChangesInInventoriesOfFinishedGoodsWorkInProgressAndStockInTrade": 0,
+                "EmployeeBenefitExpense": 42428000,
+                "FinanceCosts": 3556000,
+                "DepreciationDepletionAndAmortisationExpense": 294000,
+                "OtherExpenses": 9672000,
+                "Expenses": 347033000,
+                "ProfitBeforeExceptionalItemsAndTax": 14540000,
+                "ExceptionalItemsBeforeTax": 0,
+                "ProfitBeforeTax": 14540000,
+                "CurrentTax": 2781000,
+                "DeferredTax": -38000,
+                "TaxExpense": 2743000,
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": 0,
+                "ProfitLossForPeriodFromContinuingOperations": 11797000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ProfitLossForPeriod": 11797000,
+                "OtherComprehensiveIncomeNetOfTaxes": 0,
+                "ComprehensiveIncomeForThePeriod": 11797000,
+                "ProfitOrLossAttributableToOwnersOfParent": 11797000,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "PaidUpValueOfEquityShareCapital": 29280000,
+                "FaceValueOfEquityShareCapital": 10,
+                "BasicEarningsLossPerShareFromContinuingOperations": 4.03,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 4.03,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 4.03,
+                "DilutedEarningsLossPerShareFromContinuingAndDiscontinuedOperations": 4.03,
+                "SegmentRevenue": 357262000,
+                "SegmentRevenueFromOperations": 357262000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 18096000,
+                "SegmentFinanceCosts": 3556000,
+                "SegmentProfitBeforeTax": 14540000,
+                "AdjustmentsForFinanceCosts": 0,
+                "AdjustmentsForDecreaseIncreaseInInventories": 0,
+                "AdjustmentsForDecreaseIncreaseInTradeReceivablesCurrent": 12417000,
+                "AdjustmentsForDecreaseIncreaseInTradeReceivablesNoncurrent": 0,
+                "AdjustmentsForDecreaseIncreaseInOtherCurrentAssets": 1059000,
+                "AdjustmentsForDecreaseIncreaseInOtherNoncurrentAssets": 0,
+                "AdjustmentsForOtherFinancialAssetsNoncurrent": 0,
+                "AdjustmentsForOtherFinancialAssetsCurrent": 0,
+                "AdjustmentsForOtherBankBalances": 0,
+                "AdjustmentsForIncreaseDecreaseInTradePayablesCurrent": 1371000,
+                "AdjustmentsForIncreaseDecreaseInTradePayablesNoncurrent": 0,
+                "AdjustmentsForIncreaseDecreaseInOtherCurrentLiabilities": 1291000,
+                "AdjustmentsForIncreaseDecreaseInOtherNoncurrentLiabilities": 0,
+                "AdjustmentsForDepreciationAndAmortisationExpense": 294000,
+                "AdjustmentsForImpairmentLossReversalOfImpairmentLossRecognisedInProfitOrLoss": 0,
+                "AdjustmentsForProvisionsCurrent": 0,
+                "AdjustmentsForProvisionsNoncurrent": 0,
+                "AdjustmentsForOtherFinancialLiabilitiesCurrent": 889000,
+                "AdjustmentsForOtherFinancialLiabilitiesNoncurrent": 0,
+                "AdjustmentsForUnrealisedForeignExchangeLossesGains": 0,
+                "AdjustmentsForDividendIncome": -3556000,
+                "AdjustmentsForInterestIncome": 0,
+                "AdjustmentsForSharebasedPayments": 0,
+                "AdjustmentsForFairValueGainsLosses": 0,
+                "AdjustmentsForUndistributedProfitsOfAssociates": 0,
+                "OtherAdjustmentsForWhichCashEffectsAreInvestingOrFinancingCashFlow": -4304000,
+                "OtherAdjustmentsToReconcileProfitLoss": 0,
+                "OtherAdjustmentsForNoncashItems": 0,
+                "ShareOfProfitAndLossFromPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+                "AdjustmentsForReconcileProfitLoss": 16573000,
+                "CashFlowsFromUsedInOperations": 31113000,
+                "DividendsReceivedClassifiedAsOperatingActivities": 0,
+                "InterestPaidClassifiedAsOperatingActivities": 0,
+                "InterestReceivedClassifiedAsOperatingActivities": 0,
+                "IncomeTaxesPaidRefundClassifiedAsOperatingActivities": 7949000,
+                "OtherInflowsOutflowsOfCashClassifiedAsOperatingActivities": 0,
+                "CashFlowsFromLosingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+                "CashFlowsUsedInObtainingControlOfSubsidiariesOrOtherBusinessesClassifiedAsInvestingActivities": 0,
+                "OtherCashReceiptsFromSalesOfEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+                "OtherCashPaymentsToAcquireEquityOrDebtInstrumentsOfOtherEntitiesClassifiedAsInvestingActivities": 0,
+                "OtherCashReceiptsFromSalesOfInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+                "OtherCashPaymentsToAcquireInterestsInJointVenturesClassifiedAsInvestingActivities": 0,
+                "CashReceiptsFromShareOfProfitsOfPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+                "CashPaymentForInvestmentInPartnershipFirmOrAssociationOfPersonsOrLimitedLiabilityPartnerships": 0,
+                "ProceedsFromSalesOfPropertyPlantAndEquipmentClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+                "PurchaseOfInvestmentPropertyClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfIntangibleAssetsUnderDevelopment": 0,
+                "PurchaseOfIntangibleAssetsUnderDevelopment": 0,
+                "ProceedsFromSalesOfGoodwillClassifiedAsInvestingActivities": 0,
+                "PurchaseOfGoodwillClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfIntangibleAssetsClassifiedAsInvestingActivities": 0,
+                "PurchaseOfIntangibleAssetsClassifiedAsInvestingActivities": 0,
+                "ProceedsFromBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+                "PurchaseOfBiologicalAssetsOtherThanBearerPlantsClassifiedAsInvestingActivities": 0,
+                "ProceedsFromSalesOfOtherLongTermAssetsClassifiedAsInvestingActivities": 0,
+                "PurchaseOfOtherLongTermAssetsClassifiedAsInvestingActivities": 14600000,
+                "CashAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": 0,
+                "CashReceiptsFromRepaymentOfAdvancesAndLoansMadeToOtherPartiesClassifiedAsInvestingActivities": 1133000,
+                "CashPaymentsForFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+                "CashReceiptsFromFutureContractsForwardContractsOptionContractsAndSwapContractsClassifiedAsInvestingActivities": 0,
+                "DividendsReceivedClassifiedAsInvestingActivities": 0,
+                "InterestReceivedClassifiedAsInvestingActivities": 4304000,
+                "IncomeTaxesPaidRefundClassifiedAsInvestingActivities": 0,
+                "OtherInflowsOutflowsOfCashClassifiedAsInvestingActivities": 0,
+                "ProceedsFromGovernmentGrantsClassifiedAsInvestingActivities": 0,
+                "ProceedsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+                "PaymentsFromChangesInOwnershipInterestsInSubsidiaries": 0,
+                "ProceedsFromIssuingSharesClassifiedAsFinancingActivities": 0,
+                "ProceedsFromIssuingOtherEquityInstruments": 0,
+                "PaymentsToAcquireOrRedeemEntitysShares": 0,
+                "PaymentsOfOtherEquityInstruments": 0,
+                "ProceedsFromExerciseOfStockOptions": 0,
+                "ProceedsFromIssuingDebenturesNotesBondsEtc": 0,
+                "ProceedsFromBorrowingsClassifiedAsFinancingActivities": -12057000,
+                "RepaymentsOfBorrowingsClassifiedAsFinancingActivities": 0,
+                "PaymentsOfFinanceLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+                "PaymentsOfLeaseLiabilitiesClassifiedAsFinancingActivities": 0,
+                "DividendsPaidClassifiedAsFinancingActivities": 5856000,
+                "InterestPaidClassifiedAsFinancingActivities": 3556000,
+                "IncomeTaxesPaidRefundClassifiedAsFinancingActivities": 0,
+                "OtherInflowsOutflowsOfCashClassifiedAsFinancingActivities": 0,
+                "IncreaseDecreaseInCashAndCashEquivalentsBeforeEffectOfExchangeRateChanges": -8186000,
+                "EffectOfExchangeRateChangesOnCashAndCashEquivalents": 4137000,
+                "IncreaseDecreaseInCashAndCashEquivalents": -4049000,
+                "CashAndCashEquivalentsCashFlowStatement": 41778000
+              },
+              "period": {
+                "start": "2024-04-01",
+                "end": "2024-09-30"
+              },
+              "note": "year-to-date cumulative as filed, not single-quarter"
+            },
+            "segment_breakdown": [
+              {
+                "label": "Digital Services",
+                "revenue": 357262000,
+                "profit_before_tax_and_finance_costs": 18096000,
+                "finance_costs": null,
+                "assets": 406565000,
+                "liabilities": 406565000
+              }
+            ]
+          },
+          "shareholding": {
+            "as_of": "2024-09-30",
+            "submission_date": "14-OCT-2024",
+            "promoter_holding_pct": 42.42,
+            "public_holding_pct": 57.58,
+            "fii_holding_pct": 3.77,
+            "dii_holding_pct": 0,
+            "promoter_pledge_flag": false,
+            "significant_beneficial_owners": null,
+            "categories": {
+              "IndividualsOrHinduUndividedFamily": {
+                "num_shares": 124460,
+                "pct_of_total_shares": 4.25,
+                "num_shareholders": 2,
+                "pct_voting_rights": 4.25
+              },
+              "CentralGovernmentOrStateGovernmentS": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "IndianFinancialInstitutionsOrBanks": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherIndianShareholders": {
+                "num_shares": 1117600,
+                "pct_of_total_shares": 38.17,
+                "num_shareholders": 1,
+                "pct_voting_rights": 38.17
+              },
+              "Indian": {
+                "num_shares": 1242060,
+                "pct_of_total_shares": 42.42,
+                "num_shareholders": 3,
+                "pct_voting_rights": 42.42
+              },
+              "NonResidentIndividualsOrForeignIndividuals": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignGovernment": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignInstitutions": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignPortfolioInvestor": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherForeignShareholders": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Foreign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingOfPromoterAndPromoterGroup": {
+                "num_shares": 1242060,
+                "pct_of_total_shares": 42.42,
+                "num_shareholders": 3,
+                "pct_voting_rights": 42.42
+              },
+              "MutualFundsOrUti": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "VentureCapitalFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AlternativeInvestmentFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Banks": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InsuranceCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ProvidentFundsOrPensionFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AssetReconstructionCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SovereignWealthFundsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "NBFCsRegisteredWithRbi": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherFinancialInstitutions": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherInstitutionsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignDirectInvestment": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignVentureCapitalInvestors": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SovereignWealthFundsForeign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeignPortfolioInvestorCatergoryOne": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeignPortfolioInvestorCatergoryTwo": {
+                "num_shares": 110400,
+                "pct_of_total_shares": 3.77,
+                "num_shareholders": 1,
+                "pct_voting_rights": 3.77
+              },
+              "OverseasDepositories": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherInstitutionsForeign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeign": {
+                "num_shares": 110400,
+                "pct_of_total_shares": 3.77,
+                "num_shareholders": 1,
+                "pct_voting_rights": 3.77
+              },
+              "CentralGovernmentOrPresidentOfIndia": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "StateGovernmentsOrGovernors": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingByCompaniesOrBodiesCorporatewhereCentralOrStateGovernmentIsPromoter": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Goverments": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AssociateCompaniesOrSubsidiaries": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "DirectorsAndDirectorsRelatives": {
+                "num_shares": 119900,
+                "pct_of_total_shares": 4.09,
+                "num_shareholders": 2,
+                "pct_voting_rights": 4.09
+              },
+              "KeyManagerialPersonnel": {
+                "num_shares": 6300,
+                "pct_of_total_shares": 0.22,
+                "num_shareholders": 1,
+                "pct_voting_rights": 0.22
+              },
+              "RelativesOfPromotersOtherThanPromoterGroup": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "TrustsWhereAnyPersonBelongingToPromoterAndPromoterGroupIsisTrusteeOrBeneficiaryOrAuthorOfTrust": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InvestorEducationAndProtectionFund": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh": {
+                "num_shares": 830120,
+                "pct_of_total_shares": 28.35,
+                "num_shareholders": 450,
+                "pct_voting_rights": 28.35
+              },
+              "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh": {
+                "num_shares": 285800,
+                "pct_of_total_shares": 9.76,
+                "num_shareholders": 8,
+                "pct_voting_rights": 9.76
+              },
+              "NonResidentIndians": {
+                "num_shares": 98000,
+                "pct_of_total_shares": 3.35,
+                "num_shareholders": 22,
+                "pct_voting_rights": 3.35
+              },
+              "ForeignNationals": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "BodiesCorporate": {
+                "num_shares": 72900,
+                "pct_of_total_shares": 2.49,
+                "num_shareholders": 16,
+                "pct_voting_rights": 2.49
+              },
+              "OtherNonInstitutions": {
+                "num_shares": 162520,
+                "pct_of_total_shares": 5.55,
+                "num_shareholders": 38,
+                "pct_voting_rights": 5.55
+              },
+              "NonInstitutions": {
+                "num_shares": 1575540,
+                "pct_of_total_shares": 53.81,
+                "num_shareholders": 537,
+                "pct_voting_rights": 53.81
+              },
+              "PublicShareholding": {
+                "num_shares": 1685940,
+                "pct_of_total_shares": 57.58,
+                "num_shareholders": 538,
+                "pct_voting_rights": 57.58
+              },
+              "CustodianOrDRHolder": {
+                "num_shares": 0,
+                "pct_of_total_shares": null,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "EmployeeBenefitsTrusts": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SharesHeldByNonPromoterNonPublicShareholders": {
+                "num_shares": 0,
+                "pct_of_total_shares": null,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingPattern": {
+                "num_shares": 2928000,
+                "pct_of_total_shares": 100,
+                "num_shareholders": 541,
+                "pct_voting_rights": 100
+              }
+            }
+          }
+        },
+        "Q1": {
+          "consolidated": {
+            "filed_date": "06-AUG-2024 12:47:51",
+            "audited_status": "Unaudited",
+            "income_statement": {
+              "revenue_from_operations": 180629000,
+              "other_income": 2109000,
+              "total_income": 182738000,
+              "cost_of_materials_consumed": 145631000,
+              "purchases_of_stock_in_trade": 0,
+              "changes_in_inventories": 0,
+              "employee_benefit_expense": 21968000,
+              "finance_costs": 1742000,
+              "depreciation_amortisation": 96000,
+              "other_expenses": 5635000,
+              "total_expenses": 175072000,
+              "profit_before_exceptional_and_tax": 7666000,
+              "exceptional_items": 0,
+              "profit_before_tax": 7666000,
+              "current_tax": 1643000,
+              "deferred_tax": -214000,
+              "total_tax_expense": 1429000,
+              "net_profit": 6237000,
+              "net_profit_attributable_to_owners": 0,
+              "net_profit_attributable_to_minority_interest": 0,
+              "other_comprehensive_income": 0,
+              "total_comprehensive_income": 6237000,
+              "paid_up_equity_share_capital": 29280000,
+              "face_value_per_share": 10,
+              "basic_eps": 2.13,
+              "diluted_eps": 2.13,
+              "debt_equity_ratio": null,
+              "debt_service_coverage_ratio": null,
+              "interest_service_coverage_ratio": null,
+              "other_facts": {
+                "ReportingQuarter": "First quarter",
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": 0,
+                "ProfitLossForPeriodFromContinuingOperations": 6237000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "BasicEarningsLossPerShareFromContinuingOperations": 2.13,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 2.13,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "SegmentRevenue": 180629000,
+                "SegmentRevenueFromOperations": 180629000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 9408000,
+                "SegmentFinanceCosts": 1742000,
+                "SegmentProfitBeforeTax": 7666000,
+                "SegmentAssets": 397365000
+              }
+            },
+            "period": {
+              "start": "2024-04-01",
+              "end": "2024-06-30"
+            },
+            "segment_breakdown": [
+              {
+                "label": "Digital Services",
+                "revenue": 180629000,
+                "profit_before_tax_and_finance_costs": 9408000,
+                "finance_costs": null,
+                "assets": 397365000,
+                "liabilities": 242416000
+              }
+            ]
+          },
+          "standalone": {
+            "filed_date": "06-AUG-2024 12:54:54",
+            "audited_status": "Unaudited",
+            "income_statement": {
+              "revenue_from_operations": 129510000,
+              "other_income": 2005000,
+              "total_income": 131515000,
+              "cost_of_materials_consumed": 96841000,
+              "purchases_of_stock_in_trade": 0,
+              "changes_in_inventories": 0,
+              "employee_benefit_expense": 21968000,
+              "finance_costs": 1742000,
+              "depreciation_amortisation": 96000,
+              "other_expenses": 5424000,
+              "total_expenses": 126071000,
+              "profit_before_exceptional_and_tax": 5444000,
+              "exceptional_items": 0,
+              "profit_before_tax": 5444000,
+              "current_tax": 1643000,
+              "deferred_tax": -214000,
+              "total_tax_expense": 1429000,
+              "net_profit": 4015000,
+              "net_profit_attributable_to_owners": null,
+              "net_profit_attributable_to_minority_interest": null,
+              "other_comprehensive_income": 0,
+              "total_comprehensive_income": 4015000,
+              "paid_up_equity_share_capital": 29280000,
+              "face_value_per_share": 10,
+              "basic_eps": 1.37,
+              "diluted_eps": 1.37,
+              "debt_equity_ratio": null,
+              "debt_service_coverage_ratio": null,
+              "interest_service_coverage_ratio": null,
+              "other_facts": {
+                "ReportingQuarter": "First quarter",
+                "NetMovementInRegulatoryDeferralAccountBalancesRelatedToProfitOrLossAndTheRelatedDeferredTaxMovement": 0,
+                "ProfitLossForPeriodFromContinuingOperations": 4015000,
+                "ProfitLossFromDiscontinuedOperationsBeforeTax": 0,
+                "TaxExpenseOfDiscontinuedOperations": 0,
+                "ProfitLossFromDiscontinuedOperationsAfterTax": 0,
+                "ShareOfProfitLossOfAssociatesAndJointVenturesAccountedForUsingEquityMethod": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParent": 0,
+                "ComprehensiveIncomeForThePeriodAttributableToOwnersOfParentNonControllingInterests": 0,
+                "BasicEarningsLossPerShareFromContinuingOperations": 1.37,
+                "DilutedEarningsLossPerShareFromContinuingOperations": 1.37,
+                "BasicEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "DilutedEarningsLossPerShareFromDiscontinuedOperations": 0,
+                "SegmentRevenue": 129510000,
+                "SegmentRevenueFromOperations": 129510000,
+                "SegmentProfitLossBeforeTaxAndFinanceCosts": 7186000,
+                "SegmentFinanceCosts": 1742000,
+                "SegmentProfitBeforeTax": 5444000,
+                "SegmentAssets": 317818000
+              }
+            },
+            "period": {
+              "start": "2024-04-01",
+              "end": "2024-06-30"
+            },
+            "segment_breakdown": [
+              {
+                "label": "Digital Services",
+                "revenue": 129510000,
+                "profit_before_tax_and_finance_costs": 7186000,
+                "finance_costs": null,
+                "assets": 317818000,
+                "liabilities": 186894000
+              }
+            ]
+          },
+          "shareholding": {
+            "as_of": "2024-06-30",
+            "submission_date": "11-JUL-2024",
+            "promoter_holding_pct": 42.42,
+            "public_holding_pct": 57.58,
+            "fii_holding_pct": 3.77,
+            "dii_holding_pct": 0,
+            "promoter_pledge_flag": false,
+            "significant_beneficial_owners": null,
+            "categories": {
+              "IndividualsOrHinduUndividedFamily": {
+                "num_shares": 124460,
+                "pct_of_total_shares": 4.25,
+                "num_shareholders": 2,
+                "pct_voting_rights": 4.25
+              },
+              "CentralGovernmentOrStateGovernmentS": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "IndianFinancialInstitutionsOrBanks": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherIndianShareholders": {
+                "num_shares": 1117600,
+                "pct_of_total_shares": 38.17,
+                "num_shareholders": 1,
+                "pct_voting_rights": 38.17
+              },
+              "Indian": {
+                "num_shares": 1242060,
+                "pct_of_total_shares": 42.42,
+                "num_shareholders": 3,
+                "pct_voting_rights": 42.42
+              },
+              "NonResidentIndividualsOrForeignIndividuals": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignGovernment": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignInstitutions": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignPortfolioInvestor": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherForeignShareholders": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Foreign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingOfPromoterAndPromoterGroup": {
+                "num_shares": 1242060,
+                "pct_of_total_shares": 42.42,
+                "num_shareholders": 3,
+                "pct_voting_rights": 42.42
+              },
+              "MutualFundsOrUti": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "VentureCapitalFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AlternativeInvestmentFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Banks": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InsuranceCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ProvidentFundsOrPensionFunds": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AssetReconstructionCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SovereignWealthFundsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "NBFCsRegisteredWithRbi": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherFinancialInstitutions": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherInstitutionsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsDomestic": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignDirectInvestment": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignVentureCapitalInvestors": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SovereignWealthFundsForeign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeignPortfolioInvestorCatergoryOne": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeignPortfolioInvestorCatergoryTwo": {
+                "num_shares": 110400,
+                "pct_of_total_shares": 3.77,
+                "num_shareholders": 1,
+                "pct_voting_rights": 3.77
+              },
+              "OverseasDepositories": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "OtherInstitutionsForeign": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InstitutionsForeign": {
+                "num_shares": 110400,
+                "pct_of_total_shares": 3.77,
+                "num_shareholders": 1,
+                "pct_voting_rights": 3.77
+              },
+              "CentralGovernmentOrPresidentOfIndia": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "StateGovernmentsOrGovernors": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingByCompaniesOrBodiesCorporatewhereCentralOrStateGovernmentIsPromoter": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "Goverments": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "AssociateCompaniesOrSubsidiaries": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "DirectorsAndDirectorsRelatives": {
+                "num_shares": 119900,
+                "pct_of_total_shares": 4.09,
+                "num_shareholders": 2,
+                "pct_voting_rights": 4.09
+              },
+              "KeyManagerialPersonnel": {
+                "num_shares": 6300,
+                "pct_of_total_shares": 0.22,
+                "num_shareholders": 1,
+                "pct_voting_rights": 0.22
+              },
+              "RelativesOfPromotersOtherThanPromoterGroup": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "TrustsWhereAnyPersonBelongingToPromoterAndPromoterGroupIsisTrusteeOrBeneficiaryOrAuthorOfTrust": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "InvestorEducationAndProtectionFund": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ResidentIndividualShareholdersHoldingNominalShareCapitalUpToRsTwoLakh": {
+                "num_shares": 759720,
+                "pct_of_total_shares": 25.95,
+                "num_shareholders": 356,
+                "pct_voting_rights": 25.95
+              },
+              "ResidentIndividualShareholdersHoldingNominalShareCapitalInExcessOfRsTwoLakh": {
+                "num_shares": 333000,
+                "pct_of_total_shares": 11.37,
+                "num_shareholders": 8,
+                "pct_voting_rights": 11.37
+              },
+              "NonResidentIndians": {
+                "num_shares": 29200,
+                "pct_of_total_shares": 1,
+                "num_shareholders": 14,
+                "pct_voting_rights": 1
+              },
+              "ForeignNationals": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ForeignCompanies": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "BodiesCorporate": {
+                "num_shares": 150500,
+                "pct_of_total_shares": 5.14,
+                "num_shareholders": 16,
+                "pct_voting_rights": 5.14
+              },
+              "OtherNonInstitutions": {
+                "num_shares": 176920,
+                "pct_of_total_shares": 6.04,
+                "num_shareholders": 38,
+                "pct_voting_rights": 6.04
+              },
+              "NonInstitutions": {
+                "num_shares": 1575540,
+                "pct_of_total_shares": 53.81,
+                "num_shareholders": 435,
+                "pct_voting_rights": 53.81
+              },
+              "PublicShareholding": {
+                "num_shares": 1685940,
+                "pct_of_total_shares": 57.58,
+                "num_shareholders": 436,
+                "pct_voting_rights": 57.58
+              },
+              "CustodianOrDRHolder": {
+                "num_shares": 0,
+                "pct_of_total_shares": null,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "EmployeeBenefitsTrusts": {
+                "num_shares": 0,
+                "pct_of_total_shares": 0,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "SharesHeldByNonPromoterNonPublicShareholders": {
+                "num_shares": 0,
+                "pct_of_total_shares": null,
+                "num_shareholders": 0,
+                "pct_voting_rights": 0
+              },
+              "ShareholdingPattern": {
+                "num_shares": 2928000,
+                "pct_of_total_shares": 100,
+                "num_shareholders": 439,
+                "pct_voting_rights": 100
+              }
+            }
+          }
+        }
+      },
+      "annual": {},
+      "fy_start": "2024-04-01",
+      "fy_end": "2025-03-31"
+    }
+  }
+}

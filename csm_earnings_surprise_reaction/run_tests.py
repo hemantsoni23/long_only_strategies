@@ -1,0 +1,8 @@
+"""Run the earnings-surprise point-in-time and execution regression tests."""
+from pathlib import Path
+import unittest
+
+if __name__ == '__main__':
+    suite = unittest.defaultTestLoader.discover(str(Path(__file__).parent / 'tests'))
+    result = unittest.TextTestRunner(verbosity=2).run(suite)
+    raise SystemExit(not result.wasSuccessful())

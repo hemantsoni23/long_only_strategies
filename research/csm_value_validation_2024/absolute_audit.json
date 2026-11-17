@@ -1,0 +1,47 @@
+{
+  "guard_instance_error": {
+    "type": "AttributeError",
+    "message": "'IndividualMomentumStrategy' object has no attribute 'dropna'"
+  },
+  "limit_order_bar": {
+    "open": 80,
+    "high": 90,
+    "low": 75,
+    "close": 85,
+    "limit": 100,
+    "simulated_fill": 100.0,
+    "resulting_weight": 0.0
+  },
+  "weekend_month_end_example": {
+    "signal_label": "2024-08-31",
+    "last_trading_session": "2024-08-30",
+    "next_trading_session": "2024-09-02",
+    "engine_first_active_session": "2024-09-03"
+  },
+  "cutoff": "2024-12-31",
+  "universe": "original CSM Absolute settings, all OHLCV symbols, top 1000 turnover filter",
+  "source_note": "Reference audit of a separate strategy; not a same-universe comparison with CSM Value.",
+  "reference_zero_exit_weight": {
+    "start": "2020-01-01",
+    "end": "2024-12-31",
+    "cagr": 0.5645846601049791,
+    "max_drawdown": -0.060855723256310834
+  },
+  "alternative_prior_weight_on_complete_exit": {
+    "start": "2020-01-01",
+    "end": "2024-12-31",
+    "cagr": 0.050274239213837335,
+    "max_drawdown": -0.2313392212751748
+  },
+  "same_executed_weights": true,
+  "trades_entered_2020_2024": 2305,
+  "mean_holding_days": 11.153145336225597,
+  "median_holding_days": 9.0,
+  "guard_tested_method": "get_exit_signals",
+  "source_sha256": {
+    "Old_live_strategies/csm_absolute.py": "0127d724d81cac2fb30728e08c27fb2521fa09dda7d87a2cbe099add9ce10190",
+    "Old_live_strategies/csm_absolute_backtest.py": "fb6a314f08ef7cdcefa857ade63073f883d58e36149760f3e2dc6721807b8613",
+    "Old_live_strategies/run_csm_absolute.py": "552fbdf5b6bc24bd0e9f5c8222bafa06a4bbf2ee4530014637a08a94dc84bc4d",
+    "Old_live_strategies/limit_ordder_manager.py": "ae24cba2f8fdb935c0231534d334a1a3d6686819c8310abb6f3cffdf98e9d04c"
+  }
+}

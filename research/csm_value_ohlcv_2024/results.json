@@ -1,0 +1,114 @@
+{
+  "cutoff": "2024-12-31",
+  "candidates": [
+    "baseline",
+    "momentum_12_1",
+    "momentum_6_1",
+    "near_52w_high",
+    "low_vol_63",
+    "above_200d"
+  ],
+  "selection_rule": "maximum 2019-06-03 to 2021-12-31 Calmar, then Sharpe, then baseline",
+  "selected": "momentum_6_1",
+  "is_results": [
+    {
+      "candidate": "baseline",
+      "start": "2019-06-03",
+      "end": "2021-12-31",
+      "cagr": 0.24960545605043793,
+      "drawdown": -0.13137203827962773,
+      "sharpe": 1.9945686191972838,
+      "calmar": 1.8999892162679874,
+      "annual_turnover": 4.520530374972231,
+      "exposure": 0.3822537429762582,
+      "max_positions": 10
+    },
+    {
+      "candidate": "momentum_12_1",
+      "start": "2019-06-03",
+      "end": "2021-12-31",
+      "cagr": 0.2773364583483764,
+      "drawdown": -0.12219600976506084,
+      "sharpe": 2.090743651262235,
+      "calmar": 2.2696032291201247,
+      "annual_turnover": 4.378795743940197,
+      "exposure": 0.3787452274079145,
+      "max_positions": 10
+    },
+    {
+      "candidate": "momentum_6_1",
+      "start": "2019-06-03",
+      "end": "2021-12-31",
+      "cagr": 0.29914186901435524,
+      "drawdown": -0.12529714797471636,
+      "sharpe": 2.2781534784284534,
+      "calmar": 2.3874595220213544,
+      "annual_turnover": 4.517882159577941,
+      "exposure": 0.3833156330891948,
+      "max_positions": 10
+    },
+    {
+      "candidate": "near_52w_high",
+      "start": "2019-06-03",
+      "end": "2021-12-31",
+      "cagr": 0.255173764945114,
+      "drawdown": -0.12269238364349067,
+      "sharpe": 2.061874370677709,
+      "calmar": 2.0797848845008726,
+      "annual_turnover": 4.652888419116001,
+      "exposure": 0.37719592708902533,
+      "max_positions": 10
+    },
+    {
+      "candidate": "low_vol_63",
+      "start": "2019-06-03",
+      "end": "2021-12-31",
+      "cagr": 0.23528898343059135,
+      "drawdown": -0.11613417769082823,
+      "sharpe": 2.1222861731878377,
+      "calmar": 2.026009811314774,
+      "annual_turnover": 3.786084610377015,
+      "exposure": 0.3895367734590671,
+      "max_positions": 10
+    },
+    {
+      "candidate": "above_200d",
+      "start": "2019-06-03",
+      "end": "2021-12-31",
+      "cagr": 0.23744696833600631,
+      "drawdown": -0.128267940468071,
+      "sharpe": 1.9814728313898928,
+      "calmar": 1.8511793942393004,
+      "annual_turnover": 4.527204458710912,
+      "exposure": 0.38049000583964854,
+      "max_positions": 10
+    }
+  ],
+  "warning": "2022\u201324 has been examined in prior research; not a blind holdout.",
+  "previously_examined_2022_2024": [
+    {
+      "candidate": "baseline",
+      "start": "2022-01-03",
+      "end": "2024-12-31",
+      "cagr": 0.1803227989043008,
+      "drawdown": -0.1386779791485061,
+      "sharpe": 1.5951850709328284,
+      "calmar": 1.3002987209036159,
+      "annual_turnover": 4.724509163816852,
+      "exposure": 0.4369847305259572,
+      "max_positions": 10
+    },
+    {
+      "candidate": "momentum_6_1",
+      "start": "2022-01-03",
+      "end": "2024-12-31",
+      "cagr": 0.1292549905864946,
+      "drawdown": -0.19612605032886055,
+      "sharpe": 1.0996569544925614,
+      "calmar": 0.6590403996295352,
+      "annual_turnover": 5.881961819198016,
+      "exposure": 0.4222726813713551,
+      "max_positions": 10
+    }
+  ]
+}

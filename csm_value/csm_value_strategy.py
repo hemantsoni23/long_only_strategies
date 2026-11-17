@@ -1,8 +1,13 @@
 """
 csm_value_strategy.py -- CSM Earnings-Yield on the Elendel chassis.
-Derived from Old_live_strategies/csm_elendel_strategy.py by _generate_elendel_chassis.py: ONLY the ranking signal (E/P on point-in-time quarterly results) and the universe
-(liquidity ranks 301-1000, no SMA-200 trend filter, no absolute-momentum gate) differ; position sizing, hysteresis, stops, Crash Guard, overlays and live exit interface are Elendel's.
+Value ranking uses point-in-time quarterly results. There is no liquidity-rank
+cutoff, SMA-200 filter or absolute-momentum gate; the portfolio and risk
+mechanics follow the Elendel chassis with the documented CSM Value adjustments.
 """
+import datetime
+import glob
+import json
+import math
 import os
 import sys
 
@@ -10,7 +15,265 @@ import pandas as pd
 import numpy as np
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from fundamentals_loader import load_results, monthly_frame   # point-in-time quarterly results read straight from the raw NSE XBRL JSON
+# Point-in-time fundamentals loading is included in this strategy file.
+FUNDAMENTALS_DIR = os.environ.get('CSM_FUNDAMENTALS_DIR', os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'fundamentals'))
+VALID_FACE_VALUES = (0.5, 1.0, 2.0, 5.0, 10.0, 100.0)
+EXCLUDE_SYMBOLS = frozenset({'DRCSYSTEMS', 'GATECH'})         # corrupted share data (found by the earlier audit of this corpus)
+CLEAN_RATIOS = (1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 10.0)
+CLEAN_TOL = 0.03
+SHARE_RATIO_BAND = (0.05, 20.0)                             # adjacent-filing share-count ratios outside this band are corruption, not corporate actions
+CUM_FACTOR_BAND = (0.1, 60.0)                               # cumulative restored-units factor outside this band -> symbol excluded
+QUARTER_DAYS = (80, 100)
+CORE_TAX = 0.25                                             # flat tax rate applied to other income / exceptional items when building 'core' profit
+MAX_FILING_LAG_DAYS = 120
+
+
+def _num(v):
+    if v is None or isinstance(v, bool):
+        return None
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return None
+    return None if (math.isnan(f) or math.isinf(f)) else f
+
+
+def _parse_filed(s):
+    if not s:
+        return None
+    s = s.strip()
+    for fmt in ('%d-%b-%Y %H:%M:%S', '%d-%b-%Y %H:%M', '%d-%b-%Y', '%d-%B-%Y %H:%M:%S', '%d-%B-%Y %H:%M', '%d-%B-%Y'):
+        try:
+            return datetime.datetime.strptime(s, fmt)
+        except ValueError:
+            pass
+    return None
+
+
+def _read_symbol(path, profit_basis='total'):
+    sym = os.path.basename(path)[:-5]
+    if sym in EXCLUDE_SYMBOLS:
+        return []
+    try:
+        with open(path, encoding='utf-8') as f:
+            doc = json.load(f)
+    except Exception:
+        return []
+    rows = []
+    for fy, node in (doc.get('fiscal_years') or {}).items():
+        for q, qnode in (node.get('quarters') or {}).items():
+            for basis in ('consolidated', 'standalone'):
+                blk = qnode.get(basis)
+                if not blk:
+                    continue
+                inc = blk.get('income_statement') or {}
+                facts = inc.get('other_facts') or {}
+                per = blk.get('period') or {}
+                try:
+                    d0 = datetime.date.fromisoformat((per.get('start') or '')[:10]); d1 = datetime.date.fromisoformat((per.get('end') or '')[:10])
+                except (ValueError, TypeError):
+                    continue
+                if not (QUARTER_DAYS[0] <= (d1 - d0).days <= QUARTER_DAYS[1]):
+                    continue                                   # year-to-date or odd periods are not single quarters
+                filed = _parse_filed(blk.get('filed_date'))
+                if filed is None:
+                    continue
+                np_total = _num(inc.get('net_profit'))
+                if np_total is None:
+                    for k in ('ProfitLossForThePeriod', 'ProfitLossFromOrdinaryActivitiesAfterTax'):
+                        np_total = _num(facts.get(k))
+                        if np_total is not None:
+                            break
+                np_owners = _num(inc.get('net_profit_attributable_to_owners'))
+                # Do not silently switch between total and owner-attributable
+                # earnings in a trailing sum when a field is missing.
+                npf = np_owners if profit_basis == 'owners' else np_total
+                pbt_ = _num(inc.get('profit_before_tax')); pbe_ = _num(inc.get('profit_before_exceptional_and_tax'))
+                is_bank = inc.get('revenue_from_operations') is None and facts.get('InterestEarned') is not None   # banking taxonomy: 'other income' is core fee income there
+                cap, fv = _num(inc.get('paid_up_equity_share_capital')), _num(inc.get('face_value_per_share'))
+                shares = cap / fv if (cap and fv and any(abs(fv - v) < 1e-9 for v in VALID_FACE_VALUES) and cap / fv > 0) else None
+                rows.append(dict(symbol=sym, basis=basis, period_end=pd.Timestamp(d1), filed=pd.Timestamp(filed), net_profit=npf, np_total=np_total, np_owners=np_owners, pbt=pbt_, exc=(pbt_ - pbe_) if (pbt_ is not None and pbe_ is not None) else None,
+                                 other_income=_num(inc.get('other_income')), is_bank=is_bank, shares=shares))
+    return rows
+
+
+def _split_factor_per_period(sh, window_starts=None, window_ends=None, cliff_checker=None):
+    """sh: Series of raw share counts indexed by period_end (ascending). Returns Series: product of clean split/bonus ratios in LATER periods (the factor that restores today's units).
+    cliff_checker(start, end, ratio) -> True when the price series itself shows the matching one-day cliff inside [start, end]: the vendor did NOT adjust that event, so prices and filings are
+    already in the same units around it and the step must not be applied (applying it would double count)."""
+    sh = sh.dropna()
+    if len(sh) < 2:
+        return pd.Series(1.0, index=sh.index)
+    ratio = (sh / sh.shift(1)).iloc[1:]
+    if ((ratio < SHARE_RATIO_BAND[0]) | (ratio > SHARE_RATIO_BAND[1])).any():
+        return pd.Series(np.nan, index=sh.index)            # an implausible jump between adjacent filings is data corruption: do not trust this symbol's share count
+    def clean(r):
+        for c in CLEAN_RATIOS:
+            if abs(r / c - 1) <= CLEAN_TOL:
+                return c
+            if abs(r * c - 1) <= CLEAN_TOL:
+                return 1.0 / c
+        return 1.0
+    steps = []
+    for k, (pe, r) in enumerate(ratio.items()):
+        c = clean(r)
+        if c != 1.0 and cliff_checker is not None and window_starts is not None:
+            if cliff_checker(window_starts.get(pe), window_ends.get(pe), c):
+                c = 1.0                                     # unadjusted in the prices: nothing to restore
+        steps.append(c)
+    step = pd.Series(steps, index=ratio.index).reindex(sh.index).fillna(1.0)   # multiplier at each period that is a split/bonus (vs the previous period), else 1
+    later = step[::-1].cumprod()[::-1].shift(-1).fillna(1.0) # product over strictly later periods
+    return later
+
+
+def load_results(symbols=None, directory=None, cliff_checker=None, restore_units=False, profit_basis='total'):
+    """Construct results from each filing event using only facts already filed.
+
+    `shares_adj` is the as-filed share count. It must be multiplied by a
+    verified *unadjusted, point-in-time* price, not by back-adjusted OHLCV.
+    Half-yearly and otherwise non-quarterly blocks are excluded by _read_symbol.
+    """
+    if restore_units or cliff_checker is not None:
+        raise ValueError('Future-inferred split adjustments are disabled; provide verified unadjusted valuation prices.')
+    if profit_basis not in ('total', 'owners', 'owners_consistent', 'core'):
+        raise ValueError(f'Unknown profit basis: {profit_basis}')
+    directory = directory or FUNDAMENTALS_DIR
+    paths = sorted(glob.glob(os.path.join(directory, '*.json')) + glob.glob(os.path.join(directory, 'sme', '*.json')))
+    if symbols is not None:
+        keep = set(symbols)
+        paths = [p for p in paths if os.path.splitext(os.path.basename(p))[0] in keep]
+    raw = []
+    for path in paths:
+        raw.extend(_read_symbol(path, profit_basis))
+    if not raw:
+        raise FileNotFoundError(f'no usable quarterly fundamentals JSON under {directory}')
+    df = pd.DataFrame(raw)
+    lag = (df.filed - df.period_end).dt.days
+    df = df[lag.between(0, MAX_FILING_LAG_DAYS)]
+    output = []
+    for symbol, group in df.groupby('symbol', sort=False):
+        known = {'standalone': {}, 'consolidated': {}}
+        group = group.sort_values(['filed', 'period_end', 'basis'], kind='stable')
+        group = group.assign(_filing_day=group.filed.dt.normalize())
+        for filed, events in group.groupby('_filing_day', sort=True):
+            # Process all same-day filings together; none is visible until tomorrow.
+            for event in events.itertuples(index=False):
+                known[event.basis][event.period_end] = event
+            candidates = []
+            for basis, facts in known.items():
+                if not facts:
+                    continue
+                end = max(facts)
+                ends = pd.date_range(end=end, periods=4, freq='QE')
+                q = [facts.get(x) for x in ends]
+                if any(x is None for x in q):
+                    continue
+                now = q[-1]
+                if now.shares is None or not np.isfinite(now.shares) or now.shares <= 0:
+                    continue
+                old = facts.get(end - pd.DateOffset(years=1))
+                def number(row, name):
+                    return _num(getattr(row, name)) if row is not None else None
+                if profit_basis == 'owners_consistent':
+                    use_owners = all(number(x, 'np_owners') is not None for x in q)
+                    key = 'np_owners' if use_owners else 'np_total'
+                    profits = [number(x, key) for x in q]
+                    growth_key = 'np_owners' if number(now, 'np_owners') is not None and number(old, 'np_owners') is not None else 'np_total'
+                    current, previous = number(now, growth_key), number(old, growth_key)
+                elif profit_basis == 'core':
+                    def core(x):
+                        n = number(x, 'np_total')
+                        if n is None:
+                            return None
+                        return n if x.is_bank else n - ((number(x, 'other_income') or 0) + (number(x, 'exc') or 0)) * (1 - CORE_TAX)
+                    profits = [core(x) for x in q]
+                    current, previous = core(now), core(old) if old is not None else None
+                else:
+                    profits = [number(x, 'net_profit') for x in q]
+                    current, previous = number(now, 'net_profit'), number(old, 'net_profit')
+                if any(x is None for x in profits):
+                    continue
+                growth = None
+                if current is not None and previous is not None and abs(current) + abs(previous) > 0:
+                    growth = (current - previous) / ((abs(current) + abs(previous)) / 2)
+                pbt = [number(x, 'pbt') for x in q]
+                if now.is_bank:
+                    oneoff = 0.0
+                elif all(x is not None for x in pbt) and sum(pbt) > 0:
+                    oneoff = sum((number(x, 'other_income') or 0) + max(number(x, 'exc') or 0, 0) for x in q) / sum(pbt)
+                else:
+                    oneoff = None
+                candidates.append(dict(symbol=symbol, period_end=end, filed=filed,
+                                       basis=basis, np_ttm=sum(profits), sg_np=growth,
+                                       shares_adj=now.shares, oneoff_share=oneoff,
+                                       _result_filed=now.filed))
+            if candidates:
+                # Prefer the newest reporting period, then consolidated if ready.
+                chosen = max(candidates, key=lambda x: (x['period_end'], x['basis'] == 'consolidated'))
+                # Recomputations after a late earlier filing do not reset the age
+                # of the latest quarter's result.
+                chosen['result_filed'] = chosen.pop('_result_filed').normalize()
+                chosen['filed_timestamp'] = events.filed.max()
+                output.append(chosen)
+    if not output:
+        return pd.DataFrame(columns=['symbol', 'period_end', 'filed', 'basis', 'np_ttm', 'sg_np', 'shares_adj', 'oneoff_share', 'result_filed'])
+    return pd.DataFrame(output).sort_values(['symbol', 'filed']).reset_index(drop=True)
+
+
+def monthly_frame(results, col, dates, columns, max_age=140):
+    """Latest result strictly before the signal date, expiring by result age."""
+    out = {}
+    cols = set(columns)
+    for symbol, group in results.groupby('symbol'):
+        if symbol not in cols:
+            continue
+        group = group.sort_values('filed').drop_duplicates('filed', keep='last')
+        available = pd.DatetimeIndex(group['filed']) + pd.Timedelta(days=1)
+        values = pd.Series(group[col].values, index=available)
+        age_col = 'result_filed' if 'result_filed' in group else 'filed'
+        ages = pd.Series(pd.to_datetime(group[age_col]).values, index=available)
+        union = available.union(dates)
+        vv = values.reindex(union, method='ffill').reindex(dates)
+        aa = pd.to_datetime(ages.reindex(union, method='ffill').reindex(dates))
+        out[symbol] = vv.where((dates.to_series() - aa).dt.days <= max_age)
+    return pd.DataFrame(out, index=dates).reindex(columns=columns)
+
+
+def capped_inverse_vol_weights(vols, cap):
+    """Allocate up to available stock capacity, preserving inverse-vol ratios."""
+    if cap <= 0 or vols.empty:
+        return pd.Series(0.0, index=vols.index)
+    inverse = 1.0 / vols
+    weights = pd.Series(0.0, index=vols.index)
+    remaining = min(1.0, cap * len(vols))
+    active = list(vols.index)
+    while active and remaining > 1e-12:
+        proposed = inverse.loc[active] / inverse.loc[active].sum() * remaining
+        capped = list(proposed.index[proposed > cap])
+        if not capped:
+            weights.loc[active] = proposed
+            break
+        weights.loc[capped] = cap
+        remaining -= cap * len(capped)
+        capped_set = set(capped)
+        active = [name for name in active if name not in capped_set]
+    return weights.clip(upper=cap)
+
+
+def value_growth_pullback_score(value, growth, a3, q5):
+    """Experimental 75% fundamental / 25% inverse price-strength rank.
+
+    Each input is a month-by-symbol panel available at the signal close.
+    Missing secondary legs receive neutral percentile ranks; invalid value
+    observations cannot become eligible through another leg.
+    """
+    eligible = value.notna()
+    def rank(x):
+        return x.where(eligible).rank(axis=1, pct=True, method='average').fillna(.5)
+    value_rank, growth_rank = rank(value), rank(growth)
+    pullback = 1.0 - (rank(a3) + rank(q5)) / 2.0
+    score = (.55 * value_rank + .20 * growth_rank + .25 * pullback).where(eligible)
+    return score, pullback.where(eligible)
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -27,7 +290,8 @@ class CSMValue:
         opens_df            = None,
         benchmark_series    = None,
         # Ranking signal: E/P (TTM net profit / market cap) among names with positive TTM profit AND rising latest-quarter profit; point-in-time quarterly results
-        results_df          = None,  # optional pre-built results table (fundamentals_loader.load_results); default reads the raw JSON directory
+        results_df          = None,  # optional pre-built point-in-time results table
+        valuation_prices_df = None,  # verified as-traded, unadjusted closes for market cap
         results_max_age_days = 140,  # a quarterly result stays 'current' this long after its filing date
         require_profit_growth = True,  # latest quarter's yoy net profit must be rising
         max_ep              = 0.50,  # data-error / one-off guard: ignore E/P above 50%
@@ -38,17 +302,18 @@ class CSMValue:
         min_cooldown_days   = 0,     # re-entry churn control: minimum calendar days a name is blocked after ANY stop, including profitable ones (the loss-scaled cooldown gives profitable stops 0 days)
         max_oneoff_share    = None,  # earnings-quality filter: drop names whose trailing-12m other income + exceptional gains exceed this share of trailing-12m pre-tax profit (banks exempt). None = off
         profit_basis        = 'total',  # 'total' = reported net profit; 'owners_consistent' = profit attributable to owners where every quarter of a figure reports it, else the total line for all of them; 'core' = reported profit less other income and exceptional items (25% tax); 'owners' = legacy mixed fallback (ablation only)
-        restore_units       = True,  # restore filed share counts to today's units (matches the split-adjusted prices). False = the old leaky behaviour, for ablation only
+        ranking_mode        = 'value',  # value_growth_pullback is exploratory and not independently validated
+        restore_units       = False,  # future-inferred adjustment is disabled; requires as-traded valuation prices
         ca_tol              = 0.03,  # a one-day move within this of a clean split/bonus cliff (-33%, -50%, -60%, -67%, -75%, -80%, -90%) counts as a corporate action
         abs_momentum_lookback_months = 12,  # kept only for the engine's bookkeeping: the value strategy has NO absolute-momentum gate (momentum_returns is set to a constant positive)
         abs_momentum_lag_months      = 1,
         # Universe
-        top_n               = 15,
+        top_n               = 20,   # 20 x 5% permits up to 100% before risk overlays
         min_price           = 20.0,
-        universe_top_n_min = 301,   # liquidity ranks 301-1000 (the 300 most liquid names excluded): chosen on the TRAIN window by train_test_protocol.py (a near tie with a floor of 1)
-        universe_top_n_max      = 1000,
+        universe_top_n_min = None,   # legacy argument; liquidity-rank filtering is disabled
+        universe_top_n_max = None,
         max_circuit_days    = 5,
-        buffer_ratio        = 0.2,
+        buffer_ratio        = 1.0,  # allow prior selections through rank 40, subject to swaps
         # Stops
         atr_period          = 14,
         atr_multiplier      = 3.0,
@@ -62,17 +327,18 @@ class CSMValue:
         crash_guard_cooldown    = 10,
         corr_guard_threshold    = 0.8,
         stop_cooldown_days      = 20,   # block re-entry N calendar days after stop on same ticker
-        min_hold_days           = 5,    # TRADING days before stop can fire (V1 fix #1)
+        min_hold_days           = 5,    # calendar days with min_hold_trading=False
         atr_multiplier_high_vol = 2.0,  # tighter chandelier when benchmark vol is elevated (moot: chandelier off)
-        risk_pct_per_trade      = 0.01,  # risk-budget sizing: weight = risk_pct_per_trade / hard_stop_from_entry, same convention the breakout strategies (HR/VCP/Donchian) already run live -- see POSITION_SIZING_BREAKOUT_VS_MOMENTUM.md Fix 1
-        max_weight_per_stock    = 0.05,  # kept at the original default -- a controlled A/B test showed raising this (to let the risk-budget cap below bind) worsens Sharpe/Sortino/MaxDD/Calmar here, because momentum's wide 15% stop reflects genuinely imprecise entries (unlike breakout's structurally-tight ones), so a bigger position just amplifies that risk rather than monetizing earned safety -- see POSITION_SIZING_BREAKOUT_VS_MOMENTUM.md's own Fix 1 -> Fix 3 dependency. risk_pct_per_trade below is kept available to opt into once/if entry precision is improved (Fix 3).
-        vol_target              = 0.15,
+        risk_pct_per_trade      = 0.0075, # 0.75% / 15% entry stop = 5% stock cap
+        max_weight_per_stock    = 0.05,  # maximum target weight for a single stock
+        fill_weight_caps        = False, # allocate up to available capacity before risk overlays
+        vol_target              = 0.20,
         # Entry-reason tagging
         post_cooldown_window_days = 90, # entry within N days of a prior stop → POST_COOLDOWN
         # Chassis A/B flags -- default False reproduces batch v2.4 exactly
         apply_atr_cap           = False,  # cap ATR at rolling q75/63d
         atr_prev_day            = False,  # use day i-1 ATR in the loop
-        min_hold_trading        = False,  # count min-hold in trading days, not calendar
+        min_hold_trading        = False,  # False counts calendar days; True counts trading sessions
         # Execution-layer features
         use_liquid_mf           = True,   # idle cash is swept into a liquid fund (6.5%), as in Zenith; the Elendel default (False) leaves it at 0%
         liquid_mf_annual_rate   = 0.065,
@@ -85,7 +351,7 @@ class CSMValue:
                                           # its own expanding 95th-pct threshold; overwrites
                                           # leverage_bull as the base, bear then tightens
                                           # further via min(). Independent of Crash Guard.
-        rebalance_exit_buffer_months = 1, # exit only after N+1 consecutive signal drops
+        rebalance_exit_buffer_months = 2, # exit after 3 consecutive monthly signal drops
         stop_fill_mode          = 'close_next_open', # 'close_next_open' = stop checked on the daily close, exit at next open | 'stop' = resting intraday stop order | 'next_open' = intraday-low breach, exit at next open
         # Risk & alpha features
         use_crystallisation     = False,  # sell fraction at +trigger, breakeven stop
@@ -117,8 +383,12 @@ class CSMValue:
         self.opens                = opens_df  if opens_df  is not None else pd.DataFrame()
         self.benchmark            = benchmark_series
 
-        self.components            = ('EP',)
+        if ranking_mode not in ('value', 'value_growth_pullback'):
+            raise ValueError(f'Unknown ranking_mode: {ranking_mode}')
+        self.ranking_mode          = ranking_mode
+        self.components            = ('EP',) if ranking_mode == 'value' else ('EP', 'PROFIT_GROWTH', 'PULLBACK')
         self._results_in           = results_df
+        self.valuation_prices      = valuation_prices_df
         self.results_max_age_days  = results_max_age_days
         self.require_profit_growth = require_profit_growth
         self.max_ep                = max_ep
@@ -134,10 +404,14 @@ class CSMValue:
         self.abs_momentum_lookback_months = abs_momentum_lookback_months
         self.abs_momentum_lag_months      = abs_momentum_lag_months
 
+        if isinstance(top_n, bool) or not isinstance(top_n, int) or top_n < 1:
+            raise ValueError('top_n must be a positive integer')
         self.top_n                = top_n
         self.min_price            = min_price
-        self.universe_top_n_min = universe_top_n_min
-        self.universe_top_n_max       = universe_top_n_max
+        if universe_top_n_min is not None or universe_top_n_max is not None:
+            raise ValueError('Liquidity-rank universe filters are disabled for CSM Value.')
+        self.universe_top_n_min = None
+        self.universe_top_n_max = None
         self.max_circuit_days     = max_circuit_days
         self.buffer_ratio         = buffer_ratio
 
@@ -157,6 +431,7 @@ class CSMValue:
         self.atr_multiplier_high_vol  = atr_multiplier_high_vol
         self.risk_pct_per_trade       = risk_pct_per_trade
         self.max_weight_per_stock     = max_weight_per_stock
+        self.fill_weight_caps         = fill_weight_caps
         self.vol_target               = vol_target
         self.post_cooldown_window_days = post_cooldown_window_days
         self.apply_atr_cap            = apply_atr_cap
@@ -212,33 +487,26 @@ class CSMValue:
         has_l = not self.lows.empty
         has_o = not self.opens.empty
         print(f"CSM CSMValue Earnings-Yield initialised  |  top_n={top_n}  buffer={buffer_ratio}"
-              f"  signal=E/P(profit growth>0={require_profit_growth})"
-              f"  abs_mom_gate={self.abs_momentum_lookback_months}m(lag{self.abs_momentum_lag_months})"
-              f"  ATR-stops={'YES' if has_h and has_l else 'FALLBACK-2%'}"
+              f"  signal={ranking_mode}(profit growth>0={require_profit_growth})"
+              f"  abs_mom_gate=OFF"
+              f"  ATR-stops={'ON' if use_chandelier else 'OFF'}"
               f"  chandelier={'OFF (signal-driven exits)' if not use_chandelier else 'ON'}"
-              f"  opens={'YES' if has_o else 'FALLBACK-close'}"
+              f"  opens={'YES' if has_o else 'MISSING'}"
               f"  crash_guard={'ON' if use_crash_guard else 'OFF'}"
               f"  stop_cooldown={stop_cooldown_days}d"
               f"  min_hold={min_hold_days} {'trading' if min_hold_trading else 'calendar'}-days"
               f"  atr_mult={atr_multiplier}/{atr_multiplier_high_vol}(hv)"
               f"  atr_cap={'ON' if apply_atr_cap else 'OFF'}"
               f"  atr_prev_day={'ON' if atr_prev_day else 'OFF'}"
-              f"  universe_top_n_min={universe_top_n_min}"
-              f"  universe_top_n_max={universe_top_n_max}")
+              f"  liquidity_rank_filter=OFF")
 
     # ──────────────────────────────────────────────────────────────────────────
     # UNIVERSE FILTER  (identical to batch v2.4)
     # ──────────────────────────────────────────────────────────────────────────
 
-    def filter_universe(self, monthly_prices, monthly_avg_dvol, daily_prices):
-        """Universe eligibility mask: price floor, liquidity rank band, circuit-day limit, falling-knife gate (all lookahead-safe via .shift).  Unlike Elendel there is NO SMA-200 trend filter."""
-        price_mask = monthly_prices.shift(1) > self.min_price
-
-        daily_dvol        = self.prices * self.volumes
-        median_dvol_daily = daily_dvol.rolling(window=63, min_periods=21).median().shift(1)
-        monthly_dvol      = median_dvol_daily.resample('ME').last().reindex(monthly_prices.index)
-        dvol_rank         = monthly_dvol.rank(axis=1, ascending=False, method='min')
-        liquidity_mask    = (dvol_rank >= self.universe_top_n_min) & (dvol_rank <= self.universe_top_n_max)
+    def filter_universe(self, monthly_prices, monthly_avg_dvol, daily_prices, fundamentals_eligible=None, valuation_prices=None):
+        """Price, circuit and falling-knife gates; no price-volume rank cutoff."""
+        price_mask = (valuation_prices if valuation_prices is not None else monthly_prices).shift(1) > self.min_price
 
         circuit_mask = pd.DataFrame(True, index=monthly_prices.index, columns=monthly_prices.columns)
         if not self.highs.empty and not self.lows.empty:
@@ -250,7 +518,7 @@ class CSMValue:
         monthly_ret = monthly_prices.pct_change(fill_method=None)
         crash_mask  = monthly_ret.shift(1) >= -0.15
 
-        return price_mask & liquidity_mask & circuit_mask & crash_mask
+        return price_mask & circuit_mask & crash_mask
 
     # ──────────────────────────────────────────────────────────────────────────
     # FACTOR CALCULATION  (CSMElendel composite — blueprint §3.2)
@@ -263,72 +531,84 @@ class CSMValue:
         if self.benchmark is None:
             raise ValueError("CSMValue requires a benchmark_series (regime / vol scaling); none was provided.")
 
-        monthly_prices = self.prices.resample('ME').last()
-
-        # Dollar-volume for the universe filter
-        daily_dvol       = self.prices * self.volumes
-        monthly_avg_dvol = daily_dvol.resample('ME').mean()
-
-        prices_ff = self.prices.ffill()
-        bench_ff  = self.benchmark.reindex(self.prices.index).ffill()
-
-        valid_universe = self.filter_universe(monthly_prices, monthly_avg_dvol, self.prices)
-
-        # E/P, point-in-time: latest quarterly result filed on/before each month-end (expires after results_max_age_days), TTM net profit / (month-end price x shares outstanding)
-        # ── Corporate-action mask (price side), in the spirit of the runner's mask_corporate_actions ───────────────────────────────────────────────
-        # A corporate-action "cliff" is a one-day move that matches a clean split/bonus (-33%, -50%, -60%, -67%, -75%, -80%, -90%, or a clean reverse-split jump) or a day the runner already
-        # NaN'd (move outside [-40%, +300%]).  Two uses:
-        #  (a) a split seen in the filings is restored to today's units ONLY if the price series was adjusted for it (no cliff in the prices around it); if the vendor left it unadjusted the
-        #      prices and the filings are already in the same units, so nothing is restored;
-        #  (b) a stock-month is excluded when a cliff occurred AFTER the latest filing used for it: the filed share count is then stale relative to the price.
-        px_ca = self.prices
-        r1 = px_ca.pct_change(fill_method=None)
-        masked_day = px_ca.isna() & px_ca.shift(1).notna() & px_ca.shift(-1).notna()
-        ratios_ca = (1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 10.0)
-        cliff_ca = masked_day.copy()
-        for c_ in ratios_ca:
-            cliff_ca |= (r1 - (1.0 / c_ - 1.0)).abs() <= self.ca_tol          # forward split / bonus: price falls to 1/c
-            cliff_ca |= (r1 - (c_ - 1.0)).abs() <= self.ca_tol * c_          # reverse split: price rises c-fold
-        R_ca, M_ca, D_ca = r1.values, masked_day.values, px_ca.index
-        col_ca = {s_: i_ for i_, s_ in enumerate(px_ca.columns)}
-        def cliff_checker(sym, a, b, ratio):
-            j = col_ca.get(sym)
-            if j is None or a is None or b is None:
-                return False
-            i0, i1 = D_ca.searchsorted(pd.Timestamp(a)), D_ca.searchsorted(pd.Timestamp(b), side='right')
-            if i1 <= i0:
-                return False
-            seg, msk = R_ca[i0:i1, j], M_ca[i0:i1, j]
-            if ratio >= 1.0:
-                return bool(msk.any() or np.nanmin(np.append(seg, 0.0)) <= -0.8 * (1.0 - 1.0 / ratio))
-            return bool(msk.any() or np.nanmax(np.append(seg, 0.0)) >= 0.8 * (1.0 / ratio - 1.0))
-        res = (load_results(symbols=list(self.prices.columns), cliff_checker=(cliff_checker if self.use_ca_mask else None), restore_units=self.restore_units, profit_basis=self.profit_basis)
+        if self.valuation_prices is None:
+            raise ValueError(
+                'CSM Value requires verified as-traded (unadjusted) daily closes '
+                'via valuation_prices_df. The supplied OHLCV may be back-adjusted; '
+                'multiplying it by filed share counts or future-inferred adjustments '
+                'does not establish a point-in-time market cap.'
+            )
+        if self.restore_units:
+            raise ValueError('Future-inferred share adjustments are not supported.')
+        res = (load_results(symbols=list(self.prices.columns), profit_basis=self.profit_basis)
                if self._results_in is None else self._results_in)
+        matched = self.prices.columns.intersection(pd.Index(res['symbol'].unique()), sort=False)
+        matched = matched.intersection(self.valuation_prices.columns, sort=False)
+        if matched.empty:
+            raise ValueError('No securities match fundamentals, OHLCV and verified valuation prices.')
+        for name in ('prices', 'volumes', 'highs', 'lows', 'opens'):
+            panel = getattr(self, name)
+            if not panel.empty:
+                setattr(self, name, panel.reindex(columns=matched))
+        monthly_prices = self.prices.resample('ME').last()
         idx = monthly_prices.index
-        npttm  = monthly_frame(res, 'np_ttm', idx, self.prices.columns, self.results_max_age_days)
-        shares = monthly_frame(res, 'shares_adj', idx, self.prices.columns, self.results_max_age_days)   # shares in today's (split-adjusted) units to match the split-adjusted prices
-        growth = monthly_frame(res, 'sg_np', idx, self.prices.columns, self.results_max_age_days)
-        ep = (npttm / (monthly_prices * shares)).replace([np.inf, -np.inf], np.nan)
+        # Month-end labels can fall on a weekend. Facts must be known on the
+        # actual last trading session, not on the later calendar label.
+        session_dates = pd.Series(self.prices.index, index=self.prices.index).resample('ME').last().reindex(idx)
+        usable = session_dates.notna()
+        actual = pd.DatetimeIndex(session_dates[usable].values)
+        def asof_month(col):
+            f = monthly_frame(res, col, actual, matched, self.results_max_age_days)
+            f.index = idx[usable]
+            return f.reindex(idx)
+        npttm = asof_month('np_ttm')
+        shares = asof_month('shares_adj')
+        growth = asof_month('sg_np')
+        price_raw = self.valuation_prices.reindex(index=self.prices.index, columns=matched)
+        # Do not fill stale prices from earlier sessions into the valuation.
+        valuation_month = price_raw.reindex(pd.DatetimeIndex(session_dates.values)).set_axis(idx)
+        daily_dvol = self.prices * self.volumes
+        monthly_avg_dvol = daily_dvol.resample('ME').mean()
+        eligible = npttm.notna() & shares.notna() & valuation_month.notna()
+        valid_universe = self.filter_universe(monthly_prices, monthly_avg_dvol, self.prices, eligible, valuation_month)
+        ep = (npttm / (valuation_month * shares)).replace([np.inf, -np.inf], np.nan)
+        prices_ff = self.prices.ffill()
+        bench_ff = self.benchmark.reindex(self.prices.index).ffill()
         ok = (npttm > 0) & ep.notna() & (ep <= self.max_ep)
-        self.ca_stale_mask = pd.DataFrame(False, index=idx, columns=self.prices.columns)
+        # A share count is measured at its period end. Compare the ratio of
+        # actual NSE and adjusted OHLCV closes at that period end and at the
+        # signal date: a change reveals an adjustment between those dates. A
+        # later adjustment changes both ratios equally and therefore cancels.
+        self.ca_stale_mask = pd.DataFrame(False, index=idx, columns=matched)
         if self.use_ca_mask:
-            filed_ns = monthly_frame(res.assign(filed_ns=res.filed.astype('int64').astype('float64')), 'filed_ns', idx, self.prices.columns, self.results_max_age_days)
-            cc = cliff_ca.fillna(False).astype('int32').cumsum().values
-            pos_me = D_ca.searchsorted(idx.values, side='right') - 1
-            Lns = filed_ns.values
-            valid_L = ~np.isnan(Lns)
-            L_dt = np.where(valid_L, Lns, 0).astype('int64').astype('datetime64[ns]')
-            pos_L = D_ca.searchsorted(L_dt.reshape(-1), side='right').reshape(Lns.shape) - 1
-            pos_L = np.clip(pos_L, 0, len(D_ca) - 1)
-            cols_ix = np.arange(cc.shape[1])[None, :].repeat(len(idx), axis=0)
-            stale = (cc[pos_me[:, None].repeat(cc.shape[1], axis=1), cols_ix] - cc[pos_L, cols_ix]) > 0
-            self.ca_stale_mask = pd.DataFrame(stale & valid_L, index=idx, columns=self.prices.columns)
+            adjusted_month = self.prices.reindex(pd.DatetimeIndex(session_dates.values)).set_axis(idx)
+            adjustment = (valuation_month / adjusted_month).replace([np.inf, -np.inf], np.nan)
+            periods = asof_month('period_end')
+            daily_ret = self.prices.pct_change(fill_method=None)
+            cliff = pd.DataFrame(False, index=self.prices.index, columns=matched)
+            for ratio in (1.5, 2.0, 2.5, 3.0, 4.0, 5.0, 10.0):
+                cliff |= (daily_ret - (1.0 / ratio - 1.0)).abs() <= self.ca_tol
+                cliff |= (daily_ret - (ratio - 1.0)).abs() <= self.ca_tol * ratio
+            for symbol in matched:
+                period = pd.to_datetime(periods[symbol])
+                period_month = period.dt.to_period('M').dt.to_timestamp('M')
+                period_adj = adjustment[symbol].reindex(pd.DatetimeIndex(period_month.values))
+                period_adj.index = idx
+                change = (adjustment[symbol] / period_adj - 1).abs()
+                missing_reference = period.notna() & (period_adj.isna() | adjustment[symbol].isna())
+                changed_units = change > self.ca_tol
+                event_dates = cliff.index[cliff[symbol].fillna(False)]
+                if len(event_dates):
+                    last_event = pd.Series(event_dates, index=event_dates).reindex(
+                        event_dates.union(actual), method='ffill').reindex(actual)
+                    last_event.index = idx[usable]
+                    changed_units.loc[usable] |= (last_event > period.loc[usable]).fillna(False)
+                self.ca_stale_mask[symbol] = (missing_reference | changed_units).fillna(False)
             ok &= ~self.ca_stale_mask
-            print(f"  [corporate-action mask] stock-months with a price cliff after the latest filing excluded: {int((self.ca_stale_mask & (npttm > 0)).sum().sum()):,}")
         if self.require_profit_growth:
             ok &= (growth > 0)
         if self.max_oneoff_share is not None:
-            oo = monthly_frame(res, 'oneoff_share', idx, self.prices.columns, self.results_max_age_days)
+            oo = asof_month('oneoff_share')
             ok &= (oo <= self.max_oneoff_share)          # NaN (no positive pre-tax profit) fails the test
         ep_unf = ep.where(ok)
         ep_masked = ep_unf.where(valid_universe)
@@ -341,13 +621,31 @@ class CSMValue:
         self._legs_unfiltered  = {'EP': ep_unf}
         self.factor_legs       = {'EP': ep_masked}
 
+        if self.ranking_mode == 'value_growth_pullback':
+            # Elendel-inspired relative-strength and trend-persistence legs,
+            # sampled at the actual last trading close of each month. Prices
+            # are forward-filled exactly as in the research comparison; the
+            # strategy does not assume an order can fill at a stale price.
+            rs_line = prices_ff.div(bench_ff, axis=0)
+            a3_daily = rs_line / rs_line.rolling(252, min_periods=200).max()
+            sma = prices_ff.rolling(50, min_periods=40).mean()
+            above = (prices_ff > sma).where(prices_ff.notna() & sma.notna()).astype(float)
+            q5_daily = above.rolling(126, min_periods=100).mean()
+            def at_sessions(frame):
+                return frame.reindex(actual).set_axis(idx[usable]).reindex(idx)
+            a3, q5 = at_sessions(a3_daily), at_sessions(q5_daily)
+            self.factors, pullback = value_growth_pullback_score(self.factors, growth, a3, q5)
+            self.factor_legs.update({'PROFIT_GROWTH': growth.where(ep_masked.notna()), 'PULLBACK': pullback})
+            self._legs_unfiltered.update({'PROFIT_GROWTH': growth, 'PULLBACK': pullback})
+
         # No absolute-momentum gate for a value strategy: a constant positive "return" keeps every ranked name eligible and the engine's bookkeeping unchanged.
         self.momentum_returns = valid_universe.astype(float).where(valid_universe)
 
         self._prepare_stop_indicators(monthly_prices)
         # 63-day median traded value (Rs), lagged one day, at each month-end: used by the optional capacity cap in get_positions()
         self._adv_monthly = ((self.prices * self.volumes).rolling(63, min_periods=21).median().shift(1).resample('ME').last().reindex(monthly_prices.index))
-        self.factors.dropna(how='all', inplace=True)
+        # Keep empty signal months: get_positions must emit zero targets
+        # rather than forward-fill an earlier portfolio indefinitely.
         self.momentum_returns.dropna(how='all', inplace=True)
 
         # ATR (Wilder EWM; True Range = max(H-L, |H-PrevC|, |L-PrevC|)), capped at its own rolling 75th percentile so a crash-day spike can't blow the chandelier open (1-day shift applied at point of use)
@@ -408,7 +706,7 @@ class CSMValue:
             self._monthly_lows  = monthly_prices.copy()
 
         # Primary entry/exit fill price; falls back to prev-close if no opens loaded
-        self._opens_ff   = self.opens.ffill() if not self.opens.empty else prices_ff.shift(1)
+        self._opens_ff   = self.opens if not self.opens.empty else pd.DataFrame(np.nan, index=prices_ff.index, columns=prices_ff.columns)
         self._open_proxy = prices_ff.shift(1)   # prev-close: gap-down fallback only
         self._prices_ff  = prices_ff
 
@@ -448,7 +746,7 @@ class CSMValue:
                 fill = curr_open if (not pd.isna(curr_open) and curr_open > 0
                                      and curr_open <= synthetic_stop) \
                        else synthetic_stop * (1.0 - self.stop_slippage_pct)
-                return True, float(fill), float(synthetic_stop), holding, 'FORCE_60'
+                return True, (np.nan if close_only else float(fill)), float(synthetic_stop), holding, 'FORCE_60'
 
         # Seed effective stop using old peak before updating it
         peak_hard      = peak_price * (1.0 - self.hard_stop_from_peak)
@@ -516,8 +814,8 @@ class CSMValue:
         _effective_cap = min(self.risk_pct_per_trade / self.hard_stop_from_entry, self.max_weight_per_stock)
         print(f"Generating Positions  "
               f"top_n={self.top_n}  buffer={self.buffer_ratio}  "
-              f"abs_momentum_gate=ON  max_wt={self.max_weight_per_stock:.0%} "
-              f"(risk-budget cap={_effective_cap:.1%} from {self.risk_pct_per_trade:.0%} risk / {self.hard_stop_from_entry:.0%} stop)")
+              f"abs_momentum_gate=OFF  max_wt={self.max_weight_per_stock:.0%} "
+              f"(risk-budget cap={_effective_cap:.1%} from {self.risk_pct_per_trade:.2%} risk / {self.hard_stop_from_entry:.0%} stop)")
 
         # Volatility for inverse-vol weighting (shift 1 before resample)
         daily_ret   = self.prices.pct_change(fill_method=None)
@@ -592,7 +890,8 @@ class CSMValue:
                     else:
                         break   # this and all weaker candidates need an even bigger gap
             else:
-                current_selection += [s for s, r in new_candidates]
+                free_slots = max(0, self.top_n - len(current_selection))
+                current_selection += [s for s, r in sorted(new_candidates, key=lambda x: (x[1], x[0]))[:free_slots]]
 
             prev_held = set(current_selection)
 
@@ -611,12 +910,15 @@ class CSMValue:
             # max_weight_per_stock remains an outer safety ceiling only (see POSITION_SIZING_
             # BREAKOUT_VS_MOMENTUM.md Fix 1 + Fix 2).
             cap = min(self.risk_pct_per_trade / self.hard_stop_from_entry, self.max_weight_per_stock)
-            for _ in range(2):
+            if self.fill_weight_caps:
+                raw_w = capped_inverse_vol_weights(sel_vols, cap)
+            else:
+                for _ in range(2):
+                    raw_w = raw_w.clip(upper=cap)
+                    total = raw_w.sum()
+                    if total > 0:
+                        raw_w = raw_w / total
                 raw_w = raw_w.clip(upper=cap)
-                total = raw_w.sum()
-                if total > 0:
-                    raw_w = raw_w / total   # renormalize
-            raw_w = raw_w.clip(upper=cap)   # final safety clip
 
             # Capacity-aware sizing (optional): position <= max_adv_participation x the name's median daily traded value, for a book of book_size_cr crore.
             # The weight removed here is NOT redistributed; it stays in cash (liquid fund).

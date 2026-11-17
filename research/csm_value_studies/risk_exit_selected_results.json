@@ -1,0 +1,567 @@
+{
+  "warning": "All pre-2025 data has been examined; these are exploratory historical comparisons, not independent validation.",
+  "cases": {
+    "baseline": {},
+    "weight_8pct": {
+      "max_weight_per_stock": 0.08,
+      "risk_pct_per_trade": 0.012
+    },
+    "weight_10pct": {
+      "max_weight_per_stock": 0.1,
+      "risk_pct_per_trade": 0.015
+    },
+    "trailing_12pct": {
+      "hard_stop_from_peak": 0.12
+    },
+    "trailing_16pct": {
+      "hard_stop_from_peak": 0.16
+    },
+    "short_cooldown": {
+      "stop_cooldown_days": 5,
+      "cooldown_floor_days": 2,
+      "cooldown_cap_days": 15
+    },
+    "bear_full_exposure": {
+      "leverage_bear": 1.0
+    },
+    "bear_half_exposure": {
+      "leverage_bear": 0.5
+    },
+    "no_rebalance_delay": {
+      "rebalance_exit_buffer_months": 0
+    },
+    "monthly_sma50_gate": {
+      "_monthly_sma50_gate": true
+    },
+    "combined_8_12_bear50": {
+      "max_weight_per_stock": 0.08,
+      "risk_pct_per_trade": 0.012,
+      "hard_stop_from_peak": 0.12,
+      "leverage_bear": 0.5
+    },
+    "combined_10_12_bear50": {
+      "max_weight_per_stock": 0.1,
+      "risk_pct_per_trade": 0.015,
+      "hard_stop_from_peak": 0.12,
+      "leverage_bear": 0.5
+    },
+    "combined_10_16_bear50": {
+      "max_weight_per_stock": 0.1,
+      "risk_pct_per_trade": 0.015,
+      "hard_stop_from_peak": 0.16,
+      "leverage_bear": 0.5
+    }
+  },
+  "windows": {
+    "full": [
+      "2019-06-03",
+      "2024-12-31"
+    ],
+    "development": [
+      "2019-06-03",
+      "2021-12-31"
+    ],
+    "previously_examined": [
+      "2022-01-03",
+      "2024-12-31"
+    ],
+    "year_2024": [
+      "2024-01-01",
+      "2024-12-31"
+    ]
+  },
+  "results": [
+    {
+      "ranking": "value",
+      "case": "combined_8_12_bear50",
+      "windows": {
+        "full": {
+          "cagr": 0.3148314929974654,
+          "max_drawdown": -0.14158189629997175,
+          "sharpe": 2.0267595027931233,
+          "calmar": 2.2236705484607087,
+          "avg_exposure": 0.5223445782197811,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.08,
+          "turnover_per_year": 9.62654696900728,
+          "trades_entered": 381,
+          "median_holding_days": 36.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 307,
+            "REBALANCE": 64,
+            "END_OF_PERIOD": 10
+          },
+          "double_cost_cagr": 0.27742586645881184,
+          "double_cost_max_drawdown": -0.1499324316349545
+        },
+        "development": {
+          "cagr": 0.2494067546645915,
+          "max_drawdown": -0.14158189629997175,
+          "sharpe": 1.7308037391497966,
+          "calmar": 1.7615723562295673,
+          "avg_exposure": 0.4284243253505226,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.08,
+          "turnover_per_year": 9.630207907206861,
+          "trades_entered": 187,
+          "median_holding_days": 34.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 160,
+            "REBALANCE": 27
+          },
+          "double_cost_cagr": 0.21381835132184523,
+          "double_cost_max_drawdown": -0.1499324316349545
+        },
+        "previously_examined": {
+          "cagr": 0.3749924222458838,
+          "max_drawdown": -0.0993356976461599,
+          "sharpe": 2.264463794935215,
+          "calmar": 3.7750016472590824,
+          "avg_exposure": 0.6034977442252506,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.08,
+          "turnover_per_year": 9.649814157591925,
+          "trades_entered": 194,
+          "median_holding_days": 39.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 147,
+            "REBALANCE": 37,
+            "END_OF_PERIOD": 10
+          },
+          "double_cost_cagr": 0.3358112311495376,
+          "double_cost_max_drawdown": -0.10341802898720975
+        },
+        "year_2024": {
+          "cagr": 0.22383058346566753,
+          "max_drawdown": -0.09093237770859319,
+          "sharpe": 1.3696578227127088,
+          "calmar": 2.461505891586461,
+          "avg_exposure": 0.562254486122984,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.08,
+          "turnover_per_year": 9.94272787407573,
+          "trades_entered": 66,
+          "median_holding_days": 42.5,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 47,
+            "END_OF_PERIOD": 10,
+            "REBALANCE": 9
+          },
+          "double_cost_cagr": 0.18794537946027345,
+          "double_cost_max_drawdown": -0.09629143520101502
+        }
+      }
+    },
+    {
+      "ranking": "value",
+      "case": "combined_10_12_bear50",
+      "windows": {
+        "full": {
+          "cagr": 0.34395789599108806,
+          "max_drawdown": -0.13839645203441409,
+          "sharpe": 2.1264503429052732,
+          "calmar": 2.4853086255820953,
+          "avg_exposure": 0.5401625791723612,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.1,
+          "turnover_per_year": 10.663184216291922,
+          "trades_entered": 381,
+          "median_holding_days": 36.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 307,
+            "REBALANCE": 64,
+            "END_OF_PERIOD": 10
+          },
+          "double_cost_cagr": 0.3016803459886175,
+          "double_cost_max_drawdown": -0.14691037533592555
+        },
+        "development": {
+          "cagr": 0.2666015550330194,
+          "max_drawdown": -0.13839645203441409,
+          "sharpe": 1.7964889781810152,
+          "calmar": 1.9263611972272632,
+          "avg_exposure": 0.43928434046018894,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.09851698823605597,
+          "turnover_per_year": 10.550191963810178,
+          "trades_entered": 187,
+          "median_holding_days": 34.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 160,
+            "REBALANCE": 27
+          },
+          "double_cost_cagr": 0.2271393580272303,
+          "double_cost_max_drawdown": -0.14691037533592555
+        },
+        "previously_examined": {
+          "cagr": 0.41555544729575744,
+          "max_drawdown": -0.1092518383614991,
+          "sharpe": 2.3895313484762934,
+          "calmar": 3.803647183681637,
+          "avg_exposure": 0.6273278944525963,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.1,
+          "turnover_per_year": 10.789834037414227,
+          "trades_entered": 194,
+          "median_holding_days": 39.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 147,
+            "REBALANCE": 37,
+            "END_OF_PERIOD": 10
+          },
+          "double_cost_cagr": 0.3705376191935792,
+          "double_cost_max_drawdown": -0.11646455631968533
+        },
+        "year_2024": {
+          "cagr": 0.26620555086085274,
+          "max_drawdown": -0.09667103661419985,
+          "sharpe": 1.6128401962785865,
+          "calmar": 2.7537260402331327,
+          "avg_exposure": 0.5538108554478537,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.09253943363704704,
+          "turnover_per_year": 10.615975043847753,
+          "trades_entered": 66,
+          "median_holding_days": 42.5,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 47,
+            "END_OF_PERIOD": 10,
+            "REBALANCE": 9
+          },
+          "double_cost_cagr": 0.22659612352600633,
+          "double_cost_max_drawdown": -0.10223850375346821
+        }
+      }
+    },
+    {
+      "ranking": "value",
+      "case": "combined_10_16_bear50",
+      "windows": {
+        "full": {
+          "cagr": 0.3274601517338447,
+          "max_drawdown": -0.15605886466830587,
+          "sharpe": 2.052303554787566,
+          "calmar": 2.09831176479364,
+          "avg_exposure": 0.5419363730878407,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.1,
+          "turnover_per_year": 8.561183433442162,
+          "trades_entered": 284,
+          "median_holding_days": 58.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 190,
+            "REBALANCE": 84,
+            "END_OF_PERIOD": 10
+          },
+          "double_cost_cagr": 0.29385366525211243,
+          "double_cost_max_drawdown": -0.16480772923759213
+        },
+        "development": {
+          "cagr": 0.281732689649012,
+          "max_drawdown": -0.15605886466830587,
+          "sharpe": 1.8854099196888023,
+          "calmar": 1.8052975731165197,
+          "avg_exposure": 0.4431921981094954,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.1,
+          "turnover_per_year": 8.150976059369015,
+          "trades_entered": 136,
+          "median_holding_days": 58.5,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 94,
+            "REBALANCE": 42
+          },
+          "double_cost_cagr": 0.2508117886762298,
+          "double_cost_max_drawdown": -0.16480772923759213
+        },
+        "previously_examined": {
+          "cagr": 0.36924120086955736,
+          "max_drawdown": -0.11894668023737875,
+          "sharpe": 2.1869693165912145,
+          "calmar": 3.10425814434394,
+          "avg_exposure": 0.6272577194352131,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.1,
+          "turnover_per_year": 8.938218105607975,
+          "trades_entered": 148,
+          "median_holding_days": 57.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 96,
+            "REBALANCE": 42,
+            "END_OF_PERIOD": 10
+          },
+          "double_cost_cagr": 0.3330779910174979,
+          "double_cost_max_drawdown": -0.12325475343683545
+        },
+        "year_2024": {
+          "cagr": 0.3024323847004877,
+          "max_drawdown": -0.10210264751776166,
+          "sharpe": 1.7916382836153482,
+          "calmar": 2.9620425332053895,
+          "avg_exposure": 0.561699721043674,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.08940232096701865,
+          "turnover_per_year": 8.578757575790066,
+          "trades_entered": 51,
+          "median_holding_days": 55.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 29,
+            "REBALANCE": 12,
+            "END_OF_PERIOD": 10
+          },
+          "double_cost_cagr": 0.2694240112673205,
+          "double_cost_max_drawdown": -0.10603962674640921
+        }
+      }
+    },
+    {
+      "ranking": "value_growth_pullback",
+      "case": "combined_8_12_bear50",
+      "windows": {
+        "full": {
+          "cagr": 0.31727332404672803,
+          "max_drawdown": -0.13516918498258756,
+          "sharpe": 2.0454484835227404,
+          "calmar": 2.347231168757872,
+          "avg_exposure": 0.5180110281086319,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.08,
+          "turnover_per_year": 10.710935410276537,
+          "trades_entered": 415,
+          "median_holding_days": 36.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 312,
+            "REBALANCE": 91,
+            "END_OF_PERIOD": 10,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.2756711987310472,
+          "double_cost_max_drawdown": -0.15561511111648818
+        },
+        "development": {
+          "cagr": 0.3129816583818634,
+          "max_drawdown": -0.13516918498258756,
+          "sharpe": 2.1181296201746878,
+          "calmar": 2.315480842931631,
+          "avg_exposure": 0.45362830243617563,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.08,
+          "turnover_per_year": 9.908302208846274,
+          "trades_entered": 188,
+          "median_holding_days": 34.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 154,
+            "REBALANCE": 32,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.274585527692099,
+          "double_cost_max_drawdown": -0.15561511111648818
+        },
+        "previously_examined": {
+          "cagr": 0.3219828463797685,
+          "max_drawdown": -0.12916442738174316,
+          "sharpe": 1.9910888535279996,
+          "calmar": 2.4928136399982166,
+          "avg_exposure": 0.5736418624043477,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.08,
+          "turnover_per_year": 11.432082054355346,
+          "trades_entered": 227,
+          "median_holding_days": 41.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 158,
+            "REBALANCE": 59,
+            "END_OF_PERIOD": 10
+          },
+          "double_cost_cagr": 0.27746102590905286,
+          "double_cost_max_drawdown": -0.13743209966851944
+        },
+        "year_2024": {
+          "cagr": 0.25497970733251774,
+          "max_drawdown": -0.12241446506197529,
+          "sharpe": 1.543380297621551,
+          "calmar": 2.0829213868101952,
+          "avg_exposure": 0.5743670373510368,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.08,
+          "turnover_per_year": 11.610003990627524,
+          "trades_entered": 77,
+          "median_holding_days": 36.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 52,
+            "REBALANCE": 15,
+            "END_OF_PERIOD": 10
+          },
+          "double_cost_cagr": 0.21206472901897966,
+          "double_cost_max_drawdown": -0.1273885013854955
+        }
+      }
+    },
+    {
+      "ranking": "value_growth_pullback",
+      "case": "combined_10_12_bear50",
+      "windows": {
+        "full": {
+          "cagr": 0.33200830117077285,
+          "max_drawdown": -0.1408479014733387,
+          "sharpe": 2.078996510596289,
+          "calmar": 2.3572115572742076,
+          "avg_exposure": 0.5231767463781452,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.1,
+          "turnover_per_year": 11.771730143087945,
+          "trades_entered": 415,
+          "median_holding_days": 36.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 312,
+            "REBALANCE": 91,
+            "END_OF_PERIOD": 10,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.28586776927095925,
+          "double_cost_max_drawdown": -0.15434968048142128
+        },
+        "development": {
+          "cagr": 0.33582039354888105,
+          "max_drawdown": -0.12820945522559835,
+          "sharpe": 2.204889110074883,
+          "calmar": 2.619310665956492,
+          "avg_exposure": 0.4622546064747526,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.1,
+          "turnover_per_year": 10.924829850133221,
+          "trades_entered": 188,
+          "median_holding_days": 34.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 154,
+            "REBALANCE": 32,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.29284148739466653,
+          "double_cost_max_drawdown": -0.13992006991834893
+        },
+        "previously_examined": {
+          "cagr": 0.32977755396068886,
+          "max_drawdown": -0.14084790147333937,
+          "sharpe": 1.9837977993756353,
+          "calmar": 2.341373570433432,
+          "avg_exposure": 0.5758174110053027,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.1,
+          "turnover_per_year": 12.533939901910099,
+          "trades_entered": 227,
+          "median_holding_days": 41.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 158,
+            "REBALANCE": 59,
+            "END_OF_PERIOD": 10
+          },
+          "double_cost_cagr": 0.28077125274252857,
+          "double_cost_max_drawdown": -0.15434968048142017
+        },
+        "year_2024": {
+          "cagr": 0.2855630518045438,
+          "max_drawdown": -0.11394668164442945,
+          "sharpe": 1.6761469415477648,
+          "calmar": 2.5061111713252266,
+          "avg_exposure": 0.5830523156662034,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.1,
+          "turnover_per_year": 12.66711199012476,
+          "trades_entered": 77,
+          "median_holding_days": 36.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 52,
+            "REBALANCE": 15,
+            "END_OF_PERIOD": 10
+          },
+          "double_cost_cagr": 0.23767898002748877,
+          "double_cost_max_drawdown": -0.11969991322061435
+        }
+      }
+    },
+    {
+      "ranking": "value_growth_pullback",
+      "case": "combined_10_16_bear50",
+      "windows": {
+        "full": {
+          "cagr": 0.3313902042103789,
+          "max_drawdown": -0.1578111449890901,
+          "sharpe": 2.093694312137238,
+          "calmar": 2.099916354027396,
+          "avg_exposure": 0.5213105682729172,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.1,
+          "turnover_per_year": 9.804923954798122,
+          "trades_entered": 327,
+          "median_holding_days": 53.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 191,
+            "REBALANCE": 124,
+            "END_OF_PERIOD": 10,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.2928881529051732,
+          "double_cost_max_drawdown": -0.1658800810112505
+        },
+        "development": {
+          "cagr": 0.32814955353212394,
+          "max_drawdown": -0.13308200965338735,
+          "sharpe": 2.2109305707700018,
+          "calmar": 2.465769448378416,
+          "avg_exposure": 0.45617192841258214,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.1,
+          "turnover_per_year": 9.08548344045175,
+          "trades_entered": 145,
+          "median_holding_days": 51.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 94,
+            "REBALANCE": 49,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.29253516911215316,
+          "double_cost_max_drawdown": -0.14136108263406333
+        },
+        "previously_examined": {
+          "cagr": 0.33523805972752996,
+          "max_drawdown": -0.15781114498908988,
+          "sharpe": 2.0099385774269516,
+          "calmar": 2.124299014183734,
+          "avg_exposure": 0.5775945612612553,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.1,
+          "turnover_per_year": 10.451884372344944,
+          "trades_entered": 182,
+          "median_holding_days": 53.0,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 97,
+            "REBALANCE": 75,
+            "END_OF_PERIOD": 10
+          },
+          "double_cost_cagr": 0.2941045545974752,
+          "double_cost_max_drawdown": -0.16588008101125074
+        },
+        "year_2024": {
+          "cagr": 0.3386539982882468,
+          "max_drawdown": -0.09966977595826554,
+          "sharpe": 1.9257755103645524,
+          "calmar": 3.3977602039564183,
+          "avg_exposure": 0.5930303707444643,
+          "max_actual_positions": 10,
+          "max_actual_weight": 0.09931065863696754,
+          "turnover_per_year": 9.892973033598029,
+          "trades_entered": 58,
+          "median_holding_days": 56.5,
+          "exit_counts_by_entry_cohort": {
+            "STOP_HIT": 29,
+            "REBALANCE": 19,
+            "END_OF_PERIOD": 10
+          },
+          "double_cost_cagr": 0.2995908367723663,
+          "double_cost_max_drawdown": -0.10293725120741493
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "candidate": "value_growth_pullback",
+  "cutoff": "2024-12-31",
+  "code_sha256": {
+    "csm_value/csm_value_strategy.py": "9870455e6f7d18155279986eb94939d58318759e1db1bf6ca2697c83a53dd213",
+    "csm_value/fundamentals_loader.py": "4a2944dfc3e2e1d2a3cc57d3f9848adef7bf088b06b03275a8beca978ae83287",
+    "csm_value/run_csm_value_backtest.py": "7cee2897aded74f81815693ba8a4968db01de02e6e03939973e5cc6fd232c4da",
+    "Old_live_strategies/csm_absolute.py": "0127d724d81cac2fb30728e08c27fb2521fa09dda7d87a2cbe099add9ce10190",
+    "Old_live_strategies/run_csm_absolute.py": "552fbdf5b6bc24bd0e9f5c8222bafa06a4bbf2ee4530014637a08a94dc84bc4d"
+  },
+  "scenarios": [
+    "reference",
+    "double_cost",
+    "zero_cash",
+    "tighter_close_stops",
+    "absolute_signal_gate"
+  ],
+  "data_sources": [
+    "fundamentals",
+    "upstox_data_folder/ohlcv_data",
+    "csm_value/data/nse_monthly_prices.csv"
+  ],
+  "warning": "Same 2019\u20132024 data used to choose the candidate; no genuinely independent market holdout."
+}

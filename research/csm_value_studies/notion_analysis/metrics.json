@@ -1,0 +1,2942 @@
+{
+  "results": [
+    {
+      "version": "normal",
+      "case": "fundamental",
+      "first_signal": "2019-07-31",
+      "windows": {
+        "full": {
+          "cagr": 0.36510478635164545,
+          "max_drawdown": -0.24750101660000434,
+          "sharpe": 1.841348666234161,
+          "exposure": 0.7353543795444979,
+          "annual_turnover": 7.360579997765123,
+          "max_positions": 20,
+          "closed": 392,
+          "winners": 207,
+          "losers": 184,
+          "flat": 1,
+          "win_rate": 0.5280612244897959,
+          "loss_rate": 0.46938775510204084,
+          "mean_win_pct": 40.08270821256038,
+          "mean_loss_pct": -12.961264130434781,
+          "median_pnl_pct": 2.07935,
+          "mean_holding_days": 92.59438775510205,
+          "median_holding_days": 84.0,
+          "exit_counts": {
+            "STOP_HIT": 268,
+            "REBALANCE": 123,
+            "CRASH_GUARD": 1
+          }
+        },
+        "development": {
+          "cagr": 0.3176138731493028,
+          "max_drawdown": -0.24750101660000434,
+          "sharpe": 1.6489349008663179,
+          "exposure": 0.6418044201062342,
+          "annual_turnover": 7.395595372981539,
+          "max_positions": 20,
+          "closed": 178,
+          "winners": 91,
+          "losers": 86,
+          "flat": 1,
+          "win_rate": 0.5112359550561798,
+          "loss_rate": 0.48314606741573035,
+          "mean_win_pct": 40.53105054945055,
+          "mean_loss_pct": -13.509080232558139,
+          "median_pnl_pct": 1.4113,
+          "mean_holding_days": 83.53932584269663,
+          "median_holding_days": 88.5,
+          "exit_counts": {
+            "STOP_HIT": 116,
+            "REBALANCE": 61,
+            "CRASH_GUARD": 1
+          }
+        },
+        "previously_examined_2022_2024": {
+          "cagr": 0.40860861170204443,
+          "max_drawdown": -0.17558086867910327,
+          "sharpe": 2.004205547858309,
+          "exposure": 0.8161875881035361,
+          "annual_turnover": 7.350604935129655,
+          "max_positions": 20,
+          "closed": 194,
+          "winners": 104,
+          "losers": 90,
+          "flat": 0,
+          "win_rate": 0.5360824742268041,
+          "loss_rate": 0.4639175257731959,
+          "mean_win_pct": 38.97787884615384,
+          "mean_loss_pct": -12.991657777777778,
+          "median_pnl_pct": 2.1309,
+          "mean_holding_days": 99.14432989690722,
+          "median_holding_days": 78.0,
+          "exit_counts": {
+            "STOP_HIT": 137,
+            "REBALANCE": 57
+          }
+        },
+        "year_2024": {
+          "cagr": 0.2732450365931278,
+          "max_drawdown": -0.13749153338865128,
+          "sharpe": 1.3527247496652535,
+          "exposure": 0.8186387566643026,
+          "annual_turnover": 8.03986530634566,
+          "max_positions": 20,
+          "closed": 56,
+          "winners": 32,
+          "losers": 24,
+          "flat": 0,
+          "win_rate": 0.5714285714285714,
+          "loss_rate": 0.42857142857142855,
+          "mean_win_pct": 28.891990625,
+          "mean_loss_pct": -14.43175416666667,
+          "median_pnl_pct": 3.30925,
+          "mean_holding_days": 89.19642857142857,
+          "median_holding_days": 78.0,
+          "exit_counts": {
+            "STOP_HIT": 43,
+            "REBALANCE": 13
+          }
+        }
+      },
+      "annual_returns": {
+        "2019": 0.05941018392443276,
+        "2020": 0.2652717057170906,
+        "2021": 0.5194708161538033,
+        "2022": 0.240349264438098,
+        "2023": 0.7654953773118227,
+        "2024": 0.27303452951964724
+      },
+      "trade_groups": {
+        "Exit_Reason": [
+          {
+            "group": "STOP_HIT",
+            "n": 268,
+            "win_rate": 0.373134328358209,
+            "mean_pnl_pct": 2.528137686567164,
+            "median_pnl_pct": -8.8889,
+            "mean_days": 70.55597014925372
+          },
+          {
+            "group": "REBALANCE",
+            "n": 123,
+            "win_rate": 0.8617886178861789,
+            "mean_pnl_pct": 42.536913821138214,
+            "median_pnl_pct": 23.2678,
+            "mean_days": 141.35772357723576
+          },
+          {
+            "group": "CRASH_GUARD",
+            "n": 1,
+            "win_rate": 1.0,
+            "mean_pnl_pct": 2.6667,
+            "median_pnl_pct": 2.6667,
+            "mean_days": 1.0
+          }
+        ],
+        "Exit_Detail": [
+          {
+            "group": "PEAK_HARD",
+            "n": 174,
+            "win_rate": 0.5747126436781609,
+            "mean_pnl_pct": 13.26402643678161,
+            "median_pnl_pct": 4.0166,
+            "mean_days": 93.37931034482759
+          },
+          {
+            "group": "ENTRY_HARD",
+            "n": 94,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -17.34467765957447,
+            "median_pnl_pct": -15.855550000000001,
+            "mean_days": 28.30851063829787
+          },
+          {
+            "group": "SIGNAL_DROP",
+            "n": 92,
+            "win_rate": 0.8586956521739131,
+            "mean_pnl_pct": 35.638698913043484,
+            "median_pnl_pct": 22.4175,
+            "mean_days": 140.34782608695653
+          },
+          {
+            "group": "RANK_DECAY",
+            "n": 31,
+            "win_rate": 0.8709677419354839,
+            "mean_pnl_pct": 63.009035483870974,
+            "median_pnl_pct": 30.7563,
+            "mean_days": 144.3548387096774
+          },
+          {
+            "group": "BENCH_PANIC",
+            "n": 1,
+            "win_rate": 1.0,
+            "mean_pnl_pct": 2.6667,
+            "median_pnl_pct": 2.6667,
+            "mean_days": 1.0
+          }
+        ],
+        "Regime_At_Entry": [
+          {
+            "group": "BULL",
+            "n": 219,
+            "win_rate": 0.5159817351598174,
+            "mean_pnl_pct": 17.830005479452055,
+            "median_pnl_pct": 1.1277,
+            "mean_days": 97.22374429223744
+          },
+          {
+            "group": "BEAR",
+            "n": 104,
+            "win_rate": 0.5384615384615384,
+            "mean_pnl_pct": 13.360033653846152,
+            "median_pnl_pct": 3.2629,
+            "mean_days": 86.6826923076923
+          },
+          {
+            "group": "HIGH_VOL",
+            "n": 69,
+            "win_rate": 0.5507246376811594,
+            "mean_pnl_pct": 8.957004347826086,
+            "median_pnl_pct": 1.7396,
+            "mean_days": 86.81159420289855
+          }
+        ],
+        "holding_bands": [
+          {
+            "group": "1\u201330",
+            "n": 83,
+            "win_rate": 0.024096385542168676,
+            "mean_pnl_pct": -15.641904819277105
+          },
+          {
+            "group": "31\u201390",
+            "n": 126,
+            "win_rate": 0.42063492063492064,
+            "mean_pnl_pct": 2.7522444444444445
+          },
+          {
+            "group": "91\u2013180",
+            "n": 138,
+            "win_rate": 0.8043478260869565,
+            "mean_pnl_pct": 23.202590579710144
+          },
+          {
+            "group": "181\u2013365",
+            "n": 44,
+            "win_rate": 0.9090909090909091,
+            "mean_pnl_pct": 82.5246590909091
+          },
+          {
+            "group": ">365",
+            "n": 1,
+            "win_rate": 1.0,
+            "mean_pnl_pct": 30.7008
+          }
+        ],
+        "best": [
+          {
+            "Ticker": "GOODLUCK",
+            "Entry_Date": "2021-01-25T00:00:00.000",
+            "Exit_Date": "2021-08-02T00:00:00.000",
+            "PnL_Pct": 315.8708,
+            "Holding_Days": 189,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "ESTER",
+            "Entry_Date": "2020-06-01T00:00:00.000",
+            "Exit_Date": "2021-01-01T00:00:00.000",
+            "PnL_Pct": 287.2375,
+            "Holding_Days": 214,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "DALMIASUG",
+            "Entry_Date": "2020-09-01T00:00:00.000",
+            "Exit_Date": "2021-07-01T00:00:00.000",
+            "PnL_Pct": 255.7911,
+            "Holding_Days": 303,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "RECLTD",
+            "Entry_Date": "2022-12-22T00:00:00.000",
+            "Exit_Date": "2023-12-01T00:00:00.000",
+            "PnL_Pct": 218.0108,
+            "Holding_Days": 344,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "PFC",
+            "Entry_Date": "2023-04-03T00:00:00.000",
+            "Exit_Date": "2024-03-19T00:00:00.000",
+            "PnL_Pct": 207.5851,
+            "Holding_Days": 351,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "STEELXIND",
+            "Entry_Date": "2021-10-26T00:00:00.000",
+            "Exit_Date": "2022-02-01T00:00:00.000",
+            "PnL_Pct": 203.8462,
+            "Holding_Days": 98,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "NAHARPOLY",
+            "Entry_Date": "2021-02-01T00:00:00.000",
+            "Exit_Date": "2021-08-02T00:00:00.000",
+            "PnL_Pct": 152.1253,
+            "Holding_Days": 182,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "DJML",
+            "Entry_Date": "2024-03-01T00:00:00.000",
+            "Exit_Date": "2024-11-01T00:00:00.000",
+            "PnL_Pct": 143.2191,
+            "Holding_Days": 245,
+            "Exit_Reason": "REBALANCE"
+          }
+        ],
+        "worst": [
+          {
+            "Ticker": "JKIL",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -34.1176,
+            "Holding_Days": 11,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "DECCANCE",
+            "Entry_Date": "2020-02-11T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -33.7879,
+            "Holding_Days": 31,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "MANAKSIA",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-11T00:00:00.000",
+            "PnL_Pct": -33.7121,
+            "Holding_Days": 9,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "OIL",
+            "Entry_Date": "2022-07-01T00:00:00.000",
+            "Exit_Date": "2022-07-07T00:00:00.000",
+            "PnL_Pct": -29.117,
+            "Holding_Days": 6,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "EIDPARRY",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -28.4789,
+            "Holding_Days": 11,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "RAMKY",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -26.5709,
+            "Holding_Days": 11,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "DATAMATICS",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-11T00:00:00.000",
+            "PnL_Pct": -26.4943,
+            "Holding_Days": 9,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "RAMKY",
+            "Entry_Date": "2024-02-08T00:00:00.000",
+            "Exit_Date": "2024-02-14T00:00:00.000",
+            "PnL_Pct": -24.0137,
+            "Holding_Days": 6,
+            "Exit_Reason": "STOP_HIT"
+          }
+        ]
+      }
+    },
+    {
+      "version": "normal",
+      "case": "pullback_common",
+      "first_signal": "2019-07-31",
+      "windows": {
+        "full": {
+          "cagr": 0.21502227761121162,
+          "max_drawdown": -0.24370058609808276,
+          "sharpe": 1.2999641096049706,
+          "exposure": 0.7672813834596879,
+          "annual_turnover": 8.074179555868081,
+          "max_positions": 20,
+          "closed": 450,
+          "winners": 215,
+          "losers": 234,
+          "flat": 1,
+          "win_rate": 0.4777777777777778,
+          "loss_rate": 0.52,
+          "mean_win_pct": 28.53594976744186,
+          "mean_loss_pct": -12.990928632478633,
+          "median_pnl_pct": -1.0699,
+          "mean_holding_days": 81.47333333333333,
+          "median_holding_days": 82.0,
+          "exit_counts": {
+            "STOP_HIT": 259,
+            "REBALANCE": 189,
+            "CRASH_GUARD": 2
+          }
+        },
+        "development": {
+          "cagr": 0.26940950716063594,
+          "max_drawdown": -0.24370058609808276,
+          "sharpe": 1.5644098926968835,
+          "exposure": 0.6749547008795721,
+          "annual_turnover": 7.770595038221906,
+          "max_positions": 20,
+          "closed": 195,
+          "winners": 98,
+          "losers": 97,
+          "flat": 0,
+          "win_rate": 0.5025641025641026,
+          "loss_rate": 0.49743589743589745,
+          "mean_win_pct": 30.20224489795918,
+          "mean_loss_pct": -14.528062886597938,
+          "median_pnl_pct": 0.8177,
+          "mean_holding_days": 78.8051282051282,
+          "median_holding_days": 82.0,
+          "exit_counts": {
+            "STOP_HIT": 118,
+            "REBALANCE": 75,
+            "CRASH_GUARD": 2
+          }
+        },
+        "previously_examined_2022_2024": {
+          "cagr": 0.17064765872997278,
+          "max_drawdown": -0.22688300740574607,
+          "sharpe": 1.0694271548070373,
+          "exposure": 0.8470576017859788,
+          "annual_turnover": 8.357984820543562,
+          "max_positions": 20,
+          "closed": 235,
+          "winners": 108,
+          "losers": 126,
+          "flat": 1,
+          "win_rate": 0.4595744680851064,
+          "loss_rate": 0.5361702127659574,
+          "mean_win_pct": 26.58989074074074,
+          "mean_loss_pct": -12.159666666666666,
+          "median_pnl_pct": -1.7145,
+          "mean_holding_days": 83.52765957446809,
+          "median_holding_days": 82.0,
+          "exit_counts": {
+            "STOP_HIT": 128,
+            "REBALANCE": 107
+          }
+        },
+        "year_2024": {
+          "cagr": 0.1741467161358492,
+          "max_drawdown": -0.13740405197604244,
+          "sharpe": 1.022650747416841,
+          "exposure": 0.9237867768530115,
+          "annual_turnover": 8.331560179905756,
+          "max_positions": 20,
+          "closed": 65,
+          "winners": 29,
+          "losers": 36,
+          "flat": 0,
+          "win_rate": 0.4461538461538462,
+          "loss_rate": 0.5538461538461539,
+          "mean_win_pct": 22.890627586206897,
+          "mean_loss_pct": -13.44426111111111,
+          "median_pnl_pct": -7.19,
+          "mean_holding_days": 82.67692307692307,
+          "median_holding_days": 79.0,
+          "exit_counts": {
+            "STOP_HIT": 34,
+            "REBALANCE": 31
+          }
+        }
+      },
+      "annual_returns": {
+        "2019": 0.1366207362174754,
+        "2020": 0.23522427318912187,
+        "2021": 0.3177507014920806,
+        "2022": 0.08037244905392993,
+        "2023": 0.2633255211055243,
+        "2024": 0.17401770235369973
+      },
+      "trade_groups": {
+        "Exit_Reason": [
+          {
+            "group": "STOP_HIT",
+            "n": 259,
+            "win_rate": 0.23166023166023167,
+            "mean_pnl_pct": -5.750195752895753,
+            "median_pnl_pct": -13.8122,
+            "mean_days": 59.316602316602314
+          },
+          {
+            "group": "REBALANCE",
+            "n": 189,
+            "win_rate": 0.8201058201058201,
+            "mean_pnl_pct": 24.47663915343915,
+            "median_pnl_pct": 16.8007,
+            "mean_days": 112.53968253968254
+          },
+          {
+            "group": "CRASH_GUARD",
+            "n": 2,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -20.7161,
+            "median_pnl_pct": -20.7161,
+            "mean_days": 15.0
+          }
+        ],
+        "Exit_Detail": [
+          {
+            "group": "PEAK_HARD",
+            "n": 130,
+            "win_rate": 0.46153846153846156,
+            "mean_pnl_pct": 5.683656153846154,
+            "median_pnl_pct": -1.6487500000000002,
+            "mean_days": 80.11538461538461
+          },
+          {
+            "group": "ENTRY_HARD",
+            "n": 129,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -17.272682170542637,
+            "median_pnl_pct": -15.9256,
+            "mean_days": 38.35658914728682
+          },
+          {
+            "group": "SIGNAL_DROP",
+            "n": 111,
+            "win_rate": 0.7477477477477478,
+            "mean_pnl_pct": 20.09534144144144,
+            "median_pnl_pct": 9.5129,
+            "mean_days": 108.23423423423424
+          },
+          {
+            "group": "RANK_DECAY",
+            "n": 78,
+            "win_rate": 0.9230769230769231,
+            "mean_pnl_pct": 30.711562820512828,
+            "median_pnl_pct": 22.302599999999998,
+            "mean_days": 118.66666666666667
+          },
+          {
+            "group": "BENCH_PANIC",
+            "n": 2,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -20.7161,
+            "median_pnl_pct": -20.7161,
+            "mean_days": 15.0
+          }
+        ],
+        "Regime_At_Entry": [
+          {
+            "group": "BULL",
+            "n": 280,
+            "win_rate": 0.4392857142857143,
+            "mean_pnl_pct": 5.891168571428571,
+            "median_pnl_pct": -3.55365,
+            "mean_days": 84.06785714285714
+          },
+          {
+            "group": "BEAR",
+            "n": 115,
+            "win_rate": 0.5565217391304348,
+            "mean_pnl_pct": 9.757267826086956,
+            "median_pnl_pct": 4.1014,
+            "mean_days": 74.20869565217392
+          },
+          {
+            "group": "HIGH_VOL",
+            "n": 55,
+            "win_rate": 0.509090909090909,
+            "mean_pnl_pct": 5.886161818181817,
+            "median_pnl_pct": 0.6341,
+            "mean_days": 83.45454545454545
+          }
+        ],
+        "holding_bands": [
+          {
+            "group": "1\u201330",
+            "n": 79,
+            "win_rate": 0.05063291139240506,
+            "mean_pnl_pct": -16.340435443037972
+          },
+          {
+            "group": "31\u201390",
+            "n": 172,
+            "win_rate": 0.3546511627906977,
+            "mean_pnl_pct": 1.129573255813953
+          },
+          {
+            "group": "91\u2013180",
+            "n": 181,
+            "win_rate": 0.7348066298342542,
+            "mean_pnl_pct": 20.37361215469613
+          },
+          {
+            "group": "181\u2013365",
+            "n": 18,
+            "win_rate": 0.9444444444444444,
+            "mean_pnl_pct": 28.01866111111111
+          }
+        ],
+        "best": [
+          {
+            "Ticker": "BCG",
+            "Entry_Date": "2023-04-25T00:00:00.000",
+            "Exit_Date": "2023-07-03T00:00:00.000",
+            "PnL_Pct": 197.2477,
+            "Holding_Days": 69,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "THEMISMED",
+            "Entry_Date": "2021-03-16T00:00:00.000",
+            "Exit_Date": "2021-07-01T00:00:00.000",
+            "PnL_Pct": 129.9501,
+            "Holding_Days": 107,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "KELLTONTEC",
+            "Entry_Date": "2021-11-01T00:00:00.000",
+            "Exit_Date": "2022-02-01T00:00:00.000",
+            "PnL_Pct": 118.9873,
+            "Holding_Days": 92,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "ARIHANTSUP",
+            "Entry_Date": "2023-09-26T00:00:00.000",
+            "Exit_Date": "2024-02-01T00:00:00.000",
+            "PnL_Pct": 105.2381,
+            "Holding_Days": 128,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "VAISHALI",
+            "Entry_Date": "2021-11-30T00:00:00.000",
+            "Exit_Date": "2022-04-01T00:00:00.000",
+            "PnL_Pct": 98.7988,
+            "Holding_Days": 122,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "GRMOVER",
+            "Entry_Date": "2024-06-04T00:00:00.000",
+            "Exit_Date": "2024-09-02T00:00:00.000",
+            "PnL_Pct": 93.559,
+            "Holding_Days": 90,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "KAMDHENU",
+            "Entry_Date": "2023-12-21T00:00:00.000",
+            "Exit_Date": "2024-03-20T00:00:00.000",
+            "PnL_Pct": 92.5512,
+            "Holding_Days": 90,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "ZEEL",
+            "Entry_Date": "2021-08-24T00:00:00.000",
+            "Exit_Date": "2021-12-01T00:00:00.000",
+            "PnL_Pct": 92.4318,
+            "Holding_Days": 99,
+            "Exit_Reason": "REBALANCE"
+          }
+        ],
+        "worst": [
+          {
+            "Ticker": "FELDVR",
+            "Entry_Date": "2020-03-16T00:00:00.000",
+            "Exit_Date": "2020-03-24T00:00:00.000",
+            "PnL_Pct": -36.0606,
+            "Holding_Days": 8,
+            "Exit_Reason": "CRASH_GUARD"
+          },
+          {
+            "Ticker": "HINDOILEXP",
+            "Entry_Date": "2020-03-05T00:00:00.000",
+            "Exit_Date": "2020-03-12T00:00:00.000",
+            "PnL_Pct": -33.7838,
+            "Holding_Days": 7,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "RSWM",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -32.6443,
+            "Holding_Days": 11,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "ORIENTCEM",
+            "Entry_Date": "2020-02-19T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -31.8786,
+            "Holding_Days": 23,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "JUSTDIAL",
+            "Entry_Date": "2020-02-19T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -31.5987,
+            "Holding_Days": 23,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "DYNAMATECH",
+            "Entry_Date": "2020-03-05T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -31.4634,
+            "Holding_Days": 8,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "SALONA",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-11T00:00:00.000",
+            "PnL_Pct": -30.2542,
+            "Holding_Days": 9,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "NEWGEN",
+            "Entry_Date": "2020-02-13T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -30.1711,
+            "Holding_Days": 29,
+            "Exit_Reason": "STOP_HIT"
+          }
+        ]
+      }
+    },
+    {
+      "version": "normal",
+      "case": "pullback_price_only",
+      "first_signal": "2019-07-31",
+      "windows": {
+        "full": {
+          "cagr": 0.2087456176148368,
+          "max_drawdown": -0.29354270819136075,
+          "sharpe": 1.2094008832174759,
+          "exposure": 0.7421090202394577,
+          "annual_turnover": 9.026753586911758,
+          "max_positions": 20,
+          "closed": 507,
+          "winners": 235,
+          "losers": 271,
+          "flat": 1,
+          "win_rate": 0.4635108481262327,
+          "loss_rate": 0.534516765285996,
+          "mean_win_pct": 27.874116170212762,
+          "mean_loss_pct": -13.495838376383762,
+          "median_pnl_pct": -2.4747,
+          "mean_holding_days": 72.66666666666667,
+          "median_holding_days": 69.0,
+          "exit_counts": {
+            "STOP_HIT": 357,
+            "REBALANCE": 143,
+            "CRASH_GUARD": 7
+          }
+        },
+        "development": {
+          "cagr": 0.3780362007339024,
+          "max_drawdown": -0.2095717445258023,
+          "sharpe": 1.995952749663932,
+          "exposure": 0.6584418616689536,
+          "annual_turnover": 8.501205639431413,
+          "max_positions": 20,
+          "closed": 223,
+          "winners": 113,
+          "losers": 110,
+          "flat": 0,
+          "win_rate": 0.5067264573991032,
+          "loss_rate": 0.49327354260089684,
+          "mean_win_pct": 30.68058230088496,
+          "mean_loss_pct": -13.360190000000001,
+          "median_pnl_pct": 0.3601,
+          "mean_holding_days": 67.847533632287,
+          "median_holding_days": 63.0,
+          "exit_counts": {
+            "STOP_HIT": 159,
+            "REBALANCE": 57,
+            "CRASH_GUARD": 7
+          }
+        },
+        "previously_examined_2022_2024": {
+          "cagr": 0.08018857758551845,
+          "max_drawdown": -0.29354270819135964,
+          "sharpe": 0.540641612287876,
+          "exposure": 0.8144028503905529,
+          "annual_turnover": 9.50447218461278,
+          "max_positions": 20,
+          "closed": 264,
+          "winners": 111,
+          "losers": 153,
+          "flat": 0,
+          "win_rate": 0.42045454545454547,
+          "loss_rate": 0.5795454545454546,
+          "mean_win_pct": 24.1666018018018,
+          "mean_loss_pct": -13.716567320261436,
+          "median_pnl_pct": -6.08275,
+          "mean_holding_days": 74.56818181818181,
+          "median_holding_days": 71.0,
+          "exit_counts": {
+            "STOP_HIT": 181,
+            "REBALANCE": 83
+          }
+        },
+        "year_2024": {
+          "cagr": 0.03728437734363865,
+          "max_drawdown": -0.18177251315474907,
+          "sharpe": 0.2909764174656872,
+          "exposure": 0.821889889703088,
+          "annual_turnover": 9.32772229509934,
+          "max_positions": 20,
+          "closed": 73,
+          "winners": 31,
+          "losers": 42,
+          "flat": 0,
+          "win_rate": 0.4246575342465753,
+          "loss_rate": 0.5753424657534246,
+          "mean_win_pct": 20.336693548387093,
+          "mean_loss_pct": -13.607559523809524,
+          "median_pnl_pct": -5.3545,
+          "mean_holding_days": 72.78082191780823,
+          "median_holding_days": 70.0,
+          "exit_counts": {
+            "STOP_HIT": 51,
+            "REBALANCE": 22
+          }
+        }
+      },
+      "annual_returns": {
+        "2019": 0.07990526666522801,
+        "2020": 0.39742118039983265,
+        "2021": 0.5151230175731583,
+        "2022": -0.07801938021544996,
+        "2023": 0.3171576924110522,
+        "2024": 0.03725838796427361
+      },
+      "trade_groups": {
+        "Exit_Reason": [
+          {
+            "group": "STOP_HIT",
+            "n": 357,
+            "win_rate": 0.28851540616246496,
+            "mean_pnl_pct": -3.590664985994398,
+            "median_pnl_pct": -12.1965,
+            "mean_days": 60.11764705882353
+          },
+          {
+            "group": "REBALANCE",
+            "n": 143,
+            "win_rate": 0.9090909090909091,
+            "mean_pnl_pct": 29.48871748251748,
+            "median_pnl_pct": 19.0915,
+            "mean_days": 106.8951048951049
+          },
+          {
+            "group": "CRASH_GUARD",
+            "n": 7,
+            "win_rate": 0.2857142857142857,
+            "mean_pnl_pct": -5.996300000000001,
+            "median_pnl_pct": -11.9565,
+            "mean_days": 13.428571428571429
+          }
+        ],
+        "Exit_Detail": [
+          {
+            "group": "PEAK_HARD",
+            "n": 205,
+            "win_rate": 0.5024390243902439,
+            "mean_pnl_pct": 6.586144878048781,
+            "median_pnl_pct": 0.3165,
+            "mean_days": 75.3219512195122
+          },
+          {
+            "group": "ENTRY_HARD",
+            "n": 152,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -17.315967763157897,
+            "median_pnl_pct": -16.2761,
+            "mean_days": 39.61184210526316
+          },
+          {
+            "group": "RANK_DECAY",
+            "n": 136,
+            "win_rate": 0.9044117647058824,
+            "mean_pnl_pct": 27.32764705882353,
+            "median_pnl_pct": 17.045299999999997,
+            "mean_days": 106.61029411764706
+          },
+          {
+            "group": "BENCH_PANIC",
+            "n": 7,
+            "win_rate": 0.2857142857142857,
+            "mean_pnl_pct": -5.996300000000001,
+            "median_pnl_pct": -11.9565,
+            "mean_days": 13.428571428571429
+          },
+          {
+            "group": "SIGNAL_DROP",
+            "n": 7,
+            "win_rate": 1.0,
+            "mean_pnl_pct": 71.47522857142857,
+            "median_pnl_pct": 81.1628,
+            "mean_days": 112.42857142857143
+          }
+        ],
+        "Regime_At_Entry": [
+          {
+            "group": "BULL",
+            "n": 316,
+            "win_rate": 0.4620253164556962,
+            "mean_pnl_pct": 6.537079430379746,
+            "median_pnl_pct": -2.5881,
+            "mean_days": 76.15822784810126
+          },
+          {
+            "group": "BEAR",
+            "n": 103,
+            "win_rate": 0.4368932038834951,
+            "mean_pnl_pct": 4.2246009708737855,
+            "median_pnl_pct": -4.3478,
+            "mean_days": 61.58252427184466
+          },
+          {
+            "group": "HIGH_VOL",
+            "n": 88,
+            "win_rate": 0.5,
+            "mean_pnl_pct": 4.4567511363636365,
+            "median_pnl_pct": -0.0948,
+            "mean_days": 73.10227272727273
+          }
+        ],
+        "holding_bands": [
+          {
+            "group": "1\u201330",
+            "n": 98,
+            "win_rate": 0.11224489795918367,
+            "mean_pnl_pct": -12.880173469387756
+          },
+          {
+            "group": "31\u201390",
+            "n": 247,
+            "win_rate": 0.4008097165991903,
+            "mean_pnl_pct": 1.5422275303643724
+          },
+          {
+            "group": "91\u2013180",
+            "n": 151,
+            "win_rate": 0.7682119205298014,
+            "mean_pnl_pct": 23.01756225165563
+          },
+          {
+            "group": "181\u2013365",
+            "n": 11,
+            "win_rate": 0.8181818181818182,
+            "mean_pnl_pct": 27.156363636363633
+          }
+        ],
+        "best": [
+          {
+            "Ticker": "RKFORGE",
+            "Entry_Date": "2020-08-03T00:00:00.000",
+            "Exit_Date": "2020-11-02T00:00:00.000",
+            "PnL_Pct": 169.2308,
+            "Holding_Days": 91,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "TOUCHWOOD",
+            "Entry_Date": "2020-11-06T00:00:00.000",
+            "Exit_Date": "2021-04-01T00:00:00.000",
+            "PnL_Pct": 161.5385,
+            "Holding_Days": 146,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "V2RETAIL",
+            "Entry_Date": "2020-10-05T00:00:00.000",
+            "Exit_Date": "2021-02-01T00:00:00.000",
+            "PnL_Pct": 128.0,
+            "Holding_Days": 119,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "KELLTONTEC",
+            "Entry_Date": "2021-11-22T00:00:00.000",
+            "Exit_Date": "2022-02-01T00:00:00.000",
+            "PnL_Pct": 112.2699,
+            "Holding_Days": 71,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "PANSARI",
+            "Entry_Date": "2021-01-01T00:00:00.000",
+            "Exit_Date": "2021-05-03T00:00:00.000",
+            "PnL_Pct": 108.3333,
+            "Holding_Days": 122,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "SHEMAROO",
+            "Entry_Date": "2021-03-30T00:00:00.000",
+            "Exit_Date": "2021-06-01T00:00:00.000",
+            "PnL_Pct": 106.7599,
+            "Holding_Days": 63,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "ROML",
+            "Entry_Date": "2021-08-24T00:00:00.000",
+            "Exit_Date": "2021-09-22T00:00:00.000",
+            "PnL_Pct": 96.0145,
+            "Holding_Days": 29,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "INDOTHAI",
+            "Entry_Date": "2022-10-03T00:00:00.000",
+            "Exit_Date": "2022-12-27T00:00:00.000",
+            "PnL_Pct": 95.0311,
+            "Holding_Days": 85,
+            "Exit_Reason": "STOP_HIT"
+          }
+        ],
+        "worst": [
+          {
+            "Ticker": "BCG",
+            "Entry_Date": "2023-03-24T00:00:00.000",
+            "Exit_Date": "2023-03-31T00:00:00.000",
+            "PnL_Pct": -32.9897,
+            "Holding_Days": 7,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "SHEMAROO",
+            "Entry_Date": "2020-02-04T00:00:00.000",
+            "Exit_Date": "2020-02-13T00:00:00.000",
+            "PnL_Pct": -32.875,
+            "Holding_Days": 9,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "PNBHOUSING",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-11T00:00:00.000",
+            "PnL_Pct": -29.7046,
+            "Holding_Days": 9,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "GLAND",
+            "Entry_Date": "2023-02-16T00:00:00.000",
+            "Exit_Date": "2023-05-22T00:00:00.000",
+            "PnL_Pct": -29.5555,
+            "Holding_Days": 95,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "THOMASCOOK",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -28.8913,
+            "Holding_Days": 11,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "SANGINITA",
+            "Entry_Date": "2020-10-14T00:00:00.000",
+            "Exit_Date": "2020-11-06T00:00:00.000",
+            "PnL_Pct": -28.1646,
+            "Holding_Days": 23,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "MCL",
+            "Entry_Date": "2022-01-12T00:00:00.000",
+            "Exit_Date": "2022-02-24T00:00:00.000",
+            "PnL_Pct": -26.3623,
+            "Holding_Days": 43,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "UFO",
+            "Entry_Date": "2020-02-11T00:00:00.000",
+            "Exit_Date": "2020-03-12T00:00:00.000",
+            "PnL_Pct": -25.4493,
+            "Holding_Days": 30,
+            "Exit_Reason": "STOP_HIT"
+          }
+        ]
+      }
+    },
+    {
+      "version": "normal",
+      "case": "trend_price_only",
+      "first_signal": "2019-07-31",
+      "windows": {
+        "full": {
+          "cagr": 0.3901071549168178,
+          "max_drawdown": -0.23215595541345468,
+          "sharpe": 1.9894365626837567,
+          "exposure": 0.7200777705601368,
+          "annual_turnover": 7.7563251269170115,
+          "max_positions": 20,
+          "closed": 429,
+          "winners": 218,
+          "losers": 209,
+          "flat": 2,
+          "win_rate": 0.5081585081585082,
+          "loss_rate": 0.48717948717948717,
+          "mean_win_pct": 39.26086880733945,
+          "mean_loss_pct": -13.36133779904306,
+          "median_pnl_pct": 0.6593,
+          "mean_holding_days": 85.37062937062937,
+          "median_holding_days": 78.0,
+          "exit_counts": {
+            "STOP_HIT": 238,
+            "REBALANCE": 182,
+            "CRASH_GUARD": 9
+          }
+        },
+        "development": {
+          "cagr": 0.5423756715358448,
+          "max_drawdown": -0.23215595541345468,
+          "sharpe": 2.6807478519263888,
+          "exposure": 0.6500136657702431,
+          "annual_turnover": 6.939011730007498,
+          "max_positions": 20,
+          "closed": 167,
+          "winners": 87,
+          "losers": 80,
+          "flat": 0,
+          "win_rate": 0.5209580838323353,
+          "loss_rate": 0.47904191616766467,
+          "mean_win_pct": 53.49274827586208,
+          "mean_loss_pct": -14.436315000000002,
+          "median_pnl_pct": 3.9246,
+          "mean_holding_days": 90.97604790419162,
+          "median_holding_days": 83.0,
+          "exit_counts": {
+            "STOP_HIT": 84,
+            "REBALANCE": 74,
+            "CRASH_GUARD": 9
+          }
+        },
+        "previously_examined_2022_2024": {
+          "cagr": 0.2721416089985931,
+          "max_drawdown": -0.19522063669441114,
+          "sharpe": 1.4367693810080595,
+          "exposure": 0.7806176834472318,
+          "annual_turnover": 8.482014235123335,
+          "max_positions": 20,
+          "closed": 242,
+          "winners": 115,
+          "losers": 125,
+          "flat": 2,
+          "win_rate": 0.47520661157024796,
+          "loss_rate": 0.5165289256198347,
+          "mean_win_pct": 31.408042608695652,
+          "mean_loss_pct": -12.8636912,
+          "median_pnl_pct": -1.06535,
+          "mean_holding_days": 79.4504132231405,
+          "median_holding_days": 73.0,
+          "exit_counts": {
+            "STOP_HIT": 145,
+            "REBALANCE": 97
+          }
+        },
+        "year_2024": {
+          "cagr": 0.31919797672052375,
+          "max_drawdown": -0.10682585625339591,
+          "sharpe": 1.4518101051245387,
+          "exposure": 0.708642123251422,
+          "annual_turnover": 7.88281339096126,
+          "max_positions": 20,
+          "closed": 63,
+          "winners": 27,
+          "losers": 36,
+          "flat": 0,
+          "win_rate": 0.42857142857142855,
+          "loss_rate": 0.5714285714285714,
+          "mean_win_pct": 19.898607407407408,
+          "mean_loss_pct": -11.464611111111111,
+          "median_pnl_pct": -1.4396,
+          "mean_holding_days": 72.88888888888889,
+          "median_holding_days": 73.0,
+          "exit_counts": {
+            "STOP_HIT": 37,
+            "REBALANCE": 26
+          }
+        }
+      },
+      "annual_returns": {
+        "2019": 0.06673412451945482,
+        "2020": 0.39356494248993235,
+        "2021": 1.056693009026815,
+        "2022": 0.03738293434621709,
+        "2023": 0.5019400152314322,
+        "2024": 0.31894786392045393
+      },
+      "trade_groups": {
+        "Exit_Reason": [
+          {
+            "group": "STOP_HIT",
+            "n": 238,
+            "win_rate": 0.31512605042016806,
+            "mean_pnl_pct": 1.8864705882352941,
+            "median_pnl_pct": -12.8727,
+            "mean_days": 64.34033613445378
+          },
+          {
+            "group": "REBALANCE",
+            "n": 182,
+            "win_rate": 0.7857142857142857,
+            "mean_pnl_pct": 29.853375274725273,
+            "median_pnl_pct": 11.52815,
+            "mean_days": 116.36813186813187
+          },
+          {
+            "group": "CRASH_GUARD",
+            "n": 9,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -12.88272222222222,
+            "median_pnl_pct": -14.0666,
+            "mean_days": 14.666666666666666
+          }
+        ],
+        "Exit_Detail": [
+          {
+            "group": "RANK_DECAY",
+            "n": 181,
+            "win_rate": 0.7845303867403315,
+            "mean_pnl_pct": 29.82107513812155,
+            "median_pnl_pct": 11.3725,
+            "mean_days": 116.56353591160222
+          },
+          {
+            "group": "PEAK_HARD",
+            "n": 138,
+            "win_rate": 0.5434782608695652,
+            "mean_pnl_pct": 16.520741304347826,
+            "median_pnl_pct": 2.7658,
+            "mean_days": 88.28260869565217
+          },
+          {
+            "group": "ENTRY_HARD",
+            "n": 99,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -17.541533333333334,
+            "median_pnl_pct": -16.4301,
+            "mean_days": 31.343434343434343
+          },
+          {
+            "group": "BENCH_PANIC",
+            "n": 9,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -12.88272222222222,
+            "median_pnl_pct": -14.0666,
+            "mean_days": 14.666666666666666
+          },
+          {
+            "group": "FORCE_60",
+            "n": 1,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -94.2705,
+            "median_pnl_pct": -94.2705,
+            "mean_days": 27.0
+          },
+          {
+            "group": "SIGNAL_DROP",
+            "n": 1,
+            "win_rate": 1.0,
+            "mean_pnl_pct": 35.6997,
+            "median_pnl_pct": 35.6997,
+            "mean_days": 81.0
+          }
+        ],
+        "Regime_At_Entry": [
+          {
+            "group": "BULL",
+            "n": 277,
+            "win_rate": 0.5090252707581228,
+            "mean_pnl_pct": 16.94669855595668,
+            "median_pnl_pct": 0.6978,
+            "mean_days": 88.68592057761732
+          },
+          {
+            "group": "HIGH_VOL",
+            "n": 84,
+            "win_rate": 0.5119047619047619,
+            "mean_pnl_pct": 8.141928571428572,
+            "median_pnl_pct": 0.9577,
+            "mean_days": 71.98809523809524
+          },
+          {
+            "group": "BEAR",
+            "n": 68,
+            "win_rate": 0.5,
+            "mean_pnl_pct": 5.7087102941176475,
+            "median_pnl_pct": -0.1748,
+            "mean_days": 88.3970588235294
+          }
+        ],
+        "holding_bands": [
+          {
+            "group": "1\u201330",
+            "n": 93,
+            "win_rate": 0.043010752688172046,
+            "mean_pnl_pct": -16.39648709677419
+          },
+          {
+            "group": "31\u201390",
+            "n": 167,
+            "win_rate": 0.4550898203592814,
+            "mean_pnl_pct": 1.2360095808383236
+          },
+          {
+            "group": "91\u2013180",
+            "n": 138,
+            "win_rate": 0.7753623188405797,
+            "mean_pnl_pct": 25.37585
+          },
+          {
+            "group": "181\u2013365",
+            "n": 30,
+            "win_rate": 1.0,
+            "mean_pnl_pct": 108.09082666666664
+          },
+          {
+            "group": ">365",
+            "n": 1,
+            "win_rate": 1.0,
+            "mean_pnl_pct": 340.2174
+          }
+        ],
+        "best": [
+          {
+            "Ticker": "TANLA",
+            "Entry_Date": "2020-08-03T00:00:00.000",
+            "Exit_Date": "2020-12-18T00:00:00.000",
+            "PnL_Pct": 454.9208,
+            "Holding_Days": 137,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "DIXON",
+            "Entry_Date": "2020-05-13T00:00:00.000",
+            "Exit_Date": "2021-06-01T00:00:00.000",
+            "PnL_Pct": 340.2174,
+            "Holding_Days": 384,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "GPIL",
+            "Entry_Date": "2020-12-01T00:00:00.000",
+            "Exit_Date": "2021-08-02T00:00:00.000",
+            "PnL_Pct": 295.9811,
+            "Holding_Days": 244,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "SAREGAMA",
+            "Entry_Date": "2021-03-01T00:00:00.000",
+            "Exit_Date": "2021-11-01T00:00:00.000",
+            "PnL_Pct": 268.2109,
+            "Holding_Days": 245,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "ANANDRATHI",
+            "Entry_Date": "2023-08-01T00:00:00.000",
+            "Exit_Date": "2024-06-03T00:00:00.000",
+            "PnL_Pct": 267.0431,
+            "Holding_Days": 307,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "ADANIENT",
+            "Entry_Date": "2021-02-01T00:00:00.000",
+            "Exit_Date": "2021-09-01T00:00:00.000",
+            "PnL_Pct": 212.4192,
+            "Holding_Days": 212,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "RKFORGE",
+            "Entry_Date": "2023-02-01T00:00:00.000",
+            "Exit_Date": "2023-12-01T00:00:00.000",
+            "PnL_Pct": 191.6667,
+            "Holding_Days": 303,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "VAIBHAVGBL",
+            "Entry_Date": "2020-07-20T00:00:00.000",
+            "Exit_Date": "2021-03-31T00:00:00.000",
+            "PnL_Pct": 174.9254,
+            "Holding_Days": 254,
+            "Exit_Reason": "STOP_HIT"
+          }
+        ],
+        "worst": [
+          {
+            "Ticker": "SUVEN",
+            "Entry_Date": "2019-12-27T00:00:00.000",
+            "Exit_Date": "2020-01-23T00:00:00.000",
+            "PnL_Pct": -94.2705,
+            "Holding_Days": 27,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "MASFIN",
+            "Entry_Date": "2020-02-27T00:00:00.000",
+            "Exit_Date": "2020-03-19T00:00:00.000",
+            "PnL_Pct": -36.4302,
+            "Holding_Days": 21,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "STAR",
+            "Entry_Date": "2024-08-01T00:00:00.000",
+            "Exit_Date": "2024-12-10T00:00:00.000",
+            "PnL_Pct": -29.7432,
+            "Holding_Days": 131,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "SUDARSCHEM",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -28.9477,
+            "Holding_Days": 11,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "JUBLFOOD",
+            "Entry_Date": "2020-02-28T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -27.3014,
+            "Holding_Days": 14,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "NBCC",
+            "Entry_Date": "2024-02-06T00:00:00.000",
+            "Exit_Date": "2024-02-13T00:00:00.000",
+            "PnL_Pct": -25.8564,
+            "Holding_Days": 7,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "NESCO",
+            "Entry_Date": "2020-03-13T00:00:00.000",
+            "Exit_Date": "2020-03-24T00:00:00.000",
+            "PnL_Pct": -25.0,
+            "Holding_Days": 11,
+            "Exit_Reason": "CRASH_GUARD"
+          },
+          {
+            "Ticker": "IGL",
+            "Entry_Date": "2020-02-18T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -24.9624,
+            "Holding_Days": 24,
+            "Exit_Reason": "STOP_HIT"
+          }
+        ]
+      }
+    },
+    {
+      "version": "experimental",
+      "case": "fundamental",
+      "first_signal": "2019-07-31",
+      "windows": {
+        "full": {
+          "cagr": 0.38322224872208377,
+          "max_drawdown": -0.18432754263030848,
+          "sharpe": 1.8917354026679905,
+          "exposure": 0.7317115245598566,
+          "annual_turnover": 7.243433519150432,
+          "max_positions": 20,
+          "closed": 376,
+          "winners": 209,
+          "losers": 165,
+          "flat": 2,
+          "win_rate": 0.5558510638297872,
+          "loss_rate": 0.43882978723404253,
+          "mean_win_pct": 36.31470956937799,
+          "mean_loss_pct": -12.823932121212122,
+          "median_pnl_pct": 5.0112000000000005,
+          "mean_holding_days": 97.04521276595744,
+          "median_holding_days": 95.5,
+          "exit_counts": {
+            "STOP_HIT": 261,
+            "REBALANCE": 111,
+            "CRASH_GUARD": 4
+          }
+        },
+        "development": {
+          "cagr": 0.4048032962697361,
+          "max_drawdown": -0.18432754263030848,
+          "sharpe": 2.021853011852659,
+          "exposure": 0.6421200264643737,
+          "annual_turnover": 6.797265318633881,
+          "max_positions": 20,
+          "closed": 166,
+          "winners": 89,
+          "losers": 75,
+          "flat": 2,
+          "win_rate": 0.536144578313253,
+          "loss_rate": 0.45180722891566266,
+          "mean_win_pct": 39.65986404494382,
+          "mean_loss_pct": -13.057701333333334,
+          "median_pnl_pct": 4.01575,
+          "mean_holding_days": 90.71686746987952,
+          "median_holding_days": 88.0,
+          "exit_counts": {
+            "STOP_HIT": 116,
+            "REBALANCE": 46,
+            "CRASH_GUARD": 4
+          }
+        },
+        "previously_examined_2022_2024": {
+          "cagr": 0.3661047362794434,
+          "max_drawdown": -0.17857722122261566,
+          "sharpe": 1.7847403756552784,
+          "exposure": 0.809124366790408,
+          "annual_turnover": 7.64784408222824,
+          "max_positions": 20,
+          "closed": 190,
+          "winners": 106,
+          "losers": 84,
+          "flat": 0,
+          "win_rate": 0.5578947368421052,
+          "loss_rate": 0.4421052631578947,
+          "mean_win_pct": 34.59985188679245,
+          "mean_loss_pct": -13.07104642857143,
+          "median_pnl_pct": 4.656750000000001,
+          "mean_holding_days": 101.51578947368421,
+          "median_holding_days": 98.0,
+          "exit_counts": {
+            "STOP_HIT": 126,
+            "REBALANCE": 64
+          }
+        },
+        "year_2024": {
+          "cagr": 0.542492473239446,
+          "max_drawdown": -0.1417146074705874,
+          "sharpe": 2.164520006896018,
+          "exposure": 0.8815355422597932,
+          "annual_turnover": 7.679423874422426,
+          "max_positions": 20,
+          "closed": 52,
+          "winners": 31,
+          "losers": 21,
+          "flat": 0,
+          "win_rate": 0.5961538461538461,
+          "loss_rate": 0.40384615384615385,
+          "mean_win_pct": 39.87944838709678,
+          "mean_loss_pct": -14.19279523809524,
+          "median_pnl_pct": 8.08365,
+          "mean_holding_days": 87.92307692307692,
+          "median_holding_days": 78.0,
+          "exit_counts": {
+            "STOP_HIT": 40,
+            "REBALANCE": 12
+          }
+        }
+      },
+      "annual_returns": {
+        "2019": 0.07002717229105304,
+        "2020": 0.24048567602699067,
+        "2021": 0.8101811736433908,
+        "2022": 0.21405260267828718,
+        "2023": 0.35862685193993094,
+        "2024": 0.5420349670996814
+      },
+      "trade_groups": {
+        "Exit_Reason": [
+          {
+            "group": "STOP_HIT",
+            "n": 261,
+            "win_rate": 0.40229885057471265,
+            "mean_pnl_pct": 4.440422222222222,
+            "median_pnl_pct": -7.2419,
+            "mean_days": 76.17624521072797
+          },
+          {
+            "group": "REBALANCE",
+            "n": 111,
+            "win_rate": 0.9279279279279279,
+            "mean_pnl_pct": 39.130836036036044,
+            "median_pnl_pct": 26.0575,
+            "mean_days": 149.17117117117118
+          },
+          {
+            "group": "CRASH_GUARD",
+            "n": 4,
+            "win_rate": 0.25,
+            "mean_pnl_pct": -7.161875,
+            "median_pnl_pct": -8.69205,
+            "mean_days": 12.25
+          }
+        ],
+        "Exit_Detail": [
+          {
+            "group": "PEAK_HARD",
+            "n": 187,
+            "win_rate": 0.5614973262032086,
+            "mean_pnl_pct": 12.697879679144384,
+            "median_pnl_pct": 5.2716,
+            "mean_days": 94.11229946524064
+          },
+          {
+            "group": "ENTRY_HARD",
+            "n": 74,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -16.426395945945945,
+            "median_pnl_pct": -16.0208,
+            "mean_days": 30.85135135135135
+          },
+          {
+            "group": "RANK_DECAY",
+            "n": 57,
+            "win_rate": 0.9824561403508771,
+            "mean_pnl_pct": 43.82060701754386,
+            "median_pnl_pct": 27.4588,
+            "mean_days": 146.5438596491228
+          },
+          {
+            "group": "SIGNAL_DROP",
+            "n": 54,
+            "win_rate": 0.8703703703703703,
+            "mean_pnl_pct": 34.18052222222223,
+            "median_pnl_pct": 22.1363,
+            "mean_days": 151.94444444444446
+          },
+          {
+            "group": "BENCH_PANIC",
+            "n": 4,
+            "win_rate": 0.25,
+            "mean_pnl_pct": -7.161875,
+            "median_pnl_pct": -8.69205,
+            "mean_days": 12.25
+          }
+        ],
+        "Regime_At_Entry": [
+          {
+            "group": "BULL",
+            "n": 213,
+            "win_rate": 0.5164319248826291,
+            "mean_pnl_pct": 13.572572300469485,
+            "median_pnl_pct": 0.8796,
+            "mean_days": 101.3849765258216
+          },
+          {
+            "group": "BEAR",
+            "n": 113,
+            "win_rate": 0.584070796460177,
+            "mean_pnl_pct": 14.150046902654866,
+            "median_pnl_pct": 6.6722,
+            "mean_days": 92.14159292035399
+          },
+          {
+            "group": "HIGH_VOL",
+            "n": 50,
+            "win_rate": 0.66,
+            "mean_pnl_pct": 19.678246,
+            "median_pnl_pct": 11.984300000000001,
+            "mean_days": 89.64
+          }
+        ],
+        "holding_bands": [
+          {
+            "group": "1\u201330",
+            "n": 63,
+            "win_rate": 0.031746031746031744,
+            "mean_pnl_pct": -14.454326984126984
+          },
+          {
+            "group": "31\u201390",
+            "n": 120,
+            "win_rate": 0.4083333333333333,
+            "mean_pnl_pct": 2.8030908333333335
+          },
+          {
+            "group": "91\u2013180",
+            "n": 151,
+            "win_rate": 0.7947019867549668,
+            "mean_pnl_pct": 24.639844370860928
+          },
+          {
+            "group": "181\u2013365",
+            "n": 42,
+            "win_rate": 0.9047619047619048,
+            "mean_pnl_pct": 55.415730952380954
+          }
+        ],
+        "best": [
+          {
+            "Ticker": "DEEPAKFERT",
+            "Entry_Date": "2021-02-01T00:00:00.000",
+            "Exit_Date": "2021-08-02T00:00:00.000",
+            "PnL_Pct": 185.3503,
+            "Holding_Days": 182,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "DVL",
+            "Entry_Date": "2021-03-01T00:00:00.000",
+            "Exit_Date": "2021-08-11T00:00:00.000",
+            "PnL_Pct": 170.8629,
+            "Holding_Days": 163,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "DWARKESH",
+            "Entry_Date": "2021-02-01T00:00:00.000",
+            "Exit_Date": "2021-08-02T00:00:00.000",
+            "PnL_Pct": 165.411,
+            "Holding_Days": 182,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "JSL",
+            "Entry_Date": "2022-06-21T00:00:00.000",
+            "Exit_Date": "2023-01-02T00:00:00.000",
+            "PnL_Pct": 145.793,
+            "Holding_Days": 195,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "CHENNPETRO",
+            "Entry_Date": "2022-02-01T00:00:00.000",
+            "Exit_Date": "2022-05-31T00:00:00.000",
+            "PnL_Pct": 142.2834,
+            "Holding_Days": 119,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "DJML",
+            "Entry_Date": "2024-03-01T00:00:00.000",
+            "Exit_Date": "2024-09-02T00:00:00.000",
+            "PnL_Pct": 136.7601,
+            "Holding_Days": 185,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "PANACHE",
+            "Entry_Date": "2024-05-13T00:00:00.000",
+            "Exit_Date": "2024-09-02T00:00:00.000",
+            "PnL_Pct": 127.3203,
+            "Holding_Days": 112,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "HITECHGEAR",
+            "Entry_Date": "2024-03-14T00:00:00.000",
+            "Exit_Date": "2024-05-10T00:00:00.000",
+            "PnL_Pct": 121.0884,
+            "Holding_Days": 57,
+            "Exit_Reason": "STOP_HIT"
+          }
+        ],
+        "worst": [
+          {
+            "Ticker": "RAMKY",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -26.5709,
+            "Holding_Days": 11,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "BCG",
+            "Entry_Date": "2023-03-20T00:00:00.000",
+            "Exit_Date": "2023-03-31T00:00:00.000",
+            "PnL_Pct": -26.5537,
+            "Holding_Days": 11,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "DATAMATICS",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-11T00:00:00.000",
+            "PnL_Pct": -26.4943,
+            "Holding_Days": 9,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "ADANIPOWER",
+            "Entry_Date": "2023-02-02T00:00:00.000",
+            "Exit_Date": "2023-02-13T00:00:00.000",
+            "PnL_Pct": -22.7723,
+            "Holding_Days": 11,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "SEAMECLTD",
+            "Entry_Date": "2019-08-01T00:00:00.000",
+            "Exit_Date": "2019-08-09T00:00:00.000",
+            "PnL_Pct": -21.531,
+            "Holding_Days": 8,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "CTE",
+            "Entry_Date": "2022-05-11T00:00:00.000",
+            "Exit_Date": "2022-06-21T00:00:00.000",
+            "PnL_Pct": -20.8754,
+            "Holding_Days": 41,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "CYBERTECH",
+            "Entry_Date": "2020-02-04T00:00:00.000",
+            "Exit_Date": "2020-03-05T00:00:00.000",
+            "PnL_Pct": -20.3975,
+            "Holding_Days": 30,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "IOC",
+            "Entry_Date": "2020-02-01T00:00:00.000",
+            "Exit_Date": "2020-03-12T00:00:00.000",
+            "PnL_Pct": -20.0592,
+            "Holding_Days": 40,
+            "Exit_Reason": "STOP_HIT"
+          }
+        ]
+      }
+    },
+    {
+      "version": "experimental",
+      "case": "pullback_common",
+      "first_signal": "2019-07-31",
+      "windows": {
+        "full": {
+          "cagr": 0.2323732623158421,
+          "max_drawdown": -0.23422565272903417,
+          "sharpe": 1.3989497137078015,
+          "exposure": 0.7541360106810493,
+          "annual_turnover": 7.291702343229002,
+          "max_positions": 20,
+          "closed": 395,
+          "winners": 191,
+          "losers": 204,
+          "flat": 0,
+          "win_rate": 0.4835443037974684,
+          "loss_rate": 0.5164556962025316,
+          "mean_win_pct": 33.47203664921466,
+          "mean_loss_pct": -13.718857352941175,
+          "median_pnl_pct": -1.3408,
+          "mean_holding_days": 93.02025316455696,
+          "median_holding_days": 94.0,
+          "exit_counts": {
+            "STOP_HIT": 260,
+            "REBALANCE": 133,
+            "CRASH_GUARD": 2
+          }
+        },
+        "development": {
+          "cagr": 0.3045662448970703,
+          "max_drawdown": -0.17590670668042585,
+          "sharpe": 1.8055688668084626,
+          "exposure": 0.6497845536710313,
+          "annual_turnover": 6.620607525832243,
+          "max_positions": 20,
+          "closed": 168,
+          "winners": 87,
+          "losers": 81,
+          "flat": 0,
+          "win_rate": 0.5178571428571429,
+          "loss_rate": 0.48214285714285715,
+          "mean_win_pct": 34.25766436781608,
+          "mean_loss_pct": -15.264760493827163,
+          "median_pnl_pct": 2.49835,
+          "mean_holding_days": 89.11904761904762,
+          "median_holding_days": 90.0,
+          "exit_counts": {
+            "STOP_HIT": 114,
+            "REBALANCE": 52,
+            "CRASH_GUARD": 2
+          }
+        },
+        "previously_examined_2022_2024": {
+          "cagr": 0.17404058520725263,
+          "max_drawdown": -0.23422565272903373,
+          "sharpe": 1.0684246734423921,
+          "exposure": 0.8443024109508093,
+          "annual_turnover": 7.89009797453498,
+          "max_positions": 20,
+          "closed": 207,
+          "winners": 95,
+          "losers": 112,
+          "flat": 0,
+          "win_rate": 0.45893719806763283,
+          "loss_rate": 0.5410628019323671,
+          "mean_win_pct": 31.923357894736842,
+          "mean_loss_pct": -12.786181249999998,
+          "median_pnl_pct": -1.7928,
+          "mean_holding_days": 95.19323671497584,
+          "median_holding_days": 96.0,
+          "exit_counts": {
+            "STOP_HIT": 128,
+            "REBALANCE": 79
+          }
+        },
+        "year_2024": {
+          "cagr": 0.26243254340821065,
+          "max_drawdown": -0.10760756315449105,
+          "sharpe": 1.4122748961477742,
+          "exposure": 0.9440113792464709,
+          "annual_turnover": 7.418995143356187,
+          "max_positions": 20,
+          "closed": 54,
+          "winners": 25,
+          "losers": 29,
+          "flat": 0,
+          "win_rate": 0.46296296296296297,
+          "loss_rate": 0.5370370370370371,
+          "mean_win_pct": 31.158816,
+          "mean_loss_pct": -13.18633103448276,
+          "median_pnl_pct": -3.4174,
+          "mean_holding_days": 92.98148148148148,
+          "median_holding_days": 77.5,
+          "exit_counts": {
+            "STOP_HIT": 30,
+            "REBALANCE": 24
+          }
+        }
+      },
+      "annual_returns": {
+        "2019": 0.09624573671808978,
+        "2020": 0.3107348629982334,
+        "2021": 0.38156334090669364,
+        "2022": 0.07086908859775298,
+        "2023": 0.19577478020688766,
+        "2024": 0.26223119201492207
+      },
+      "trade_groups": {
+        "Exit_Reason": [
+          {
+            "group": "STOP_HIT",
+            "n": 260,
+            "win_rate": 0.2846153846153846,
+            "mean_pnl_pct": -3.4675453846153843,
+            "median_pnl_pct": -12.0631,
+            "mean_days": 66.16538461538461
+          },
+          {
+            "group": "REBALANCE",
+            "n": 133,
+            "win_rate": 0.8796992481203008,
+            "mean_pnl_pct": 34.116587218045105,
+            "median_pnl_pct": 26.4199,
+            "mean_days": 146.69172932330827
+          },
+          {
+            "group": "CRASH_GUARD",
+            "n": 2,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -20.7161,
+            "median_pnl_pct": -20.7161,
+            "mean_days": 15.0
+          }
+        ],
+        "Exit_Detail": [
+          {
+            "group": "PEAK_HARD",
+            "n": 147,
+            "win_rate": 0.5034013605442177,
+            "mean_pnl_pct": 7.302080952380952,
+            "median_pnl_pct": 0.2775,
+            "mean_days": 89.04081632653062
+          },
+          {
+            "group": "ENTRY_HARD",
+            "n": 113,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -17.477590265486725,
+            "median_pnl_pct": -16.2453,
+            "mean_days": 36.4070796460177
+          },
+          {
+            "group": "SIGNAL_DROP",
+            "n": 73,
+            "win_rate": 0.8082191780821918,
+            "mean_pnl_pct": 29.353060273972602,
+            "median_pnl_pct": 24.2409,
+            "mean_days": 139.94520547945206
+          },
+          {
+            "group": "RANK_DECAY",
+            "n": 60,
+            "win_rate": 0.9666666666666667,
+            "mean_pnl_pct": 39.912211666666664,
+            "median_pnl_pct": 30.85535,
+            "mean_days": 154.9
+          },
+          {
+            "group": "BENCH_PANIC",
+            "n": 2,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -20.7161,
+            "median_pnl_pct": -20.7161,
+            "mean_days": 15.0
+          }
+        ],
+        "Regime_At_Entry": [
+          {
+            "group": "BULL",
+            "n": 238,
+            "win_rate": 0.4579831932773109,
+            "mean_pnl_pct": 9.149994537815125,
+            "median_pnl_pct": -6.22295,
+            "mean_days": 98.66806722689076
+          },
+          {
+            "group": "BEAR",
+            "n": 111,
+            "win_rate": 0.5315315315315315,
+            "mean_pnl_pct": 9.36528108108108,
+            "median_pnl_pct": 1.6489,
+            "mean_days": 83.06306306306307
+          },
+          {
+            "group": "HIGH_VOL",
+            "n": 46,
+            "win_rate": 0.5,
+            "mean_pnl_pct": 8.201460869565217,
+            "median_pnl_pct": -0.19665,
+            "mean_days": 87.82608695652173
+          }
+        ],
+        "holding_bands": [
+          {
+            "group": "1\u201330",
+            "n": 77,
+            "win_rate": 0.07792207792207792,
+            "mean_pnl_pct": -15.35733506493506
+          },
+          {
+            "group": "31\u201390",
+            "n": 117,
+            "win_rate": 0.3076923076923077,
+            "mean_pnl_pct": -4.555304273504273
+          },
+          {
+            "group": "91\u2013180",
+            "n": 167,
+            "win_rate": 0.7125748502994012,
+            "mean_pnl_pct": 24.143074251497005
+          },
+          {
+            "group": "181\u2013365",
+            "n": 34,
+            "win_rate": 0.8823529411764706,
+            "mean_pnl_pct": 37.591297058823535
+          }
+        ],
+        "best": [
+          {
+            "Ticker": "THEMISMED",
+            "Entry_Date": "2021-03-01T00:00:00.000",
+            "Exit_Date": "2021-08-02T00:00:00.000",
+            "PnL_Pct": 198.0769,
+            "Holding_Days": 154,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "PAISALO",
+            "Entry_Date": "2023-07-03T00:00:00.000",
+            "Exit_Date": "2024-02-01T00:00:00.000",
+            "PnL_Pct": 158.0897,
+            "Holding_Days": 213,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "BLBLIMITED",
+            "Entry_Date": "2023-10-26T00:00:00.000",
+            "Exit_Date": "2024-03-01T00:00:00.000",
+            "PnL_Pct": 154.1463,
+            "Holding_Days": 127,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "KELLTONTEC",
+            "Entry_Date": "2021-08-20T00:00:00.000",
+            "Exit_Date": "2022-02-01T00:00:00.000",
+            "PnL_Pct": 128.1319,
+            "Holding_Days": 165,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "VAISHALI",
+            "Entry_Date": "2021-08-24T00:00:00.000",
+            "Exit_Date": "2022-04-28T00:00:00.000",
+            "PnL_Pct": 119.086,
+            "Holding_Days": 247,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "63MOONS",
+            "Entry_Date": "2024-08-27T00:00:00.000",
+            "Exit_Date": "2024-12-02T00:00:00.000",
+            "PnL_Pct": 105.6886,
+            "Holding_Days": 97,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "TEMBO",
+            "Entry_Date": "2022-11-16T00:00:00.000",
+            "Exit_Date": "2023-05-02T00:00:00.000",
+            "PnL_Pct": 105.4674,
+            "Holding_Days": 167,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "LUXIND",
+            "Entry_Date": "2024-03-01T00:00:00.000",
+            "Exit_Date": "2024-09-02T00:00:00.000",
+            "PnL_Pct": 103.051,
+            "Holding_Days": 185,
+            "Exit_Reason": "REBALANCE"
+          }
+        ],
+        "worst": [
+          {
+            "Ticker": "FELDVR",
+            "Entry_Date": "2020-03-16T00:00:00.000",
+            "Exit_Date": "2020-03-24T00:00:00.000",
+            "PnL_Pct": -36.0606,
+            "Holding_Days": 8,
+            "Exit_Reason": "CRASH_GUARD"
+          },
+          {
+            "Ticker": "ORIENTCEM",
+            "Entry_Date": "2020-02-27T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -34.6481,
+            "Holding_Days": 15,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "RSWM",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -32.6443,
+            "Holding_Days": 11,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "BCG",
+            "Entry_Date": "2023-03-22T00:00:00.000",
+            "Exit_Date": "2023-03-31T00:00:00.000",
+            "PnL_Pct": -31.9372,
+            "Holding_Days": 9,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "JUSTDIAL",
+            "Entry_Date": "2020-02-19T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -31.5987,
+            "Holding_Days": 23,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "DYNAMATECH",
+            "Entry_Date": "2020-03-05T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -31.4634,
+            "Holding_Days": 8,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "SALONA",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-11T00:00:00.000",
+            "PnL_Pct": -30.2542,
+            "Holding_Days": 9,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "NEWGEN",
+            "Entry_Date": "2020-02-13T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -30.1711,
+            "Holding_Days": 29,
+            "Exit_Reason": "STOP_HIT"
+          }
+        ]
+      }
+    },
+    {
+      "version": "experimental",
+      "case": "pullback_price_only",
+      "first_signal": "2019-07-31",
+      "windows": {
+        "full": {
+          "cagr": 0.16957330675918425,
+          "max_drawdown": -0.2943629371759633,
+          "sharpe": 1.0150284137340349,
+          "exposure": 0.7373346227345,
+          "annual_turnover": 8.213910006917661,
+          "max_positions": 20,
+          "closed": 465,
+          "winners": 205,
+          "losers": 258,
+          "flat": 2,
+          "win_rate": 0.44086021505376344,
+          "loss_rate": 0.5548387096774193,
+          "mean_win_pct": 31.173785853658533,
+          "mean_loss_pct": -13.691684496124031,
+          "median_pnl_pct": -5.1282,
+          "mean_holding_days": 78.96129032258065,
+          "median_holding_days": 73.0,
+          "exit_counts": {
+            "STOP_HIT": 347,
+            "REBALANCE": 112,
+            "CRASH_GUARD": 6
+          }
+        },
+        "development": {
+          "cagr": 0.31540751639161235,
+          "max_drawdown": -0.1676868426950091,
+          "sharpe": 1.8252219752019418,
+          "exposure": 0.6424703537725532,
+          "annual_turnover": 7.23444576358189,
+          "max_positions": 20,
+          "closed": 203,
+          "winners": 95,
+          "losers": 108,
+          "flat": 0,
+          "win_rate": 0.46798029556650245,
+          "loss_rate": 0.5320197044334976,
+          "mean_win_pct": 34.91549684210527,
+          "mean_loss_pct": -13.95734166666667,
+          "median_pnl_pct": -3.2609,
+          "mean_holding_days": 74.47783251231527,
+          "median_holding_days": 64.0,
+          "exit_counts": {
+            "STOP_HIT": 154,
+            "REBALANCE": 43,
+            "CRASH_GUARD": 6
+          }
+        },
+        "previously_examined_2022_2024": {
+          "cagr": 0.05738119141782594,
+          "max_drawdown": -0.2943629371759636,
+          "sharpe": 0.40389910415908625,
+          "exposure": 0.819303479630287,
+          "annual_turnover": 9.080604469171139,
+          "max_positions": 20,
+          "closed": 242,
+          "winners": 100,
+          "losers": 141,
+          "flat": 1,
+          "win_rate": 0.4132231404958678,
+          "loss_rate": 0.5826446280991735,
+          "mean_win_pct": 26.141351999999998,
+          "mean_loss_pct": -13.71596524822695,
+          "median_pnl_pct": -6.2031,
+          "mean_holding_days": 80.86776859504133,
+          "median_holding_days": 76.0,
+          "exit_counts": {
+            "STOP_HIT": 175,
+            "REBALANCE": 67
+          }
+        },
+        "year_2024": {
+          "cagr": 0.0027859514672321506,
+          "max_drawdown": -0.22851970080161654,
+          "sharpe": 0.1171675970944659,
+          "exposure": 0.872935238481366,
+          "annual_turnover": 8.891119213913763,
+          "max_positions": 20,
+          "closed": 69,
+          "winners": 25,
+          "losers": 44,
+          "flat": 0,
+          "win_rate": 0.36231884057971014,
+          "loss_rate": 0.6376811594202898,
+          "mean_win_pct": 23.020692,
+          "mean_loss_pct": -13.934931818181816,
+          "median_pnl_pct": -12.1965,
+          "mean_holding_days": 72.56521739130434,
+          "median_holding_days": 63.0,
+          "exit_counts": {
+            "STOP_HIT": 54,
+            "REBALANCE": 15
+          }
+        }
+      },
+      "annual_returns": {
+        "2019": 0.07359901450761641,
+        "2020": 0.1844004888886619,
+        "2021": 0.5948596913747186,
+        "2022": -0.11981090235806169,
+        "2023": 0.3388406874187819,
+        "2024": 0.0027840419354216994
+      },
+      "trade_groups": {
+        "Exit_Reason": [
+          {
+            "group": "STOP_HIT",
+            "n": 347,
+            "win_rate": 0.2968299711815562,
+            "mean_pnl_pct": -2.004904034582133,
+            "median_pnl_pct": -12.2685,
+            "mean_days": 62.61383285302594
+          },
+          {
+            "group": "REBALANCE",
+            "n": 112,
+            "win_rate": 0.9017857142857143,
+            "mean_pnl_pct": 32.17268035714286,
+            "median_pnl_pct": 20.40935,
+            "mean_days": 133.45535714285714
+          },
+          {
+            "group": "CRASH_GUARD",
+            "n": 6,
+            "win_rate": 0.16666666666666666,
+            "mean_pnl_pct": -8.2445,
+            "median_pnl_pct": -12.4389,
+            "mean_days": 7.166666666666667
+          }
+        ],
+        "Exit_Detail": [
+          {
+            "group": "PEAK_HARD",
+            "n": 198,
+            "win_rate": 0.5202020202020202,
+            "mean_pnl_pct": 9.302931818181818,
+            "median_pnl_pct": 1.4322,
+            "mean_days": 80.43939393939394
+          },
+          {
+            "group": "ENTRY_HARD",
+            "n": 149,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -17.031424161073826,
+            "median_pnl_pct": -16.1575,
+            "mean_days": 38.92617449664429
+          },
+          {
+            "group": "RANK_DECAY",
+            "n": 107,
+            "win_rate": 0.897196261682243,
+            "mean_pnl_pct": 29.079792523364482,
+            "median_pnl_pct": 20.0538,
+            "mean_days": 132.25233644859813
+          },
+          {
+            "group": "BENCH_PANIC",
+            "n": 6,
+            "win_rate": 0.16666666666666666,
+            "mean_pnl_pct": -8.2445,
+            "median_pnl_pct": -12.4389,
+            "mean_days": 7.166666666666667
+          },
+          {
+            "group": "SIGNAL_DROP",
+            "n": 5,
+            "win_rate": 1.0,
+            "mean_pnl_pct": 98.36048000000001,
+            "median_pnl_pct": 139.0351,
+            "mean_days": 159.2
+          }
+        ],
+        "Regime_At_Entry": [
+          {
+            "group": "BULL",
+            "n": 285,
+            "win_rate": 0.4070175438596491,
+            "mean_pnl_pct": 5.806248771929824,
+            "median_pnl_pct": -7.3768,
+            "mean_days": 80.19298245614036
+          },
+          {
+            "group": "BEAR",
+            "n": 94,
+            "win_rate": 0.43617021276595747,
+            "mean_pnl_pct": 5.002543617021277,
+            "median_pnl_pct": -3.3706,
+            "mean_days": 70.47872340425532
+          },
+          {
+            "group": "HIGH_VOL",
+            "n": 86,
+            "win_rate": 0.5581395348837209,
+            "mean_pnl_pct": 8.525017441860467,
+            "median_pnl_pct": 3.6975000000000002,
+            "mean_days": 84.15116279069767
+          }
+        ],
+        "holding_bands": [
+          {
+            "group": "1\u201330",
+            "n": 103,
+            "win_rate": 0.11650485436893204,
+            "mean_pnl_pct": -12.45630485436893
+          },
+          {
+            "group": "31\u201390",
+            "n": 172,
+            "win_rate": 0.25,
+            "mean_pnl_pct": -3.5268348837209307
+          },
+          {
+            "group": "91\u2013180",
+            "n": 169,
+            "win_rate": 0.7751479289940828,
+            "mean_pnl_pct": 22.68941952662722
+          },
+          {
+            "group": "181\u2013365",
+            "n": 21,
+            "win_rate": 0.9047619047619048,
+            "mean_pnl_pct": 43.48926666666667
+          }
+        ],
+        "best": [
+          {
+            "Ticker": "V2RETAIL",
+            "Entry_Date": "2020-09-28T00:00:00.000",
+            "Exit_Date": "2021-03-01T00:00:00.000",
+            "PnL_Pct": 158.8235,
+            "Holding_Days": 154,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "TOUCHWOOD",
+            "Entry_Date": "2020-09-22T00:00:00.000",
+            "Exit_Date": "2021-04-13T00:00:00.000",
+            "PnL_Pct": 141.2281,
+            "Holding_Days": 203,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "SIMPLEXINF",
+            "Entry_Date": "2023-07-03T00:00:00.000",
+            "Exit_Date": "2023-12-01T00:00:00.000",
+            "PnL_Pct": 140.7895,
+            "Holding_Days": 151,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "PANSARI",
+            "Entry_Date": "2021-01-01T00:00:00.000",
+            "Exit_Date": "2021-06-01T00:00:00.000",
+            "PnL_Pct": 139.0351,
+            "Holding_Days": 151,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "VAISHALI",
+            "Entry_Date": "2021-12-01T00:00:00.000",
+            "Exit_Date": "2022-04-28T00:00:00.000",
+            "PnL_Pct": 136.2319,
+            "Holding_Days": 148,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "RAJRATAN",
+            "Entry_Date": "2020-08-03T00:00:00.000",
+            "Exit_Date": "2021-02-01T00:00:00.000",
+            "PnL_Pct": 124.7,
+            "Holding_Days": 182,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "KELLTONTEC",
+            "Entry_Date": "2021-11-23T00:00:00.000",
+            "Exit_Date": "2022-02-01T00:00:00.000",
+            "PnL_Pct": 116.7015,
+            "Holding_Days": 70,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "ROSSELLIND",
+            "Entry_Date": "2019-08-01T00:00:00.000",
+            "Exit_Date": "2019-12-02T00:00:00.000",
+            "PnL_Pct": 110.9589,
+            "Holding_Days": 123,
+            "Exit_Reason": "REBALANCE"
+          }
+        ],
+        "worst": [
+          {
+            "Ticker": "SHEMAROO",
+            "Entry_Date": "2020-02-04T00:00:00.000",
+            "Exit_Date": "2020-02-13T00:00:00.000",
+            "PnL_Pct": -32.875,
+            "Holding_Days": 9,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "ENIL",
+            "Entry_Date": "2020-03-11T00:00:00.000",
+            "Exit_Date": "2020-03-19T00:00:00.000",
+            "PnL_Pct": -31.9441,
+            "Holding_Days": 8,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "SANGINITA",
+            "Entry_Date": "2020-10-08T00:00:00.000",
+            "Exit_Date": "2020-11-06T00:00:00.000",
+            "PnL_Pct": -30.2075,
+            "Holding_Days": 29,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "PNBHOUSING",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-11T00:00:00.000",
+            "PnL_Pct": -29.7046,
+            "Holding_Days": 9,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "GLAND",
+            "Entry_Date": "2023-02-16T00:00:00.000",
+            "Exit_Date": "2023-05-22T00:00:00.000",
+            "PnL_Pct": -29.5555,
+            "Holding_Days": 95,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "THOMASCOOK",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -28.8913,
+            "Holding_Days": 11,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "UFO",
+            "Entry_Date": "2020-02-12T00:00:00.000",
+            "Exit_Date": "2020-03-12T00:00:00.000",
+            "PnL_Pct": -26.3519,
+            "Holding_Days": 29,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "INDOSTAR",
+            "Entry_Date": "2022-02-22T00:00:00.000",
+            "Exit_Date": "2022-05-10T00:00:00.000",
+            "PnL_Pct": -25.235,
+            "Holding_Days": 77,
+            "Exit_Reason": "STOP_HIT"
+          }
+        ]
+      }
+    },
+    {
+      "version": "experimental",
+      "case": "trend_price_only",
+      "first_signal": "2019-07-31",
+      "windows": {
+        "full": {
+          "cagr": 0.42237867105721105,
+          "max_drawdown": -0.1565073225824457,
+          "sharpe": 2.144071299828156,
+          "exposure": 0.7267541060574118,
+          "annual_turnover": 6.637768673753612,
+          "max_positions": 20,
+          "closed": 357,
+          "winners": 184,
+          "losers": 173,
+          "flat": 0,
+          "win_rate": 0.5154061624649859,
+          "loss_rate": 0.484593837535014,
+          "mean_win_pct": 43.58863097826087,
+          "mean_loss_pct": -13.4215225433526,
+          "median_pnl_pct": 1.0073,
+          "mean_holding_days": 103.05602240896359,
+          "median_holding_days": 99.0,
+          "exit_counts": {
+            "STOP_HIT": 224,
+            "REBALANCE": 121,
+            "CRASH_GUARD": 12
+          }
+        },
+        "development": {
+          "cagr": 0.581903699733594,
+          "max_drawdown": -0.1501972805192091,
+          "sharpe": 2.9232608457801983,
+          "exposure": 0.6482201609619256,
+          "annual_turnover": 5.823807264049876,
+          "max_positions": 20,
+          "closed": 146,
+          "winners": 74,
+          "losers": 72,
+          "flat": 0,
+          "win_rate": 0.5068493150684932,
+          "loss_rate": 0.4931506849315068,
+          "mean_win_pct": 52.933281081081084,
+          "mean_loss_pct": -14.27780138888889,
+          "median_pnl_pct": 1.2312500000000002,
+          "mean_holding_days": 103.76027397260275,
+          "median_holding_days": 104.5,
+          "exit_counts": {
+            "STOP_HIT": 82,
+            "REBALANCE": 52,
+            "CRASH_GUARD": 12
+          }
+        },
+        "previously_examined_2022_2024": {
+          "cagr": 0.2991166919310744,
+          "max_drawdown": -0.15650732258244482,
+          "sharpe": 1.5476839794392234,
+          "exposure": 0.7946125081453016,
+          "annual_turnover": 7.35749873227345,
+          "max_positions": 20,
+          "closed": 191,
+          "winners": 93,
+          "losers": 98,
+          "flat": 0,
+          "win_rate": 0.4869109947643979,
+          "loss_rate": 0.5130890052356021,
+          "mean_win_pct": 40.53951935483871,
+          "mean_loss_pct": -12.845244897959184,
+          "median_pnl_pct": -0.7228,
+          "mean_holding_days": 99.55497382198953,
+          "median_holding_days": 91.0,
+          "exit_counts": {
+            "STOP_HIT": 128,
+            "REBALANCE": 63
+          }
+        },
+        "year_2024": {
+          "cagr": 0.2500507787781898,
+          "max_drawdown": -0.141074384164672,
+          "sharpe": 1.1502060774275378,
+          "exposure": 0.8409295436625168,
+          "annual_turnover": 7.411144416698102,
+          "max_positions": 20,
+          "closed": 54,
+          "winners": 19,
+          "losers": 35,
+          "flat": 0,
+          "win_rate": 0.35185185185185186,
+          "loss_rate": 0.6481481481481481,
+          "mean_win_pct": 31.929936842105263,
+          "mean_loss_pct": -12.698725714285715,
+          "median_pnl_pct": -4.916449999999999,
+          "mean_holding_days": 80.62962962962963,
+          "median_holding_days": 69.5,
+          "exit_counts": {
+            "STOP_HIT": 43,
+            "REBALANCE": 11
+          }
+        }
+      },
+      "annual_returns": {
+        "2019": 0.07573322068411525,
+        "2020": 0.45420567389298516,
+        "2021": 1.0862481044817902,
+        "2022": 0.08861896369067157,
+        "2023": 0.6082427951797,
+        "2024": 0.24985983405440715
+      },
+      "trade_groups": {
+        "Exit_Reason": [
+          {
+            "group": "STOP_HIT",
+            "n": 224,
+            "win_rate": 0.35267857142857145,
+            "mean_pnl_pct": 5.176698660714286,
+            "median_pnl_pct": -9.998149999999999,
+            "mean_days": 80.68303571428571
+          },
+          {
+            "group": "REBALANCE",
+            "n": 121,
+            "win_rate": 0.8677685950413223,
+            "mean_pnl_pct": 38.70906198347108,
+            "median_pnl_pct": 18.5832,
+            "mean_days": 152.58677685950414
+          },
+          {
+            "group": "CRASH_GUARD",
+            "n": 12,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -12.082691666666667,
+            "median_pnl_pct": -11.911200000000001,
+            "mean_days": 21.25
+          }
+        ],
+        "Exit_Detail": [
+          {
+            "group": "PEAK_HARD",
+            "n": 149,
+            "win_rate": 0.5302013422818792,
+            "mean_pnl_pct": 16.77814429530201,
+            "median_pnl_pct": 2.8289,
+            "mean_days": 101.48993288590604
+          },
+          {
+            "group": "RANK_DECAY",
+            "n": 120,
+            "win_rate": 0.8666666666666667,
+            "mean_pnl_pct": 39.02505416666666,
+            "median_pnl_pct": 18.76215,
+            "mean_days": 152.84166666666667
+          },
+          {
+            "group": "ENTRY_HARD",
+            "n": 74,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -16.839087837837837,
+            "median_pnl_pct": -15.8671,
+            "mean_days": 39.513513513513516
+          },
+          {
+            "group": "BENCH_PANIC",
+            "n": 12,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -12.082691666666667,
+            "median_pnl_pct": -11.911200000000001,
+            "mean_days": 21.25
+          },
+          {
+            "group": "FORCE_60",
+            "n": 1,
+            "win_rate": 0.0,
+            "mean_pnl_pct": -94.2705,
+            "median_pnl_pct": -94.2705,
+            "mean_days": 27.0
+          },
+          {
+            "group": "SIGNAL_DROP",
+            "n": 1,
+            "win_rate": 1.0,
+            "mean_pnl_pct": 0.79,
+            "median_pnl_pct": 0.79,
+            "mean_days": 122.0
+          }
+        ],
+        "Regime_At_Entry": [
+          {
+            "group": "BULL",
+            "n": 211,
+            "win_rate": 0.5497630331753555,
+            "mean_pnl_pct": 20.13494028436019,
+            "median_pnl_pct": 3.1771,
+            "mean_days": 108.12322274881517
+          },
+          {
+            "group": "HIGH_VOL",
+            "n": 76,
+            "win_rate": 0.4473684210526316,
+            "mean_pnl_pct": 10.59941842105263,
+            "median_pnl_pct": -2.1036,
+            "mean_days": 89.73684210526316
+          },
+          {
+            "group": "BEAR",
+            "n": 70,
+            "win_rate": 0.4857142857142857,
+            "mean_pnl_pct": 9.205092857142859,
+            "median_pnl_pct": -2.5564999999999998,
+            "mean_days": 102.24285714285715
+          }
+        ],
+        "holding_bands": [
+          {
+            "group": "1\u201330",
+            "n": 63,
+            "win_rate": 0.031746031746031744,
+            "mean_pnl_pct": -16.52248253968254
+          },
+          {
+            "group": "31\u201390",
+            "n": 94,
+            "win_rate": 0.22340425531914893,
+            "mean_pnl_pct": -5.57558404255319
+          },
+          {
+            "group": "91\u2013180",
+            "n": 154,
+            "win_rate": 0.7532467532467533,
+            "mean_pnl_pct": 18.64922012987013
+          },
+          {
+            "group": "181\u2013365",
+            "n": 45,
+            "win_rate": 0.9777777777777777,
+            "mean_pnl_pct": 89.09932444444445
+          },
+          {
+            "group": ">365",
+            "n": 1,
+            "win_rate": 1.0,
+            "mean_pnl_pct": 381.9565
+          }
+        ],
+        "best": [
+          {
+            "Ticker": "DIXON",
+            "Entry_Date": "2020-05-13T00:00:00.000",
+            "Exit_Date": "2021-07-01T00:00:00.000",
+            "PnL_Pct": 381.9565,
+            "Holding_Days": 414,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "SAREGAMA",
+            "Entry_Date": "2021-03-01T00:00:00.000",
+            "Exit_Date": "2021-12-01T00:00:00.000",
+            "PnL_Pct": 299.5564,
+            "Holding_Days": 275,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "ANANDRATHI",
+            "Entry_Date": "2023-08-01T00:00:00.000",
+            "Exit_Date": "2024-07-01T00:00:00.000",
+            "PnL_Pct": 235.1814,
+            "Holding_Days": 335,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "GPIL",
+            "Entry_Date": "2020-12-01T00:00:00.000",
+            "Exit_Date": "2021-08-11T00:00:00.000",
+            "PnL_Pct": 205.4374,
+            "Holding_Days": 253,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "TANLA",
+            "Entry_Date": "2020-09-01T00:00:00.000",
+            "Exit_Date": "2020-12-18T00:00:00.000",
+            "PnL_Pct": 202.2944,
+            "Holding_Days": 108,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "ADANIENT",
+            "Entry_Date": "2021-02-01T00:00:00.000",
+            "Exit_Date": "2021-10-01T00:00:00.000",
+            "PnL_Pct": 186.9736,
+            "Holding_Days": 242,
+            "Exit_Reason": "REBALANCE"
+          },
+          {
+            "Ticker": "VAIBHAVGBL",
+            "Entry_Date": "2020-07-20T00:00:00.000",
+            "Exit_Date": "2021-03-31T00:00:00.000",
+            "PnL_Pct": 174.9254,
+            "Holding_Days": 254,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "AARTIDRUGS",
+            "Entry_Date": "2020-06-01T00:00:00.000",
+            "Exit_Date": "2020-09-01T00:00:00.000",
+            "PnL_Pct": 171.5779,
+            "Holding_Days": 92,
+            "Exit_Reason": "STOP_HIT"
+          }
+        ],
+        "worst": [
+          {
+            "Ticker": "SUVEN",
+            "Entry_Date": "2019-12-27T00:00:00.000",
+            "Exit_Date": "2020-01-23T00:00:00.000",
+            "PnL_Pct": -94.2705,
+            "Holding_Days": 27,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "MASFIN",
+            "Entry_Date": "2020-02-19T00:00:00.000",
+            "Exit_Date": "2020-03-19T00:00:00.000",
+            "PnL_Pct": -31.0735,
+            "Holding_Days": 29,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "STAR",
+            "Entry_Date": "2024-08-01T00:00:00.000",
+            "Exit_Date": "2024-12-10T00:00:00.000",
+            "PnL_Pct": -29.7432,
+            "Holding_Days": 131,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "SUDARSCHEM",
+            "Entry_Date": "2020-03-02T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -28.9477,
+            "Holding_Days": 11,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "JUBLFOOD",
+            "Entry_Date": "2020-02-27T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -28.245,
+            "Holding_Days": 15,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "PURVA",
+            "Entry_Date": "2024-02-29T00:00:00.000",
+            "Exit_Date": "2024-03-14T00:00:00.000",
+            "PnL_Pct": -26.9698,
+            "Holding_Days": 14,
+            "Exit_Reason": "STOP_HIT"
+          },
+          {
+            "Ticker": "NESCO",
+            "Entry_Date": "2020-03-13T00:00:00.000",
+            "Exit_Date": "2020-03-24T00:00:00.000",
+            "PnL_Pct": -25.0,
+            "Holding_Days": 11,
+            "Exit_Reason": "CRASH_GUARD"
+          },
+          {
+            "Ticker": "IGL",
+            "Entry_Date": "2020-02-18T00:00:00.000",
+            "Exit_Date": "2020-03-13T00:00:00.000",
+            "PnL_Pct": -24.9624,
+            "Holding_Days": 24,
+            "Exit_Reason": "STOP_HIT"
+          }
+        ]
+      }
+    }
+  ]
+}

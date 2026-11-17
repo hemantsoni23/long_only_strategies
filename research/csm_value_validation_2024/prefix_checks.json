@@ -1,0 +1,30 @@
+[
+  {
+    "mode": "value",
+    "cutoff": "2022-12-30",
+    "factor_max_abs": 1.7763568394002505e-15,
+    "position_max_abs": 0.0,
+    "daily_return_max_abs": 3.469446951953614e-18
+  },
+  {
+    "mode": "value",
+    "cutoff": "2023-12-29",
+    "factor_max_abs": 1.7763568394002505e-15,
+    "position_max_abs": 0.0,
+    "daily_return_max_abs": 0.0
+  },
+  {
+    "mode": "value_growth_pullback",
+    "cutoff": "2022-12-30",
+    "factor_max_abs": 0.0,
+    "position_max_abs": 0.0,
+    "daily_return_max_abs": 0.0
+  },
+  {
+    "mode": "value_growth_pullback",
+    "cutoff": "2023-12-29",
+    "factor_max_abs": 0.0,
+    "position_max_abs": 0.0,
+    "daily_return_max_abs": 2.168404344971009e-19
+  }
+]

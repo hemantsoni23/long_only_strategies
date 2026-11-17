@@ -1,0 +1,11 @@
+{
+  "prefix_end": "2023-12-29",
+  "max_absolute_differences": {
+    "factors": 0.0,
+    "positions": 0.0,
+    "executed_weights": 3.608224830031759e-16,
+    "net_returns": 9.020562075079397e-17,
+    "turnover": 1.2073675392798577e-15,
+    "execution_book_value": 2.561137080192566e-09
+  }
+}

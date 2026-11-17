@@ -1,0 +1,1342 @@
+[
+  {
+    "symbol": "TCS",
+    "fy": "FY2024-25",
+    "quarter": "Q4",
+    "scope": "consolidated",
+    "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1412101_11042025074137_WEB.xml",
+    "filed_date": "11-Apr-2025 07:41:38",
+    "period": {
+      "start": "2025-01-01",
+      "end": "2025-03-31"
+    },
+    "rounding": null,
+    "facts": {
+      "revenue_from_operations": {
+        "local": 644790000000,
+        "tag": "RevenueFromOperations",
+        "xbrl": {
+          "value": "644790000000",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "644790000000",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      },
+      "net_profit": {
+        "local": 122930000000,
+        "tag": "ProfitLossForPeriod",
+        "xbrl": {
+          "value": "122930000000",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "122930000000",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      },
+      "basic_eps": {
+        "local": 33.79,
+        "tag": "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+        "xbrl": {
+          "value": "33.79",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "33.79",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "paid_up_equity_share_capital": {
+        "local": 3620000000,
+        "tag": "PaidUpValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "3620000000",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "3620000000",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      },
+      "face_value_per_share": {
+        "local": 1,
+        "tag": "FaceValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "1",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "1",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "exceptional_items": {
+        "local": 0,
+        "tag": "ExceptionalItemsBeforeTax",
+        "xbrl": {
+          "value": "0",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "0",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      },
+      "other_income": {
+        "local": 10280000000,
+        "tag": "OtherIncome",
+        "xbrl": {
+          "value": "10280000000",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "10280000000",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "symbol": "TCS",
+    "fy": "FY2025-26",
+    "quarter": "Q2",
+    "scope": "consolidated",
+    "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1543879_09102025115624_WEB.xml",
+    "filed_date": "09-Oct-2025 23:56:24",
+    "period": {
+      "start": "2025-07-01",
+      "end": "2025-09-30"
+    },
+    "rounding": null,
+    "facts": {
+      "revenue_from_operations": {
+        "local": 657990000000,
+        "tag": "RevenueFromOperations",
+        "xbrl": {
+          "value": "657990000000",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "657990000000",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      },
+      "net_profit": {
+        "local": 121310000000,
+        "tag": "ProfitLossForPeriod",
+        "xbrl": {
+          "value": "121310000000",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "121310000000",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      },
+      "basic_eps": {
+        "local": 33.37,
+        "tag": "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+        "xbrl": {
+          "value": "33.37",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "33.37",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "paid_up_equity_share_capital": {
+        "local": 3620000000,
+        "tag": "PaidUpValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "3620000000",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "3620000000",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      },
+      "face_value_per_share": {
+        "local": 1,
+        "tag": "FaceValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "1",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "1",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "exceptional_items": {
+        "local": -11350000000,
+        "tag": "ExceptionalItemsBeforeTax",
+        "xbrl": {
+          "value": "-11350000000",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "-11350000000",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      },
+      "other_income": {
+        "local": 8670000000,
+        "tag": "OtherIncome",
+        "xbrl": {
+          "value": "8670000000",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "8670000000",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "symbol": "RELIANCE",
+    "fy": "FY2025-26",
+    "quarter": "Q2",
+    "scope": "consolidated",
+    "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1552809_17102025073643_WEB.xml",
+    "filed_date": "17-Oct-2025 19:36:44",
+    "period": {
+      "start": "2025-07-01",
+      "end": "2025-09-30"
+    },
+    "rounding": null,
+    "facts": {
+      "revenue_from_operations": {
+        "local": 2588980000000,
+        "tag": "RevenueFromOperations",
+        "xbrl": {
+          "value": "2588980000000",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "2588980000000",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      },
+      "net_profit": {
+        "local": 220920000000,
+        "tag": "ProfitLossForPeriod",
+        "xbrl": {
+          "value": "220920000000",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "220920000000",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      },
+      "basic_eps": {
+        "local": 13.42,
+        "tag": "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+        "xbrl": {
+          "value": "13.42",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "13.42",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "paid_up_equity_share_capital": {
+        "local": 135320000000,
+        "tag": "PaidUpValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "135320000000",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "135320000000",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      },
+      "face_value_per_share": {
+        "local": 10,
+        "tag": "FaceValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "10",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "10",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "exceptional_items": {
+        "local": 0,
+        "tag": "ExceptionalItemsBeforeTax",
+        "xbrl": {
+          "value": "0",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "0",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      },
+      "other_income": {
+        "local": 44820000000,
+        "tag": "OtherIncome",
+        "xbrl": {
+          "value": "44820000000",
+          "unit": "INR",
+          "decimals": "-7"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "44820000000",
+            "unit": "INR",
+            "decimals": "-7"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "symbol": "PFC",
+    "fy": "FY2025-26",
+    "quarter": "Q3",
+    "scope": "consolidated",
+    "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_NBFC_INDAS_1619283_05022026055526_WEB.xml",
+    "filed_date": "05-Feb-2026 17:55:09",
+    "period": {
+      "start": "2025-10-01",
+      "end": "2025-12-31"
+    },
+    "rounding": null,
+    "facts": {
+      "revenue_from_operations": {
+        "local": 290948100000,
+        "tag": "RevenueFromOperations",
+        "xbrl": {
+          "value": "290948100000",
+          "unit": "INR",
+          "decimals": "-5"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "290948100000",
+            "unit": "INR",
+            "decimals": "-5"
+          }
+        ]
+      },
+      "net_profit": {
+        "local": 82119000000,
+        "tag": "ProfitLossForPeriod",
+        "xbrl": {
+          "value": "82119000000",
+          "unit": "INR",
+          "decimals": "-6"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "82119000000",
+            "unit": "INR",
+            "decimals": "-6"
+          }
+        ]
+      },
+      "basic_eps": {
+        "local": 19.07,
+        "tag": "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+        "xbrl": {
+          "value": "19.07",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "19.07",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "paid_up_equity_share_capital": {
+        "local": 33001000000,
+        "tag": "PaidUpValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "33001000000",
+          "unit": "INR",
+          "decimals": "-6"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "33001000000",
+            "unit": "INR",
+            "decimals": "-6"
+          }
+        ]
+      },
+      "face_value_per_share": {
+        "local": 10,
+        "tag": "FaceValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "10",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "10",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "exceptional_items": {
+        "local": -182800000,
+        "tag": "ExceptionalItemsBeforeTax",
+        "xbrl": {
+          "value": "-182800000",
+          "unit": "INR",
+          "decimals": "-5"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "-182800000",
+            "unit": "INR",
+            "decimals": "-5"
+          }
+        ]
+      },
+      "other_income": {
+        "local": 457600000,
+        "tag": "OtherIncome",
+        "xbrl": {
+          "value": "457600000",
+          "unit": "INR",
+          "decimals": "-5"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "457600000",
+            "unit": "INR",
+            "decimals": "-5"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "symbol": "DEVIT",
+    "fy": "FY2025-26",
+    "quarter": "Q2",
+    "scope": "consolidated",
+    "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1572399_12112025055558_WEB.xml",
+    "filed_date": "12-Nov-2025 17:55:58",
+    "period": {
+      "start": "2025-07-01",
+      "end": "2025-09-30"
+    },
+    "rounding": null,
+    "facts": {
+      "revenue_from_operations": {
+        "local": 485064000,
+        "tag": "RevenueFromOperations",
+        "xbrl": {
+          "value": "485064000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "485064000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "net_profit": {
+        "local": 718766000,
+        "tag": "ProfitLossForPeriod",
+        "xbrl": {
+          "value": "718766000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "718766000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "basic_eps": {
+        "local": 12.75,
+        "tag": "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+        "xbrl": {
+          "value": "12.75",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "12.75",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "paid_up_equity_share_capital": {
+        "local": 112670000,
+        "tag": "PaidUpValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "112670000",
+          "unit": "INR",
+          "decimals": "-4"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "112670000",
+            "unit": "INR",
+            "decimals": "-4"
+          }
+        ]
+      },
+      "face_value_per_share": {
+        "local": 2,
+        "tag": "FaceValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "2",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "2",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "exceptional_items": {
+        "local": 935464000,
+        "tag": "ExceptionalItemsBeforeTax",
+        "xbrl": {
+          "value": "935464000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "935464000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "other_income": {
+        "local": 6731000,
+        "tag": "OtherIncome",
+        "xbrl": {
+          "value": "6731000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "6731000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "symbol": "INDIANHUME",
+    "fy": "FY2024-25",
+    "quarter": "Q4",
+    "scope": "standalone",
+    "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1439072_14052025084423_WEB.xml",
+    "filed_date": "14-May-2025 20:44:23",
+    "period": {
+      "start": "2025-01-01",
+      "end": "2025-03-31"
+    },
+    "rounding": null,
+    "facts": {
+      "revenue_from_operations": {
+        "local": 3921019000,
+        "tag": "RevenueFromOperations",
+        "xbrl": {
+          "value": "3921019000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "3921019000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "net_profit": {
+        "local": 4992701000,
+        "tag": "ProfitLossForPeriod",
+        "xbrl": {
+          "value": "4992701000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "4992701000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "basic_eps": {
+        "local": 94.77,
+        "tag": "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+        "xbrl": {
+          "value": "94.77",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "94.77",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "paid_up_equity_share_capital": {
+        "local": 105364000,
+        "tag": "PaidUpValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "105364000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "105364000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "face_value_per_share": {
+        "local": 2,
+        "tag": "FaceValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "2",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "2",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "exceptional_items": {
+        "local": 5452205000,
+        "tag": "ExceptionalItemsBeforeTax",
+        "xbrl": {
+          "value": "5452205000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "5452205000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "other_income": {
+        "local": 31240000,
+        "tag": "OtherIncome",
+        "xbrl": {
+          "value": "31240000",
+          "unit": "INR",
+          "decimals": "-4"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "31240000",
+            "unit": "INR",
+            "decimals": "-4"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "symbol": "ZUARI",
+    "fy": "FY2025-26",
+    "quarter": "Q2",
+    "scope": "consolidated",
+    "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1568734_07112025103910_WEB.xml",
+    "filed_date": "07-Nov-2025 22:39:10",
+    "period": {
+      "start": "2025-07-01",
+      "end": "2025-09-30"
+    },
+    "rounding": null,
+    "facts": {
+      "revenue_from_operations": {
+        "local": 14226300000,
+        "tag": "RevenueFromOperations",
+        "xbrl": {
+          "value": "14226300000",
+          "unit": "INR",
+          "decimals": "-5"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "14226300000",
+            "unit": "INR",
+            "decimals": "-5"
+          }
+        ]
+      },
+      "net_profit": {
+        "local": 8403600000,
+        "tag": "ProfitLossForPeriod",
+        "xbrl": {
+          "value": "8403600000",
+          "unit": "INR",
+          "decimals": "-5"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "8403600000",
+            "unit": "INR",
+            "decimals": "-5"
+          }
+        ]
+      },
+      "basic_eps": {
+        "local": 191.68,
+        "tag": "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+        "xbrl": {
+          "value": "191.68",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "191.68",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "paid_up_equity_share_capital": {
+        "local": 420600000,
+        "tag": "PaidUpValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "420600000",
+          "unit": "INR",
+          "decimals": "-5"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "420600000",
+            "unit": "INR",
+            "decimals": "-5"
+          }
+        ]
+      },
+      "face_value_per_share": {
+        "local": 10,
+        "tag": "FaceValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "10",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "10",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "exceptional_items": {
+        "local": 8174900000,
+        "tag": "ExceptionalItemsBeforeTax",
+        "xbrl": {
+          "value": "8174900000",
+          "unit": "INR",
+          "decimals": "-5"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "8174900000",
+            "unit": "INR",
+            "decimals": "-5"
+          }
+        ]
+      },
+      "other_income": {
+        "local": 47200000,
+        "tag": "OtherIncome",
+        "xbrl": {
+          "value": "47200000",
+          "unit": "INR",
+          "decimals": "-5"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "47200000",
+            "unit": "INR",
+            "decimals": "-5"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "symbol": "AUSOMENT",
+    "fy": "FY2025-26",
+    "quarter": "Q3",
+    "scope": "consolidated",
+    "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1624195_12022026051306_WEB.xml",
+    "filed_date": "12-Feb-2026 17:13:05",
+    "period": {
+      "start": "2025-10-01",
+      "end": "2025-12-31"
+    },
+    "rounding": null,
+    "facts": {
+      "revenue_from_operations": {
+        "local": 543447000,
+        "tag": "RevenueFromOperations",
+        "xbrl": {
+          "value": "543447000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "543447000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "net_profit": {
+        "local": 20620000,
+        "tag": "ProfitLossForPeriod",
+        "xbrl": {
+          "value": "20620000",
+          "unit": "INR",
+          "decimals": "-4"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "20620000",
+            "unit": "INR",
+            "decimals": "-4"
+          }
+        ]
+      },
+      "basic_eps": {
+        "local": 1.51,
+        "tag": "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+        "xbrl": {
+          "value": "1.51",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "1.51",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "paid_up_equity_share_capital": {
+        "local": 136236000,
+        "tag": "PaidUpValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "136236000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "136236000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "face_value_per_share": {
+        "local": 10,
+        "tag": "FaceValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "10",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "10",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "exceptional_items": {
+        "local": 0,
+        "tag": "ExceptionalItemsBeforeTax",
+        "xbrl": {
+          "value": "0",
+          "unit": "INR",
+          "decimals": "-5"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "0",
+            "unit": "INR",
+            "decimals": "-5"
+          }
+        ]
+      },
+      "other_income": {
+        "local": 18472000,
+        "tag": "OtherIncome",
+        "xbrl": {
+          "value": "18472000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "18472000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "symbol": "UMIYA-MRO",
+    "fy": "FY2025-26",
+    "quarter": "Q2",
+    "scope": "consolidated",
+    "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1549186_15102025053931_WEB.xml",
+    "filed_date": "15-Oct-2025 17:39:31",
+    "period": {
+      "start": "2025-07-01",
+      "end": "2025-09-30"
+    },
+    "rounding": null,
+    "facts": {
+      "revenue_from_operations": {
+        "local": 205743000,
+        "tag": "RevenueFromOperations",
+        "xbrl": {
+          "value": "205743000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "205743000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "net_profit": {
+        "local": 67052000,
+        "tag": "ProfitLossForPeriod",
+        "xbrl": {
+          "value": "67052000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "67052000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "basic_eps": {
+        "local": 3.59,
+        "tag": "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+        "xbrl": {
+          "value": "3.59",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "3.59",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "paid_up_equity_share_capital": {
+        "local": 93423000,
+        "tag": "PaidUpValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "93423000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "93423000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "face_value_per_share": {
+        "local": 5,
+        "tag": "FaceValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "5",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "5",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "exceptional_items": {
+        "local": 0,
+        "tag": "ExceptionalItemsBeforeTax",
+        "xbrl": {
+          "value": "0",
+          "unit": "INR",
+          "decimals": "-5"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "0",
+            "unit": "INR",
+            "decimals": "-5"
+          }
+        ]
+      },
+      "other_income": {
+        "local": 13848000,
+        "tag": "OtherIncome",
+        "xbrl": {
+          "value": "13848000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "13848000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "symbol": "DJML",
+    "fy": "FY2025-26",
+    "quarter": "Q2",
+    "scope": "consolidated",
+    "url": "https://nsearchives.nseindia.com/corporate/xbrl/INTEGRATED_FILING_INDAS_1571859_11112025105711_WEB.xml",
+    "filed_date": "11-NOV-2025 22:57:11",
+    "period": {
+      "start": "2025-07-01",
+      "end": "2025-09-30"
+    },
+    "rounding": null,
+    "facts": {
+      "revenue_from_operations": {
+        "local": 321918000,
+        "tag": "RevenueFromOperations",
+        "xbrl": {
+          "value": "321918000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "321918000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "net_profit": {
+        "local": 20417000,
+        "tag": "ProfitLossForPeriod",
+        "xbrl": {
+          "value": "20417000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "20417000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "basic_eps": {
+        "local": 0.63,
+        "tag": "BasicEarningsLossPerShareFromContinuingAndDiscontinuedOperations",
+        "xbrl": {
+          "value": "0.63",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "0.63",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "paid_up_equity_share_capital": {
+        "local": 32484000,
+        "tag": "PaidUpValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "32484000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "32484000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      },
+      "face_value_per_share": {
+        "local": 10,
+        "tag": "FaceValueOfEquityShareCapital",
+        "xbrl": {
+          "value": "10",
+          "unit": "INRPerShare",
+          "decimals": "INF"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "10",
+            "unit": "INRPerShare",
+            "decimals": "INF"
+          }
+        ]
+      },
+      "exceptional_items": {
+        "local": 0,
+        "tag": "ExceptionalItemsBeforeTax",
+        "xbrl": {
+          "value": "0",
+          "unit": "INR",
+          "decimals": "-5"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "0",
+            "unit": "INR",
+            "decimals": "-5"
+          }
+        ]
+      },
+      "other_income": {
+        "local": 1968000,
+        "tag": "OtherIncome",
+        "xbrl": {
+          "value": "1968000",
+          "unit": "INR",
+          "decimals": "-3"
+        },
+        "match": true,
+        "duplicate_values": [
+          {
+            "value": "1968000",
+            "unit": "INR",
+            "decimals": "-3"
+          }
+        ]
+      }
+    }
+  }
+]

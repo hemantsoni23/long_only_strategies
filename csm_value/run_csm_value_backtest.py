@@ -1,6 +1,6 @@
 """
-run_csm_value_backtest.py -- backtest runner for CSMValue (E/P on the Elendel chassis). Generated from Old_live_strategies/run_csm_elendel_backtest.py by _generate_elendel_chassis.py;
-the event-driven engine (_run_backtest_core), overlays, logs, performance report, IC/ICIR and realized-IC sections are Elendel's. Reporting window 2019-06 -> 2025-06 (fundamentals limit).
+run_csm_value_backtest.py -- event-driven CSM Value backtest and reporting.
+The normal runner is temporarily limited to 2024 while later data is audited.
 """
 import os
 import sys
@@ -15,14 +15,31 @@ import seaborn as sns
 _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _HERE)
 
-from csm_value_strategy import CSMValue
+from csm_value_strategy import CSMValue, FUNDAMENTALS_DIR
 
 
 VERSION_TAG = 'ey'
-# Which booking is the HEADLINE.  False = the Elendel engine's own booking, directly comparable with the Elendel / Zenith / Quad backtests (CSM Value FULL window: 38.5% CAGR, -12.6% max DD).
-# True = execution-faithful booking (charges the gap to the real fill; AUDIT.md: 20.0% / -23.0%).  Both are always computed and both are printed in the 'Accounting cross-check' block.
-EXECUTION_FAITHFUL_ACCOUNTING = False
+# User-requested Elendel convention: the executed exit-day weight is zero.
 data_folder_path = '/Users/hemantsoni/Documents/upstox_data_folder/ohlcv_data'
+# Temporary research boundary requested by the user. Do not use later results
+# until the 2025–2026 fundamentals have been repaired and revalidated.
+RESEARCH_END_DATE = pd.Timestamp('2024-12-31')
+RISK_PROFILES = {
+    'default': {},
+    # Previous configurations remain available for historical comparison.
+    'legacy_value': {
+        'top_n': 10, 'buffer_ratio': .2, 'max_weight_per_stock': .05,
+        'risk_pct_per_trade': .01, 'hard_stop_from_peak': .20,
+        'leverage_bear': .8, 'vol_target': .15,
+        'rebalance_exit_buffer_months': 1, 'fill_weight_caps': False,
+    },
+    'exploratory_10_12_bear50': {
+        'top_n': 10, 'buffer_ratio': .2,
+        'max_weight_per_stock': .10, 'risk_pct_per_trade': .015,
+        'hard_stop_from_peak': .12, 'leverage_bear': .5,
+        'vol_target': .15, 'rebalance_exit_buffer_months': 1, 'fill_weight_caps': False,
+    },
+}
 
 
 OUTPUT_DIR = os.path.join(_HERE, 'output')
@@ -282,10 +299,15 @@ def add_reject_counterfactuals(reject_df, prices):
 # DATA LOADER  (identical to batch v2.4 — same data source)
 # ══════════════════════════════════════════════════════════════════════════════
 
-def load_data(folder_path):
+def load_data(folder_path, symbols=None):
     """Loads OHLCV CSVs from folder_path; entries/exits fill at next-day open, falling back to prev-close if no open column exists."""
     import glob
     all_files = glob.glob(os.path.join(folder_path, "*.csv"))
+    if symbols is None:
+        symbols = {os.path.splitext(os.path.basename(p))[0] for p in
+                   glob.glob(os.path.join(FUNDAMENTALS_DIR, '*.json')) +
+                   glob.glob(os.path.join(FUNDAMENTALS_DIR, 'sme', '*.json'))}
+    all_files = [p for p in all_files if os.path.splitext(os.path.basename(p))[0] in symbols]
     if not all_files:
         raise ValueError(f"No CSV files found in {folder_path}")
 
@@ -349,6 +371,24 @@ def load_data(folder_path):
     return prices_df, volumes_df, highs_df, lows_df, opens_df
 
 
+def load_nse_monthly_prices(symbols=None, path=None):
+    """NSE as-traded closes at the signal sessions; no forward filling."""
+    path = path or os.path.join(_HERE, 'data', 'nse_monthly_prices.csv')
+    if not os.path.exists(path):
+        raise FileNotFoundError(
+            f'NSE month-end price file is missing: {path}. '
+            'Run python3 csm_value/fetch_nse_monthly_prices.py to download the public archive.'
+        )
+    f = pd.read_csv(path, usecols=['datetime', 'symbol', 'close'], parse_dates=['datetime'])
+    if symbols is not None:
+        f = f[f.symbol.isin(symbols)]
+    if f.duplicated(['datetime', 'symbol']).any():
+        raise ValueError('NSE monthly prices contain ambiguous symbol/date rows')
+    prices = f.pivot(index='datetime', columns='symbol', values='close').sort_index()
+    print(f'Loaded NSE as-traded month-end prices: {prices.shape} from {path}')
+    return prices
+
+
 def mask_corporate_actions(prices, highs, lows, opens, lower=-0.40, upper=3.00):
     """NaN out OHLC on any day a stock's close-to-close move falls outside [lower, upper] --
     catches un-adjusted splits/bonuses and raw data glitches (e.g. a zero-volume placeholder
@@ -373,6 +413,19 @@ def build_benchmark(prices):
                                 .clip(-0.5, 0.5)
                                 .mean(axis=1, skipna=True)
                                 .fillna(0.0)).cumprod()
+
+
+def _cap_gross_weights(weights, locked):
+    """Cap gross weight at one, without resizing positions missing an open."""
+    locked = set(locked)
+    frozen = [name for name in weights.index if name in locked]
+    adjustable = [name for name in weights.index if name not in locked]
+    available = max(0.0, 1.0 - float(weights.loc[frozen].sum()))
+    proposed = float(weights.loc[adjustable].sum())
+    if proposed > available and proposed > 0:
+        weights = weights.copy()
+        weights.loc[adjustable] *= available / proposed
+    return weights
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -444,9 +497,8 @@ def _record_closed_trade(strategy, ticker, holding, exit_date,
     min_price    = holding.get('min_price',     entry_price)
     max_price    = holding.get('max_price',     entry_price)
 
-    # Actual fill: for stop exits use fill_price; for others use exit_price
-    _stop_reasons = {'STOP_HIT', 'CRASH_GUARD'}
-    actual_fill = fill_price if exit_reason in _stop_reasons else exit_price
+    # Open-executed exits must be logged at their actual fill, not the later close.
+    actual_fill = fill_price
 
     mae_pct = ((min_price / entry_price) - 1) * 100 if (entry_price and entry_price > 0) else np.nan
     mfe_pct = ((max_price / entry_price) - 1) * 100 if (entry_price and entry_price > 0) else np.nan
@@ -534,6 +586,8 @@ def _run_backtest_core(
     """Core event-driven loop shared by backtest_event_driven()/live_backtest(); Vol Targeting and Correlation Guard run in-loop over past data only. use_ltp_filter (live_backtest only) skips new entries that gapped up more than max_entry_gap_pct."""
     if strategy.positions is None:
         raise ValueError("Call get_positions() first.")
+    if strategy.stop_fill_mode != 'close_next_open' or strategy.use_crystallisation or strategy.use_time_stop:
+        raise ValueError('Only close_next_open stops without crystallisation or time stops are supported by the audited runner.')
 
     print("\n" + "=" * 65)
     print(f"[CSM Value (Earnings-Yield) Momentum]  {label} Backtest starting")
@@ -575,11 +629,9 @@ def _run_backtest_core(
     highs_ff   = strategy.highs.ffill() if not strategy.highs.empty else prices_ff.copy()
     lows_ff    = strategy.lows.ffill()  if not strategy.lows.empty  else prices_ff.copy()
 
-    # Circuit breaker: True on bars where high == low (stock locked at price limit)
-    if not strategy.highs.empty and not strategy.lows.empty:
-        is_circuit_ff = (highs_ff == lows_ff)
-    else:
-        is_circuit_ff = pd.DataFrame(False, index=prices_ff.index, columns=prices_ff.columns)
+    # Daily high/low are unavailable at the open. The runner does not use
+    # same-day H == L to decide whether an open order could have filled; real
+    # circuit/order-book constraints remain an unmodelled execution risk.
 
     # All daily returns (needed for rolling vol/corr computations)
     _dr_all = strategy.prices.pct_change(fill_method=None).fillna(0.0)
@@ -624,7 +676,7 @@ def _run_backtest_core(
         _monthly_thr   = strategy._panic_threshold_series.reindex(
             strategy._bench_vol_monthly.index).ffill()
         _monthly_panic = (strategy._bench_vol_monthly > _monthly_thr).fillna(False)
-        _is_panic_lev  = _monthly_panic.reindex(strategy.prices.index, method='ffill').fillna(False)
+        _is_panic_lev  = _monthly_panic.reindex(strategy.prices.index, method='ffill').astype('boolean').fillna(False).astype(bool)
     else:
         _is_panic_lev = pd.Series(False, index=strategy.prices.index)
     _regime_vals = np.where(is_panic.values,    'PANIC',
@@ -632,13 +684,16 @@ def _run_backtest_core(
                    np.where(_bear.values,       'BEAR', 'BULL')))
     strategy._regime_daily = pd.Series(_regime_vals, index=strategy.prices.index)
 
-    # Monthly signal → daily (shifted 1 trading day so T signal trades T+1)
-    monthly_signal = (
-        strategy.positions
-        .reindex(strategy.prices.index, method='ffill')
-        .shift(1)
-        .fillna(0.0)
-    )
+    # The monthly frame is labelled by calendar month-end, which may be a
+    # weekend. Attach each signal to the actual last observed trading session,
+    # then trade it on the following session's open.
+    signal_positions = strategy.positions.copy()
+    session_positions = strategy.prices.index.searchsorted(signal_positions.index, side='right') - 1
+    valid = session_positions >= 0
+    signal_positions = signal_positions.iloc[valid].copy()
+    signal_positions.index = strategy.prices.index[session_positions[valid]]
+    signal_positions = signal_positions[~signal_positions.index.duplicated(keep='last')]
+    monthly_signal = signal_positions.reindex(strategy.prices.index, method='ffill').shift(1).fillna(0.0)
 
     # ── Mutable state ─────────────────────────────────────────────────────
     active_holdings:        dict = {}
@@ -661,7 +716,8 @@ def _run_backtest_core(
     cg_cooldown_remaining: int   = 0
     in_cg_recovery: bool         = False   # post-Crash-Guard quality gate state
     _pending_stop:  dict         = {}      # stop_fill_mode='next_open'
-    _drop_pending:  dict         = {}      # rebalance exit buffer
+    _pending_crash: set          = set()   # unsellable holdings after crash guard
+    _drop_pending:  dict         = {}      # ticker -> (last signal month, consecutive drops)
     _crystallised:  set          = set()   # positions running at reduced weight
     daily_rfr = (1.0 + risk_free_rate) ** (1.0 / 252) - 1.0
     # idle cash earns liquid-MF rate when enabled (else RFR)
@@ -708,7 +764,8 @@ def _run_backtest_core(
                 _close = float(prices_ff.at[date, stock])
                 _fill  = float(opens_ff.at[date, stock])
                 if pd.isna(_fill) or _fill <= 0:
-                    _fill = _close
+                    _pending_crash.add(stock)
+                    continue
                 _h = active_holdings.get(stock, {})
                 _record_closed_trade(
                     strategy,
@@ -723,8 +780,12 @@ def _run_backtest_core(
                 )
                 exited_today.add(stock)
                 n_crash += 1
-            active_holdings.clear()
+            for _sold in exited_today:
+                active_holdings.pop(_sold, None)
+                _pending_crash.discard(_sold)
             target_weights[:] = 0.0
+            for _unsold in _pending_crash:
+                target_weights[_unsold] = prev_weights[_unsold]
             cg_cooldown_remaining = strategy.crash_guard_cooldown
             in_cg_recovery = True
             _pending_stop.clear()
@@ -737,7 +798,7 @@ def _run_backtest_core(
                 _last_stop_date[_cg_stock]       = date
             _zero_w = target_weights.copy()
             executed_weights_list.append(_zero_w)
-            _port_ret_buf.append(0.0)
+            _port_ret_buf.append(float((_zero_w * _dr_all.loc[date]).sum()))
             _weight_buf.append(_zero_w)
             _vol_scale_list.append(1.0)
             _corr_scale_list.append(1.0)
@@ -762,20 +823,41 @@ def _run_backtest_core(
             else:
                 in_cg_recovery = False
 
+        # Continue crash liquidations that had no opening quote on the trigger day.
+        for stock in list(_pending_crash):
+            if stock not in active_holdings:
+                _pending_crash.discard(stock)
+                continue
+            opening = float(opens_ff.at[date, stock])
+            if pd.isna(opening) or opening <= 0:
+                target_weights[stock] = prev_weights[stock]
+                continue
+            holding = active_holdings.pop(stock)
+            _record_closed_trade(strategy, stock, holding, date,
+                                 exit_price=float(prices_ff.at[date, stock]),
+                                 fill_price=opening, exit_reason='CRASH_GUARD',
+                                 stop_price_at_exit=holding.get('atr_stop', np.nan), exit_idx=i)
+            _pending_crash.discard(stock)
+            _pending_stop.pop(stock, None)
+            exited_today.add(stock)
+            target_weights[stock] = 0.0
+            stop_cooldown_tickers[stock] = (date, strategy.stop_cooldown_days)
+            _last_stop_date[stock] = date
+            n_crash += 1
+
         # ── STEP E0: pending next-open stop fills (stop_fill_mode='next_open')
         # Yesterday's breach exits at today's open, modelling live trading without a resting stop order -- the gap vs 'stop' mode quantifies the value of the limit-order mechanism.
-        if strategy.stop_fill_mode == 'next_open' and _pending_stop:
+        if strategy.stop_fill_mode in ('next_open', 'close_next_open') and _pending_stop:
             for stock in list(_pending_stop.keys()):
                 if stock in exited_today or stock not in active_holdings:
                     del _pending_stop[stock]
                     continue
-                if stock in is_circuit_ff.columns and bool(is_circuit_ff.at[date, stock]):
-                    continue   # locked — defer fill another day
-                _stop_lvl, _po_detail = _pending_stop.pop(stock)
                 _po_close = float(prices_ff.at[date, stock])
                 _po_fill  = float(opens_ff.at[date, stock])
                 if pd.isna(_po_fill) or _po_fill <= 0:
-                    _po_fill = _po_close
+                    target_weights[stock] = prev_weights[stock]
+                    continue
+                _stop_lvl, _po_detail = _pending_stop.pop(stock)
                 _po_entry = active_holdings[stock].get('entry_price', np.nan)
                 _record_closed_trade(
                     strategy,
@@ -803,7 +885,7 @@ def _run_backtest_core(
 
         # ── STEP E: Daily stop check ──────────────────────────────────────
         for stock in prev_held:
-            if stock in exited_today or stock not in active_holdings:
+            if stock in exited_today or stock not in active_holdings or stock in _pending_stop or stock in _pending_crash:
                 continue
 
             today_close = float(prices_ff.at[date, stock])
@@ -834,17 +916,14 @@ def _run_backtest_core(
                 stock, today_close, today_low, curr_atr, today_open,
                 active_holdings[stock], curr_high=today_high,
                 high_vol=bool(is_high_vol.iloc[i]),
+                close_only=strategy.stop_fill_mode == 'close_next_open',
             )
             if _bars_held < strategy.min_hold_days:
                 should_exit = False
 
-            # Circuit day: price locked at limit — no fills possible, defer to next bar
-            if should_exit and stock in is_circuit_ff.columns \
-                    and bool(is_circuit_ff.at[date, stock]):
-                should_exit = False
-
-            # next_open mode: don't fill today — queue for tomorrow's open
-            if should_exit and strategy.stop_fill_mode == 'next_open':
+            # A close-confirmed stop is an order for a later session, never
+            # a fill at the open that preceded the close that triggered it.
+            if should_exit and strategy.stop_fill_mode in ('next_open', 'close_next_open'):
                 _pending_stop[stock] = (float(stop_lvl), _detail)
                 should_exit = False
 
@@ -943,24 +1022,25 @@ def _run_backtest_core(
             if strategy.stop_only_exits and stock in active_holdings:
                 target_weights[stock] = float(prev_weights.get(stock, 0.0))
                 continue
-            # Circuit day: can't sell — restore previous weight and defer to next bar
-            if stock in is_circuit_ff.columns and bool(is_circuit_ff.at[date, stock]):
-                target_weights[stock] = float(prev_weights.get(stock, 0.0))
-                continue
-            # rebalance exit buffer -- first signal-month drop is deferred (position kept at previous weight, stops stay live); exit only when a NEWER signal month still drops it.
+            # Count distinct consecutive monthly signals, not daily attempts.
+            # Keep an eligible-to-exit state when the opening quote is absent.
             if strategy.rebalance_exit_buffer_months > 0 and stock in active_holdings:
                 _sig_now = _signal_month_for(strategy, date)
                 _pend    = _drop_pending.get(stock)
-                if _pend is None or _pend == _sig_now:
-                    _drop_pending[stock] = _sig_now
+                _last_sig, _drops = _pend if _pend is not None else (None, 0)
+                if _pend is None or _last_sig != _sig_now:
+                    _drops += 1
+                _drop_pending[stock] = (_sig_now, _drops)
+                if _drops <= strategy.rebalance_exit_buffer_months:
                     target_weights[stock] = float(prev_weights.get(stock, 0.0))
                     continue
-                _drop_pending.pop(stock, None)
             _close = float(prices_ff.at[date, stock])
             _fill  = float(opens_ff.at[date, stock])
             if pd.isna(_fill) or _fill <= 0:
-                _fill = _close
+                target_weights[stock] = prev_weights[stock]
+                continue
             _h    = active_holdings.pop(stock, {})
+            _drop_pending.pop(stock, None)
             _crystallised.discard(stock)
             _record_closed_trade(
                 strategy,
@@ -977,8 +1057,21 @@ def _run_backtest_core(
             n_rebalance += 1
 
         # ── STEP G: New entries ───────────────────────────────────────────
-        for stock in list(current_held):
+        # Keep existing holdings, including buffered or temporarily untradeable
+        # exits, within the same hard position limit. New candidates are tried
+        # in factor-rank order with a deterministic symbol tie-break.
+        _sig = _signal_month_for(strategy, date)
+        def _entry_sort(stock):
+            rank = (strategy.all_ranks.at[_sig, stock]
+                    if _sig is not None and strategy.all_ranks is not None
+                    and _sig in strategy.all_ranks.index and stock in strategy.all_ranks.columns else np.nan)
+            return (0 if stock in prev_held else 1, float(rank) if pd.notna(rank) else float('inf'), stock)
+        for stock in sorted(current_held, key=_entry_sort):
             if stock not in prev_held:
+                if len(active_holdings) >= strategy.top_n:
+                    target_weights[stock] = 0.0
+                    _log_reject(strategy, date, stock, 'MAX_POSITIONS')
+                    continue
                 if stock in exited_today:
                     target_weights[stock] = 0.0
                     continue
@@ -994,15 +1087,13 @@ def _run_backtest_core(
                     else:
                         del stop_cooldown_tickers[stock]
 
-                # Circuit day: price locked, can't enter
-                if stock in is_circuit_ff.columns and bool(is_circuit_ff.at[date, stock]):
-                    target_weights[stock] = 0.0
-                    _log_reject(strategy, date, stock, 'CIRCUIT_DAY')
-                    continue
-
                 _ep_open  = float(opens_ff.at[date, stock])
                 _ep_close = float(prices_ff.at[date, stock])
-                _ep = _ep_open if (_ep_open > 0 and not pd.isna(_ep_open)) else _ep_close
+                if pd.isna(_ep_open) or _ep_open <= 0:
+                    target_weights[stock] = 0.0
+                    _log_reject(strategy, date, stock, 'MISSING_OPEN')
+                    continue
+                _ep = _ep_open
 
                 # LTP gap filter (live_backtest only)
                 if use_ltp_filter and max_entry_gap_pct > 0:
@@ -1149,6 +1240,21 @@ def _run_backtest_core(
                 if abs(_new_w - _prev_w) < strategy.min_trade_pct:
                     scaled_weights[_stk] = _prev_w
 
+        # With no open, retain the position and defer any resizing.
+        _locked_no_open = set()
+        for _stk in prev_held:
+            _open = opens_ff.at[date, _stk]
+            if pd.isna(_open) or _open <= 0:
+                scaled_weights[_stk] = prev_weights[_stk]
+                _locked_no_open.add(_stk)
+        scaled_weights = _cap_gross_weights(scaled_weights, _locked_no_open)
+        # A new order can be reduced to zero when unsellable holdings consume
+        # all capital. Do not leave a phantom holding occupying a future slot.
+        for _stk in current_held - prev_held:
+            if float(scaled_weights.get(_stk, 0.0)) <= 1e-6:
+                active_holdings.pop(_stk, None)
+                raw_weights[_stk] = 0.0
+                _log_reject(strategy, date, _stk, 'NO_CAPACITY')
         executed_weights_list.append(scaled_weights.copy())
 
         # Update rolling buffers (AFTER recording scaled_weights)
@@ -1166,9 +1272,7 @@ def _run_backtest_core(
     _last_i    = len(strategy.prices.index) - 1
     for stock, _h in active_holdings.items():
         _close = float(prices_ff.at[_last_date, stock])
-        _fill  = float(opens_ff.at[_last_date, stock])
-        if pd.isna(_fill) or _fill <= 0:
-            _fill = _close
+        _fill  = _close  # mark an open position at the final close; no sale is assumed
         _record_closed_trade(
             strategy,
             ticker             = stock,
@@ -1217,41 +1321,16 @@ def _run_backtest_core(
             _dr.at[exit_date, ticker] = capped_ret
 
     # ── Portfolio returns & equity curve ──────────────────────────────────
-    # Execution-faithful accounting (added in csm_value; the original line was `gross_eq_ret = (executed_weights * _dr).sum(axis=1)`):
-    #  * a position bought at the OPEN of day i earns close_i / entry_fill - 1 on that day, not the full close-to-close return that includes the overnight gap it never owned;
-    #  * a position sold at day j's fill (stop level, gap-down open, or rebalance open) keeps its previous weight on day j and earns exit_fill / close_{j-1} - 1: the original books the weight
-    #    as 0 on the exit day, so the loss from the previous close to a stop fill (about -5% on average) was never charged (the 'stop-return capping' block above is dead code for that reason).
-    _w_ret = executed_weights.copy()
-    _dr_f  = _dr.copy()
-    _pp = strategy._prices_ff_backtest
-    if True:   # always computed so both bookings can be reported; EXECUTION_FAITHFUL_ACCOUNTING only chooses which one is the headline
-        _idx_pos = {d_: k_ for k_, d_ in enumerate(executed_weights.index)}
-        for meta in strategy.position_metadata:
-            tk = meta['Ticker']
-            if tk not in executed_weights.columns:
-                continue
-            ent, ext = meta['Entry_Date'], meta['Exit_Date']
-            if ent in _idx_pos:
-                ep_ = meta['Entry_Price']; c_ = _pp.at[ent, tk]
-                if pd.notna(ep_) and ep_ > 0 and pd.notna(c_) and c_ > 0:
-                    _dr_f.at[ent, tk] = c_ / ep_ - 1.0
-            if meta['Exit_Reason'] != 'END_OF_PERIOD' and ext in _idx_pos and _idx_pos[ext] > 0:
-                jx = _idx_pos[ext]; prev_d = executed_weights.index[jx - 1]
-                if executed_weights.at[ext, tk] == 0.0 and executed_weights.at[prev_d, tk] > 0.0:
-                    xp_ = meta['Exit_Price']; pc_ = _pp.at[prev_d, tk]
-                    if pd.notna(xp_) and xp_ > 0 and pd.notna(pc_) and pc_ > 0:
-                        _w_ret.at[ext, tk] = executed_weights.at[prev_d, tk]
-                        _dr_f.at[ext, tk] = xp_ / pc_ - 1.0
-    gross_eng_ret   = (executed_weights * _dr).sum(axis=1)        # the Elendel engine's own booking
-    gross_faith_ret = (_w_ret * _dr_f).sum(axis=1)                # execution-faithful booking (see AUDIT.md)
-    gross_eq_ret    = gross_faith_ret if EXECUTION_FAITHFUL_ACCOUNTING else gross_eng_ret
+    # Elendel convention requested by the user: today's executed weight
+    # multiplies today's close-to-close return; an exited name has weight zero.
+    gross_eq_ret    = (executed_weights * _dr).sum(axis=1)
     total_w         = executed_weights.sum(axis=1)
     cash_w          = (1.0 - total_w).clip(lower=0.0)
     cash_ret        = cash_w * daily_cash_rate
     w_chg           = executed_weights.diff().abs().sum(axis=1)
     txn_cost        = w_chg * transaction_cost
     net_returns     = gross_eq_ret + cash_ret - txn_cost
-    strategy._net_by_booking = {'engine': gross_eng_ret + cash_ret - txn_cost, 'faithful': gross_faith_ret + cash_ret - txn_cost}
+    strategy._net_by_booking = {'engine': net_returns}
 
     equity_curve    = (1.0 + net_returns).cumprod()
     portfolio_value = equity_curve * initial_capital
@@ -1835,19 +1914,52 @@ def plot_ic(ic_results: dict, filename: str = 'csm_value_factor_ic.png'):
 # MAIN
 # ══════════════════════════════════════════════════════════════════════════════
 
-def main(load_start=None, load_end=None, start_report=None, mode=None, universe_min=None, universe_max=None):
+def window_metrics(net_returns, start, end):
+    """Compound returns within a reporting window, including initial drawdown."""
+    r = net_returns.loc[start:end].dropna()
+    if len(r) < 2:
+        return None
+    equity = (1.0 + r).cumprod()
+    years = (r.index[-1] - r.index[0]).days / 365.25
+    return {'start': r.index[0], 'end': r.index[-1],
+            'cagr': equity.iloc[-1] ** (1.0 / years) - 1.0 if years > 0 else np.nan,
+            'max_drawdown': (equity / equity.cummax().clip(lower=1.0) - 1.0).min(),
+            'sharpe': np.sqrt(252) * r.mean() / r.std() if r.std() > 0 else np.nan}
+
+
+def main(load_start=None, load_end=None, start_report=None, mode=None, universe_min=None, universe_max=None, max_positions=None, ranking_mode='value', risk_profile='default'):
+    global VERSION_TAG
+    if ranking_mode not in ('value', 'value_growth_pullback'):
+        raise ValueError(f'Unknown ranking_mode: {ranking_mode}')
+    if risk_profile not in RISK_PROFILES:
+        raise ValueError(f'Unknown risk_profile: {risk_profile}')
+    VERSION_TAG = 'ey' if ranking_mode == 'value' else 'ey_growth_pullback'
+    VERSION_TAG += '_value_long_term' if risk_profile == 'default' else f'_value_{risk_profile}'
+    if risk_profile == 'default':
+        print('LONG-TERM SETTINGS: calibrated on previously examined data; not independently validated.')
+    elif risk_profile == 'exploratory_10_12_bear50':
+        print('EXPERIMENTAL RISK PROFILE: selected after inspecting historical comparisons; not independently validated.')
+    if ranking_mode != 'value':
+        print('EXPERIMENTAL RANKING: selected after inspecting historical comparisons; not independently validated.')
+    if load_end and pd.Timestamp(load_end) > RESEARCH_END_DATE:
+        raise ValueError(f'CSM Value research is limited to {RESEARCH_END_DATE.date()} until the data is revalidated.')
     # ── 1. Load Data (same source as batch / individual strategies) ──────────
     data_folder = data_folder_path
     print(f"Loading data from {data_folder} ...")
     prices, volumes, highs, lows, opens = load_data(data_folder)
+    valuation_dir = os.environ.get('CSM_UNADJUSTED_PRICE_DIR')
+    if valuation_dir:
+        valuation_prices, _, _, _, _ = load_data(valuation_dir, symbols=set(prices.columns))
+    else:
+        valuation_prices = load_nse_monthly_prices(symbols=set(prices.columns))
 
     if prices.empty:
         print("Error: No data loaded.")
         return
 
-    # IN-SAMPLE defaults: warmup from 2001, report 2003–2012
+    # Legacy research window; not a fresh or untouched OOS test.
     start_load   = '2001-01-01'
-    end_load     = '2025-06-30'   # quarterly results in the data end with 2024Q4 (filed <= 2025-04)
+    end_load     = min(prices.index.max(), valuation_prices.index.max(), RESEARCH_END_DATE).strftime('%Y-%m-%d')
     report_start = '2019-06-03'   # first months with enough point-in-time results
 
     if load_start and load_end and start_report:
@@ -1870,20 +1982,29 @@ def main(load_start=None, load_end=None, start_report=None, mode=None, universe_
     print("Building equal-weight benchmark...")
     benchmark_series = build_benchmark(prices)   # rebased at 1.0
 
-    print(universe_min, universe_max)
+    if universe_min is not None or universe_max is not None:
+        raise ValueError('Liquidity-rank universe filters are disabled for CSM Value.')
 
-    # Frozen config -- no tuning args; params come from CSMValue's own
-    # defaults. Only universe_max size is overridable, for capacity studies.
+    # The position limit defaults to the IS-selected value and may be
+    # overridden independently of the value ranking and other settings.
+    profile_options = dict(RISK_PROFILES[risk_profile])
+    if max_positions is not None:
+        profile_options['top_n'] = max_positions
     csm = CSMValue(
         prices_df            = prices,
+        valuation_prices_df  = valuation_prices.loc[start_load:end_load],
         volumes_df           = volumes,
         highs_df             = highs,
         lows_df              = lows,
         opens_df             = opens,
         benchmark_series     = benchmark_series,
-        universe_top_n_min   = (universe_min or 301),
-        universe_top_n_max       = (universe_max or 1000),
+        ranking_mode         = ranking_mode,
+        **profile_options,
     )
+    _per_stock_cap = min(csm.max_weight_per_stock, csm.risk_pct_per_trade / csm.hard_stop_from_entry)
+    _theoretical_gross = min(1.0, csm.top_n * _per_stock_cap)
+    print(f"Maximum stock exposure before overlays: {_theoretical_gross:.1%} "
+          f"({csm.top_n} positions x {_per_stock_cap:.1%} cap; subject to eligible stocks).")
 
     # ── 4. Calculate Factors & Positions ─────────────────────────────────────
     csm.calculate_factors()
@@ -1893,7 +2014,7 @@ def main(load_start=None, load_end=None, start_report=None, mode=None, universe_
     BACKTEST_MODE = mode or "event_driven"   # "event_driven" | "live"
 
     _bt_kwargs = dict(
-        initial_capital  = 100_000,
+        initial_capital  = 200_000,
         transaction_cost = 0.003,
         risk_free_rate   = 0.0,
     )
@@ -1985,6 +2106,7 @@ def main(load_start=None, load_end=None, start_report=None, mode=None, universe_
     print(f"\n{SEP}")
     print(f"  CSM Value (Earnings-Yield) v1  —  PERFORMANCE REPORT")
     print(f"  ({report_start} → {end_load}, mode={BACKTEST_MODE})")
+    print(f"  Maximum positions: {csm.top_n}")
     print(SEP)
 
     print(f"\n── Portfolio Metrics ─────────────────")
@@ -2057,18 +2179,17 @@ def main(load_start=None, load_end=None, start_report=None, mode=None, universe_
     if 'ann_signal_turnover' in results:
         print(f"  Signal Turnover   : {results['ann_signal_turnover']:>8.1f}  round-trips/year (monthly rebal only)")
 
-    # ── 9b. Accounting cross-check (both bookings, same trades) ─────────────────────────────────────────────
-    try:
-        print(f"\n── Accounting cross-check ({report_start} → {end_load}, Sharpe rf 0) ──")
-        print("  engine booking = executed weight x same-day close-to-close return (as the Elendel / Zenith / Quad backtests);")
-        print("  execution-faithful = also charges the gap from the previous close to the real stop/sell fill and drops the overnight gap before an open fill (AUDIT.md).")
-        for _k, _lab in (('engine', 'engine booking'), ('faithful', 'execution-faithful booking')):
-            _r = csm._net_by_booking[_k].loc[report_start:end_load]
-            _eq = (1 + _r).cumprod(); _yrs = (_r.index[-1] - _r.index[0]).days / 365.25
-            print(f"  {_lab:<28} CAGR {(_eq.iloc[-1] ** (1 / _yrs) - 1) * 100:6.2f}%   MaxDD {((_eq / _eq.cummax()) - 1).min() * 100:7.2f}%   Sharpe {np.sqrt(252) * _r.mean() / _r.std():5.2f}")
-        print("  HEADLINE above uses: " + ("execution-faithful booking" if EXECUTION_FAITHFUL_ACCOUNTING else "engine booking") + "  (EXECUTION_FAITHFUL_ACCOUNTING)")
-    except Exception as e:
-        print(f"[Accounting] cross-check failed: {e}")
+    print('\n  Accounting: Elendel convention; exited positions have zero exit-day weight.')
+
+    # These are the existing research boundaries; the later window has been
+    # inspected in earlier work and must not be presented as a blind holdout.
+    print('\n── Historical IS / OOS periods (OOS previously examined) ──')
+    for _name, _first, _last in (('IS', '2019-06-03', '2021-12-31'),
+                                  ('OOS (previously examined)', '2022-01-01', end_load)):
+        _m = window_metrics(csm._net_by_booking['engine'], _first, _last)
+        if _m is not None:
+            print(f"  {_name}: {_m['start']:%Y-%m-%d} to {_m['end']:%Y-%m-%d} | "
+                  f"CAGR {_m['cagr']:.2%} | MaxDD {_m['max_drawdown']:.2%} | Sharpe {_m['sharpe']:.2f}")
 
     # ── 10. Visualisation ─────────────────────────────────────────────────────
     print_yearly_returns(results['portfolio_value'], dd_series=results.get('dd_series'))
@@ -2099,4 +2220,13 @@ def main(load_start=None, load_end=None, start_report=None, mode=None, universe_
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+    parser = argparse.ArgumentParser(description='Run CSM Value backtest')
+    parser.add_argument('--max-positions', type=int, default=None,
+                        help='Maximum simultaneously held stocks (default: 20; overrides the selected profile).')
+    parser.add_argument('--ranking', choices=('value', 'value_growth_pullback'), default='value',
+                        help='Ranking mode. value_growth_pullback is exploratory and has no clean holdout.')
+    parser.add_argument('--risk-profile', choices=tuple(RISK_PROFILES), default='default',
+                        help='Optional historical research profile; not independently validated.')
+    options = parser.parse_args()
+    main(max_positions=options.max_positions, ranking_mode=options.ranking, risk_profile=options.risk_profile)

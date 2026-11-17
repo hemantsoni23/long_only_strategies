@@ -1,0 +1,2994 @@
+{
+  "warning": "Previously examined history, not independent validation.",
+  "windows": {
+    "full": [
+      "2019-06-03",
+      "2024-12-31"
+    ],
+    "development": [
+      "2019-06-03",
+      "2021-12-31"
+    ],
+    "previously_examined": [
+      "2022-01-03",
+      "2024-12-31"
+    ],
+    "year_2024": [
+      "2024-01-01",
+      "2024-12-31"
+    ]
+  },
+  "cases": {
+    "current": {},
+    "cap10": {
+      "top_n": 10,
+      "max_weight_per_stock": 0.1,
+      "risk_pct_per_trade": 0.015
+    },
+    "cap15": {
+      "top_n": 15,
+      "max_weight_per_stock": 0.07,
+      "risk_pct_per_trade": 0.0105
+    },
+    "cap20": {
+      "top_n": 20,
+      "max_weight_per_stock": 0.05,
+      "risk_pct_per_trade": 0.0075
+    },
+    "buffer2": {
+      "rebalance_exit_buffer_months": 2
+    },
+    "buffer3": {
+      "rebalance_exit_buffer_months": 3
+    },
+    "rank_buffer_100pct": {
+      "buffer_ratio": 1.0
+    },
+    "trail25": {
+      "hard_stop_from_peak": 0.25
+    },
+    "trail30": {
+      "hard_stop_from_peak": 0.3
+    },
+    "long10": {
+      "top_n": 10,
+      "max_weight_per_stock": 0.1,
+      "risk_pct_per_trade": 0.015,
+      "rebalance_exit_buffer_months": 2,
+      "buffer_ratio": 1.0,
+      "hard_stop_from_peak": 0.25
+    },
+    "long15": {
+      "top_n": 15,
+      "max_weight_per_stock": 0.07,
+      "risk_pct_per_trade": 0.0105,
+      "rebalance_exit_buffer_months": 2,
+      "buffer_ratio": 1.0,
+      "hard_stop_from_peak": 0.25
+    },
+    "long20": {
+      "top_n": 20,
+      "max_weight_per_stock": 0.05,
+      "risk_pct_per_trade": 0.0075,
+      "rebalance_exit_buffer_months": 2,
+      "buffer_ratio": 1.0,
+      "hard_stop_from_peak": 0.25
+    },
+    "long15_vol25": {
+      "top_n": 15,
+      "max_weight_per_stock": 0.07,
+      "risk_pct_per_trade": 0.0105,
+      "rebalance_exit_buffer_months": 2,
+      "buffer_ratio": 1.0,
+      "hard_stop_from_peak": 0.25,
+      "vol_target": 0.25
+    },
+    "long20_vol25": {
+      "top_n": 20,
+      "max_weight_per_stock": 0.05,
+      "risk_pct_per_trade": 0.0075,
+      "rebalance_exit_buffer_months": 2,
+      "buffer_ratio": 1.0,
+      "hard_stop_from_peak": 0.25,
+      "vol_target": 0.25
+    }
+  },
+  "results": [
+    {
+      "mode": "value",
+      "case": "current",
+      "windows": {
+        "full": {
+          "cagr": 0.24475746953773903,
+          "max_drawdown": -0.1385889616234467,
+          "sharpe": 2.0000992618146065,
+          "avg_exposure": 0.4249403606664619,
+          "median_exposure": 0.4993107433695346,
+          "avg_bull_exposure": 0.4824089719127329,
+          "bull_sessions": 981,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.014440433212997,
+          "max_positions": 10,
+          "annual_turnover": 4.4544625829552436,
+          "completed_trades": 237,
+          "mean_holding_days": 75.27004219409282,
+          "median_holding_days": 62.0,
+          "fraction_90_days": 0.3291139240506329,
+          "fraction_180_days": 0.06751054852320675,
+          "exit_counts": {
+            "STOP_HIT": 139,
+            "REBALANCE": 97,
+            "CRASH_GUARD": 1
+          },
+          "double_cost_cagr": 0.2282532068525196,
+          "double_cost_drawdown": -0.14381015033964883
+        },
+        "development": {
+          "cagr": 0.2450148612844183,
+          "max_drawdown": -0.1385889616234467,
+          "sharpe": 1.961139735244041,
+          "avg_exposure": 0.38265872739993423,
+          "median_exposure": 0.49,
+          "avg_bull_exposure": 0.4845784365344846,
+          "bull_sessions": 399,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 8.373831775700934,
+          "max_positions": 10,
+          "annual_turnover": 4.474001712551849,
+          "completed_trades": 109,
+          "mean_holding_days": 67.9908256880734,
+          "median_holding_days": 61.0,
+          "fraction_90_days": 0.30275229357798167,
+          "fraction_180_days": 0.045871559633027525,
+          "exit_counts": {
+            "STOP_HIT": 61,
+            "REBALANCE": 47,
+            "CRASH_GUARD": 1
+          },
+          "double_cost_cagr": 0.2284276822539193,
+          "double_cost_drawdown": -0.14381015033964883
+        },
+        "previously_examined": {
+          "cagr": 0.24528378963648234,
+          "max_drawdown": -0.11262165455154904,
+          "sharpe": 2.0341681092339146,
+          "avg_exposure": 0.4614744233274455,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.4809216585380268,
+          "bull_sessions": 582,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.567967698519515,
+          "max_positions": 10,
+          "annual_turnover": 4.449849159047527,
+          "completed_trades": 128,
+          "mean_holding_days": 81.46875,
+          "median_holding_days": 65.5,
+          "fraction_90_days": 0.3515625,
+          "fraction_180_days": 0.0859375,
+          "exit_counts": {
+            "STOP_HIT": 78,
+            "REBALANCE": 50
+          },
+          "double_cost_cagr": 0.2287960684488457,
+          "double_cost_drawdown": -0.11690539249630771
+        },
+        "year_2024": {
+          "cagr": 0.19210162597356395,
+          "max_drawdown": -0.10179410915169507,
+          "sharpe": 1.4475664367361947,
+          "avg_exposure": 0.4810046204207443,
+          "median_exposure": 0.49846717037615357,
+          "avg_bull_exposure": 0.48648154686613193,
+          "bull_sessions": 197,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.646586345381525,
+          "max_positions": 10,
+          "annual_turnover": 4.687266639093356,
+          "completed_trades": 47,
+          "mean_holding_days": 82.63829787234043,
+          "median_holding_days": 77.0,
+          "fraction_90_days": 0.425531914893617,
+          "fraction_180_days": 0.0851063829787234,
+          "exit_counts": {
+            "STOP_HIT": 30,
+            "REBALANCE": 17
+          },
+          "double_cost_cagr": 0.17552175793279012,
+          "double_cost_drawdown": -0.10382159130248148
+        }
+      }
+    },
+    {
+      "mode": "value",
+      "case": "cap10",
+      "windows": {
+        "full": {
+          "cagr": 0.33572756876130416,
+          "max_drawdown": -0.1861359224940411,
+          "sharpe": 2.0144700409063714,
+          "avg_exposure": 0.5678599010662841,
+          "median_exposure": 0.590972450945823,
+          "avg_bull_exposure": 0.6364696448849917,
+          "bull_sessions": 981,
+          "max_exposure": 0.9505312232786696,
+          "avg_positions": 9.014440433212997,
+          "max_positions": 10,
+          "annual_turnover": 7.6269079321563025,
+          "completed_trades": 237,
+          "mean_holding_days": 75.27004219409282,
+          "median_holding_days": 62.0,
+          "fraction_90_days": 0.3291139240506329,
+          "fraction_180_days": 0.06751054852320675,
+          "exit_counts": {
+            "STOP_HIT": 139,
+            "REBALANCE": 97,
+            "CRASH_GUARD": 1
+          },
+          "double_cost_cagr": 0.3055635214593502,
+          "double_cost_drawdown": -0.19325808958505764
+        },
+        "development": {
+          "cagr": 0.3087123609810243,
+          "max_drawdown": -0.1861359224940411,
+          "sharpe": 1.8748344106148631,
+          "avg_exposure": 0.4845224732316282,
+          "median_exposure": 0.5416508496251682,
+          "avg_bull_exposure": 0.5767168995272611,
+          "bull_sessions": 399,
+          "max_exposure": 0.8752359921597792,
+          "avg_positions": 8.373831775700934,
+          "max_positions": 10,
+          "annual_turnover": 7.620156117172019,
+          "completed_trades": 109,
+          "mean_holding_days": 67.9908256880734,
+          "median_holding_days": 61.0,
+          "fraction_90_days": 0.30275229357798167,
+          "fraction_180_days": 0.045871559633027525,
+          "exit_counts": {
+            "STOP_HIT": 61,
+            "REBALANCE": 47,
+            "CRASH_GUARD": 1
+          },
+          "double_cost_cagr": 0.2791732287640205,
+          "double_cost_drawdown": -0.19325808958505764
+        },
+        "previously_examined": {
+          "cagr": 0.36053814206556556,
+          "max_drawdown": -0.12962204394014032,
+          "sharpe": 2.133491484792886,
+          "avg_exposure": 0.6398688225600244,
+          "median_exposure": 0.6598080170215347,
+          "avg_bull_exposure": 0.6774341558776626,
+          "bull_sessions": 582,
+          "max_exposure": 0.9505312232786696,
+          "avg_positions": 9.567967698519515,
+          "max_positions": 10,
+          "annual_turnover": 7.6536608447927765,
+          "completed_trades": 128,
+          "mean_holding_days": 81.46875,
+          "median_holding_days": 65.5,
+          "fraction_90_days": 0.3515625,
+          "fraction_180_days": 0.0859375,
+          "exit_counts": {
+            "STOP_HIT": 78,
+            "REBALANCE": 50
+          },
+          "double_cost_cagr": 0.329717142722467,
+          "double_cost_drawdown": -0.13481669961224974
+        },
+        "year_2024": {
+          "cagr": 0.2617018833277287,
+          "max_drawdown": -0.11368766407235809,
+          "sharpe": 1.5714542887916405,
+          "avg_exposure": 0.5621634123722156,
+          "median_exposure": 0.5641870131642924,
+          "avg_bull_exposure": 0.5756983501051354,
+          "bull_sessions": 197,
+          "max_exposure": 0.7851676560890195,
+          "avg_positions": 9.646586345381525,
+          "max_positions": 10,
+          "annual_turnover": 8.0826470073506,
+          "completed_trades": 47,
+          "mean_holding_days": 82.63829787234043,
+          "median_holding_days": 77.0,
+          "fraction_90_days": 0.425531914893617,
+          "fraction_180_days": 0.0851063829787234,
+          "exit_counts": {
+            "STOP_HIT": 30,
+            "REBALANCE": 17
+          },
+          "double_cost_cagr": 0.23160698486619724,
+          "double_cost_drawdown": -0.118685430676292
+        }
+      }
+    },
+    {
+      "mode": "value",
+      "case": "cap15",
+      "windows": {
+        "full": {
+          "cagr": 0.35804694283919547,
+          "max_drawdown": -0.2087177609743316,
+          "sharpe": 2.1229856411952555,
+          "avg_exposure": 0.5976081539557803,
+          "median_exposure": 0.6077090485548823,
+          "avg_bull_exposure": 0.6746897359450021,
+          "bull_sessions": 981,
+          "max_exposure": 1.018345435080782,
+          "avg_positions": 13.625992779783394,
+          "max_positions": 15,
+          "annual_turnover": 7.747709290764554,
+          "completed_trades": 345,
+          "mean_holding_days": 78.26376811594203,
+          "median_holding_days": 63.0,
+          "fraction_90_days": 0.3130434782608696,
+          "fraction_180_days": 0.07246376811594203,
+          "exit_counts": {
+            "STOP_HIT": 200,
+            "REBALANCE": 144,
+            "CRASH_GUARD": 1
+          },
+          "double_cost_cagr": 0.32691049568607533,
+          "double_cost_drawdown": -0.21592919395562837
+        },
+        "development": {
+          "cagr": 0.3012819092468728,
+          "max_drawdown": -0.2087177609743316,
+          "sharpe": 1.8514077265340307,
+          "avg_exposure": 0.5109956653241946,
+          "median_exposure": 0.5632063121143172,
+          "avg_bull_exposure": 0.6059360540787849,
+          "bull_sessions": 399,
+          "max_exposure": 0.9172161573512837,
+          "avg_positions": 12.542056074766355,
+          "max_positions": 15,
+          "annual_turnover": 7.762168227990307,
+          "completed_trades": 161,
+          "mean_holding_days": 68.6832298136646,
+          "median_holding_days": 61.0,
+          "fraction_90_days": 0.2857142857142857,
+          "fraction_180_days": 0.043478260869565216,
+          "exit_counts": {
+            "STOP_HIT": 93,
+            "REBALANCE": 67,
+            "CRASH_GUARD": 1
+          },
+          "double_cost_cagr": 0.27136452757609786,
+          "double_cost_drawdown": -0.21592919395562837
+        },
+        "previously_examined": {
+          "cagr": 0.4101365992141719,
+          "max_drawdown": -0.12633846120487457,
+          "sharpe": 2.3520252808377085,
+          "avg_exposure": 0.6724469395566929,
+          "median_exposure": 0.6367311135011791,
+          "avg_bull_exposure": 0.72182499206978,
+          "bull_sessions": 582,
+          "max_exposure": 1.018345435080782,
+          "avg_positions": 14.562584118438762,
+          "max_positions": 15,
+          "annual_turnover": 7.756513324621494,
+          "completed_trades": 184,
+          "mean_holding_days": 86.64673913043478,
+          "median_holding_days": 67.0,
+          "fraction_90_days": 0.33695652173913043,
+          "fraction_180_days": 0.09782608695652174,
+          "exit_counts": {
+            "STOP_HIT": 107,
+            "REBALANCE": 77
+          },
+          "double_cost_cagr": 0.3777951253927707,
+          "double_cost_drawdown": -0.13176158536282823
+        },
+        "year_2024": {
+          "cagr": 0.36306182531912623,
+          "max_drawdown": -0.07741806469011325,
+          "sharpe": 2.0381639002369014,
+          "avg_exposure": 0.6330728155105951,
+          "median_exposure": 0.6077090485548823,
+          "avg_bull_exposure": 0.6555504054563043,
+          "bull_sessions": 197,
+          "max_exposure": 0.961919887561431,
+          "avg_positions": 14.734939759036145,
+          "max_positions": 15,
+          "annual_turnover": 8.028309342604503,
+          "completed_trades": 63,
+          "mean_holding_days": 96.04761904761905,
+          "median_holding_days": 78.0,
+          "fraction_90_days": 0.38095238095238093,
+          "fraction_180_days": 0.14285714285714285,
+          "exit_counts": {
+            "STOP_HIT": 41,
+            "REBALANCE": 22
+          },
+          "double_cost_cagr": 0.3308251209040658,
+          "double_cost_drawdown": -0.08027997854687785
+        }
+      }
+    },
+    {
+      "mode": "value",
+      "case": "cap20",
+      "windows": {
+        "full": {
+          "cagr": 0.35404010328549274,
+          "max_drawdown": -0.20877605176749658,
+          "sharpe": 2.1189924795614985,
+          "avg_exposure": 0.615284286151238,
+          "median_exposure": 0.6454771464446277,
+          "avg_bull_exposure": 0.6907044367379924,
+          "bull_sessions": 981,
+          "max_exposure": 0.9596757732495259,
+          "avg_positions": 18.206498194945848,
+          "max_positions": 20,
+          "annual_turnover": 7.288067494058611,
+          "completed_trades": 434,
+          "mean_holding_days": 82.88479262672811,
+          "median_holding_days": 63.0,
+          "fraction_90_days": 0.3548387096774194,
+          "fraction_180_days": 0.0944700460829493,
+          "exit_counts": {
+            "STOP_HIT": 260,
+            "REBALANCE": 172,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.32482049100231114,
+          "double_cost_drawdown": -0.2159486611386432
+        },
+        "development": {
+          "cagr": 0.2959789700868618,
+          "max_drawdown": -0.20877605176749658,
+          "sharpe": 1.837757028558179,
+          "avg_exposure": 0.5307112421024034,
+          "median_exposure": 0.5913286454952706,
+          "avg_bull_exposure": 0.6298634830731078,
+          "bull_sessions": 399,
+          "max_exposure": 0.884245878721835,
+          "avg_positions": 16.785046728971963,
+          "max_positions": 20,
+          "annual_turnover": 7.352263564154327,
+          "completed_trades": 201,
+          "mean_holding_days": 72.1542288557214,
+          "median_holding_days": 61.0,
+          "fraction_90_days": 0.29850746268656714,
+          "fraction_180_days": 0.05970149253731343,
+          "exit_counts": {
+            "STOP_HIT": 119,
+            "REBALANCE": 80,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.26774159881663917,
+          "double_cost_drawdown": -0.2159486611386432
+        },
+        "previously_examined": {
+          "cagr": 0.40733299762123165,
+          "max_drawdown": -0.11699835485808552,
+          "sharpe": 2.3561692564255092,
+          "avg_exposure": 0.6883608598784949,
+          "median_exposure": 0.6829445111556003,
+          "avg_bull_exposure": 0.7324149874463928,
+          "bull_sessions": 582,
+          "max_exposure": 0.9596757732495259,
+          "avg_positions": 19.434724091520863,
+          "max_positions": 20,
+          "annual_turnover": 7.252744076356883,
+          "completed_trades": 233,
+          "mean_holding_days": 92.14163090128756,
+          "median_holding_days": 75.0,
+          "fraction_90_days": 0.4034334763948498,
+          "fraction_180_days": 0.12446351931330472,
+          "exit_counts": {
+            "STOP_HIT": 141,
+            "REBALANCE": 92
+          },
+          "double_cost_cagr": 0.3771342763844727,
+          "double_cost_drawdown": -0.12198191024314331
+        },
+        "year_2024": {
+          "cagr": 0.3654284443951521,
+          "max_drawdown": -0.09692583326914017,
+          "sharpe": 2.0669943584177712,
+          "avg_exposure": 0.6610201946861267,
+          "median_exposure": 0.6469493798647983,
+          "avg_bull_exposure": 0.6861421029570902,
+          "bull_sessions": 197,
+          "max_exposure": 0.9594485124618389,
+          "avg_positions": 19.606425702811244,
+          "max_positions": 20,
+          "annual_turnover": 7.432515707166967,
+          "completed_trades": 77,
+          "mean_holding_days": 103.76623376623377,
+          "median_holding_days": 83.0,
+          "fraction_90_days": 0.45454545454545453,
+          "fraction_180_days": 0.18181818181818182,
+          "exit_counts": {
+            "STOP_HIT": 50,
+            "REBALANCE": 27
+          },
+          "double_cost_cagr": 0.3354980627575035,
+          "double_cost_drawdown": -0.09845971737683257
+        }
+      }
+    },
+    {
+      "mode": "value",
+      "case": "buffer2",
+      "windows": {
+        "full": {
+          "cagr": 0.2438735338480138,
+          "max_drawdown": -0.13402876368028283,
+          "sharpe": 1.9888663083263294,
+          "avg_exposure": 0.42214440265756115,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.4792124026514921,
+          "bull_sessions": 981,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.064259927797833,
+          "max_positions": 10,
+          "annual_turnover": 4.0642401994546455,
+          "completed_trades": 215,
+          "mean_holding_days": 83.86511627906977,
+          "median_holding_days": 80.0,
+          "fraction_90_days": 0.4325581395348837,
+          "fraction_180_days": 0.08837209302325581,
+          "exit_counts": {
+            "STOP_HIT": 151,
+            "REBALANCE": 63,
+            "CRASH_GUARD": 1
+          },
+          "double_cost_cagr": 0.2288239245055277,
+          "double_cost_drawdown": -0.13933431571144006
+        },
+        "development": {
+          "cagr": 0.2185171178318306,
+          "max_drawdown": -0.13402876368028283,
+          "sharpe": 1.8397558057266368,
+          "avg_exposure": 0.37778221470812295,
+          "median_exposure": 0.47010330648485393,
+          "avg_bull_exposure": 0.48138573955433395,
+          "bull_sessions": 399,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 8.43613707165109,
+          "max_positions": 10,
+          "annual_turnover": 3.9284839182723825,
+          "completed_trades": 95,
+          "mean_holding_days": 78.29473684210527,
+          "median_holding_days": 89.0,
+          "fraction_90_days": 0.49473684210526314,
+          "fraction_180_days": 0.042105263157894736,
+          "exit_counts": {
+            "STOP_HIT": 64,
+            "REBALANCE": 30,
+            "CRASH_GUARD": 1
+          },
+          "double_cost_cagr": 0.2042578002053792,
+          "double_cost_drawdown": -0.13933431571144006
+        },
+        "previously_examined": {
+          "cagr": 0.26690848232615494,
+          "max_drawdown": -0.10349946028503276,
+          "sharpe": 2.1121526930404806,
+          "avg_exposure": 0.4604761989745724,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.47772243456861585,
+          "bull_sessions": 582,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.606998654104979,
+          "max_positions": 10,
+          "annual_turnover": 4.192396775366865,
+          "completed_trades": 120,
+          "mean_holding_days": 88.275,
+          "median_holding_days": 78.5,
+          "fraction_90_days": 0.38333333333333336,
+          "fraction_180_days": 0.125,
+          "exit_counts": {
+            "STOP_HIT": 87,
+            "REBALANCE": 33
+          },
+          "double_cost_cagr": 0.251105277360796,
+          "double_cost_drawdown": -0.10796949787053012
+        },
+        "year_2024": {
+          "cagr": 0.17145723080572095,
+          "max_drawdown": -0.0932421390299264,
+          "sharpe": 1.310858608836031,
+          "avg_exposure": 0.479718875502008,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.48502538071065987,
+          "bull_sessions": 197,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.594377510040161,
+          "max_positions": 10,
+          "annual_turnover": 4.803287671232877,
+          "completed_trades": 48,
+          "mean_holding_days": 85.35416666666667,
+          "median_holding_days": 78.0,
+          "fraction_90_days": 0.375,
+          "fraction_180_days": 0.125,
+          "exit_counts": {
+            "STOP_HIT": 37,
+            "REBALANCE": 11
+          },
+          "double_cost_cagr": 0.15476033038381676,
+          "double_cost_drawdown": -0.09501046932071977
+        }
+      }
+    },
+    {
+      "mode": "value",
+      "case": "buffer3",
+      "windows": {
+        "full": {
+          "cagr": 0.23586099687944762,
+          "max_drawdown": -0.14157914932412852,
+          "sharpe": 1.9301363414351624,
+          "avg_exposure": 0.419031176346608,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.47698704554730686,
+          "bull_sessions": 981,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.227436823104693,
+          "max_positions": 10,
+          "annual_turnover": 3.7318438471346895,
+          "completed_trades": 195,
+          "mean_holding_days": 93.9076923076923,
+          "median_holding_days": 84.0,
+          "fraction_90_days": 0.4461538461538462,
+          "fraction_180_days": 0.09743589743589744,
+          "exit_counts": {
+            "STOP_HIT": 158,
+            "REBALANCE": 37
+          },
+          "double_cost_cagr": 0.22211719627659177,
+          "double_cost_drawdown": -0.14684666590712192
+        },
+        "development": {
+          "cagr": 0.23530168878766733,
+          "max_drawdown": -0.14157914932412852,
+          "sharpe": 1.9572451619372946,
+          "avg_exposure": 0.3670359253294781,
+          "median_exposure": 0.46992629638821476,
+          "avg_bull_exposure": 0.4741984763681761,
+          "bull_sessions": 399,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 8.545171339563863,
+          "max_positions": 10,
+          "annual_turnover": 3.573688148814376,
+          "completed_trades": 85,
+          "mean_holding_days": 88.25882352941177,
+          "median_holding_days": 98.0,
+          "fraction_90_days": 0.5294117647058824,
+          "fraction_180_days": 0.058823529411764705,
+          "exit_counts": {
+            "STOP_HIT": 66,
+            "REBALANCE": 19
+          },
+          "double_cost_cagr": 0.22213215872995273,
+          "double_cost_drawdown": -0.14684666590712192
+        },
+        "previously_examined": {
+          "cagr": 0.23706206916223183,
+          "max_drawdown": -0.10537654929547446,
+          "sharpe": 1.9069102991136293,
+          "avg_exposure": 0.46395843227258027,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.4788987965824841,
+          "bull_sessions": 582,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.816958277254374,
+          "max_positions": 10,
+          "annual_turnover": 3.87839297738093,
+          "completed_trades": 110,
+          "mean_holding_days": 98.27272727272727,
+          "median_holding_days": 78.0,
+          "fraction_90_days": 0.38181818181818183,
+          "fraction_180_days": 0.12727272727272726,
+          "exit_counts": {
+            "STOP_HIT": 92,
+            "REBALANCE": 18
+          },
+          "double_cost_cagr": 0.2227773193377971,
+          "double_cost_drawdown": -0.11010814690652504
+        },
+        "year_2024": {
+          "cagr": 0.17437495238031908,
+          "max_drawdown": -0.09608042682913198,
+          "sharpe": 1.3057025947070091,
+          "avg_exposure": 0.49718875502008025,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.4972081218274111,
+          "bull_sessions": 197,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.943775100401606,
+          "max_positions": 10,
+          "annual_turnover": 4.1028082191780815,
+          "completed_trades": 41,
+          "mean_holding_days": 100.4390243902439,
+          "median_holding_days": 78.0,
+          "fraction_90_days": 0.4146341463414634,
+          "fraction_180_days": 0.12195121951219512,
+          "exit_counts": {
+            "STOP_HIT": 34,
+            "REBALANCE": 7
+          },
+          "double_cost_cagr": 0.1600902359263512,
+          "double_cost_drawdown": -0.09824405862669605
+        }
+      }
+    },
+    {
+      "mode": "value",
+      "case": "rank_buffer_100pct",
+      "windows": {
+        "full": {
+          "cagr": 0.24815588517513376,
+          "max_drawdown": -0.1442154922337202,
+          "sharpe": 2.0059975251185067,
+          "avg_exposure": 0.42849029242547115,
+          "median_exposure": 0.4993276557473386,
+          "avg_bull_exposure": 0.4859535537203462,
+          "bull_sessions": 981,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.04043321299639,
+          "max_positions": 10,
+          "annual_turnover": 4.330376054276242,
+          "completed_trades": 231,
+          "mean_holding_days": 77.66666666666667,
+          "median_holding_days": 63.0,
+          "fraction_90_days": 0.3333333333333333,
+          "fraction_180_days": 0.0735930735930736,
+          "exit_counts": {
+            "STOP_HIT": 140,
+            "REBALANCE": 91
+          },
+          "double_cost_cagr": 0.23206824847298457,
+          "double_cost_drawdown": -0.1492018437752215
+        },
+        "development": {
+          "cagr": 0.26208326892305434,
+          "max_drawdown": -0.1442154922337202,
+          "sharpe": 2.0833321021491633,
+          "avg_exposure": 0.3882534810118034,
+          "median_exposure": 0.4950543165962268,
+          "avg_bull_exposure": 0.49108523635038703,
+          "bull_sessions": 399,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 8.41588785046729,
+          "max_positions": 10,
+          "annual_turnover": 4.315190022812814,
+          "completed_trades": 106,
+          "mean_holding_days": 70.59433962264151,
+          "median_holding_days": 61.0,
+          "fraction_90_days": 0.3018867924528302,
+          "fraction_180_days": 0.05660377358490566,
+          "exit_counts": {
+            "STOP_HIT": 60,
+            "REBALANCE": 46
+          },
+          "double_cost_cagr": 0.24586623365126825,
+          "double_cost_drawdown": -0.1492018437752215
+        },
+        "previously_examined": {
+          "cagr": 0.23702836997882848,
+          "max_drawdown": -0.11616062200564592,
+          "sharpe": 1.9370777907897572,
+          "avg_exposure": 0.4632574969040373,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.482435441401813,
+          "bull_sessions": 582,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.58008075370121,
+          "max_positions": 10,
+          "annual_turnover": 4.355349860132947,
+          "completed_trades": 125,
+          "mean_holding_days": 83.664,
+          "median_holding_days": 67.0,
+          "fraction_90_days": 0.36,
+          "fraction_180_days": 0.088,
+          "exit_counts": {
+            "STOP_HIT": 80,
+            "REBALANCE": 45
+          },
+          "double_cost_cagr": 0.2209983490455245,
+          "double_cost_drawdown": -0.12075656306243543
+        },
+        "year_2024": {
+          "cagr": 0.1828828553979518,
+          "max_drawdown": -0.10051659937036539,
+          "sharpe": 1.3661700120908558,
+          "avg_exposure": 0.4783619755267318,
+          "median_exposure": 0.49760353547129393,
+          "avg_bull_exposure": 0.4849548048296613,
+          "bull_sessions": 197,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.63855421686747,
+          "max_positions": 10,
+          "annual_turnover": 4.6031216883043715,
+          "completed_trades": 46,
+          "mean_holding_days": 85.1304347826087,
+          "median_holding_days": 75.0,
+          "fraction_90_days": 0.43478260869565216,
+          "fraction_180_days": 0.10869565217391304,
+          "exit_counts": {
+            "STOP_HIT": 31,
+            "REBALANCE": 15
+          },
+          "double_cost_cagr": 0.16671937174482587,
+          "double_cost_drawdown": -0.10240697610779448
+        }
+      }
+    },
+    {
+      "mode": "value",
+      "case": "trail25",
+      "windows": {
+        "full": {
+          "cagr": 0.25528595698417567,
+          "max_drawdown": -0.15022280827243006,
+          "sharpe": 2.0283214220979033,
+          "avg_exposure": 0.42586526972405314,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.4829844893635419,
+          "bull_sessions": 981,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.109747292418772,
+          "max_positions": 10,
+          "annual_turnover": 3.810874872856229,
+          "completed_trades": 202,
+          "mean_holding_days": 85.86633663366337,
+          "median_holding_days": 63.0,
+          "fraction_90_days": 0.3910891089108911,
+          "fraction_180_days": 0.11386138613861387,
+          "exit_counts": {
+            "REBALANCE": 104,
+            "STOP_HIT": 98
+          },
+          "double_cost_cagr": 0.24103740385095995,
+          "double_cost_drawdown": -0.1551792014587854
+        },
+        "development": {
+          "cagr": 0.23634758505299613,
+          "max_drawdown": -0.15022280827243006,
+          "sharpe": 1.8803175609896663,
+          "avg_exposure": 0.3875959316922778,
+          "median_exposure": 0.49905188115334087,
+          "avg_bull_exposure": 0.4920824988873741,
+          "bull_sessions": 399,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 8.423676012461058,
+          "max_positions": 10,
+          "annual_turnover": 3.881152041652188,
+          "completed_trades": 94,
+          "mean_holding_days": 70.59574468085107,
+          "median_holding_days": 61.0,
+          "fraction_90_days": 0.3191489361702128,
+          "fraction_180_days": 0.0425531914893617,
+          "exit_counts": {
+            "REBALANCE": 49,
+            "STOP_HIT": 45
+          },
+          "double_cost_cagr": 0.22204347957913484,
+          "double_cost_drawdown": -0.1551792014587854
+        },
+        "previously_examined": {
+          "cagr": 0.27263448777473265,
+          "max_drawdown": -0.10599670716316134,
+          "sharpe": 2.1564154197485426,
+          "avg_exposure": 0.45893245009605826,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.4767471941745228,
+          "bull_sessions": 582,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.702557200538358,
+          "max_positions": 10,
+          "annual_turnover": 3.760766484578806,
+          "completed_trades": 108,
+          "mean_holding_days": 99.1574074074074,
+          "median_holding_days": 74.0,
+          "fraction_90_days": 0.4537037037037037,
+          "fraction_180_days": 0.17592592592592593,
+          "exit_counts": {
+            "REBALANCE": 55,
+            "STOP_HIT": 53
+          },
+          "double_cost_cagr": 0.25838962256952014,
+          "double_cost_drawdown": -0.109551084553003
+        },
+        "year_2024": {
+          "cagr": 0.2581441553970807,
+          "max_drawdown": -0.09596339515446073,
+          "sharpe": 1.7847247557296406,
+          "avg_exposure": 0.48252211056492306,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.4820785561510188,
+          "bull_sessions": 197,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.863453815261044,
+          "max_positions": 10,
+          "annual_turnover": 3.3422774930410495,
+          "completed_trades": 33,
+          "mean_holding_days": 104.42424242424242,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5151515151515151,
+          "fraction_180_days": 0.18181818181818182,
+          "exit_counts": {
+            "REBALANCE": 18,
+            "STOP_HIT": 15
+          },
+          "double_cost_cagr": 0.24565554024479064,
+          "double_cost_drawdown": -0.09758777734977442
+        }
+      }
+    },
+    {
+      "mode": "value",
+      "case": "trail30",
+      "windows": {
+        "full": {
+          "cagr": 0.23540479271535264,
+          "max_drawdown": -0.18189238500813698,
+          "sharpe": 1.8866633301216924,
+          "avg_exposure": 0.42845013237531565,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.4854181548046934,
+          "bull_sessions": 981,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.113357400722021,
+          "max_positions": 10,
+          "annual_turnover": 3.571587165145596,
+          "completed_trades": 186,
+          "mean_holding_days": 93.40322580645162,
+          "median_holding_days": 70.0,
+          "fraction_90_days": 0.43548387096774194,
+          "fraction_180_days": 0.13440860215053763,
+          "exit_counts": {
+            "REBALANCE": 103,
+            "STOP_HIT": 81,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.2222522200101822,
+          "double_cost_drawdown": -0.1865573400057643
+        },
+        "development": {
+          "cagr": 0.2138706601293332,
+          "max_drawdown": -0.18189238500813698,
+          "sharpe": 1.7196646906303208,
+          "avg_exposure": 0.3891157088562538,
+          "median_exposure": 0.49984011064097694,
+          "avg_bull_exposure": 0.4925810977053459,
+          "bull_sessions": 399,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 8.43613707165109,
+          "max_positions": 10,
+          "annual_turnover": 3.7098447643340444,
+          "completed_trades": 89,
+          "mean_holding_days": 74.10112359550561,
+          "median_holding_days": 61.0,
+          "fraction_90_days": 0.33707865168539325,
+          "fraction_180_days": 0.056179775280898875,
+          "exit_counts": {
+            "REBALANCE": 48,
+            "STOP_HIT": 39,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.20044347517526684,
+          "double_cost_drawdown": -0.1865573400057643
+        },
+        "previously_examined": {
+          "cagr": 0.2549981748726933,
+          "max_drawdown": -0.10668332477146569,
+          "sharpe": 2.0314884938097655,
+          "avg_exposure": 0.4624376154160124,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.480507477455277,
+          "bull_sessions": 582,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.698519515477793,
+          "max_positions": 10,
+          "annual_turnover": 3.462233188073244,
+          "completed_trades": 97,
+          "mean_holding_days": 111.11340206185567,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5257731958762887,
+          "fraction_180_days": 0.20618556701030927,
+          "exit_counts": {
+            "REBALANCE": 55,
+            "STOP_HIT": 42
+          },
+          "double_cost_cagr": 0.24204966452459153,
+          "double_cost_drawdown": -0.11030029415439879
+        },
+        "year_2024": {
+          "cagr": 0.23021614408449964,
+          "max_drawdown": -0.09757775685238812,
+          "sharpe": 1.6291485429907728,
+          "avg_exposure": 0.4916490403562262,
+          "median_exposure": 0.49999999999999994,
+          "avg_bull_exposure": 0.49001596439921585,
+          "bull_sessions": 197,
+          "max_exposure": 0.49999999999999994,
+          "avg_positions": 9.883534136546185,
+          "max_positions": 10,
+          "annual_turnover": 3.0332740963547855,
+          "completed_trades": 30,
+          "mean_holding_days": 115.4,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.6,
+          "fraction_180_days": 0.2,
+          "exit_counts": {
+            "REBALANCE": 19,
+            "STOP_HIT": 11
+          },
+          "double_cost_cagr": 0.2191190750787564,
+          "double_cost_drawdown": -0.09893983925157457
+        }
+      }
+    },
+    {
+      "mode": "value",
+      "case": "long10",
+      "windows": {
+        "full": {
+          "cagr": 0.3350970948724534,
+          "max_drawdown": -0.22042749978596832,
+          "sharpe": 1.9950193157921952,
+          "avg_exposure": 0.5399469275695642,
+          "median_exposure": 0.5391931348080076,
+          "avg_bull_exposure": 0.6182302796797292,
+          "bull_sessions": 981,
+          "max_exposure": 0.9597219429949209,
+          "avg_positions": 9.158122743682311,
+          "max_positions": 10,
+          "annual_turnover": 6.5337005149313585,
+          "completed_trades": 176,
+          "mean_holding_days": 98.93181818181819,
+          "median_holding_days": 91.5,
+          "fraction_90_days": 0.5568181818181818,
+          "fraction_180_days": 0.1534090909090909,
+          "exit_counts": {
+            "STOP_HIT": 93,
+            "REBALANCE": 83
+          },
+          "double_cost_cagr": 0.30923968954645487,
+          "double_cost_drawdown": -0.2285718321917245
+        },
+        "development": {
+          "cagr": 0.2663851628600715,
+          "max_drawdown": -0.22042749978596832,
+          "sharpe": 1.7002285958034893,
+          "avg_exposure": 0.4643112366320138,
+          "median_exposure": 0.4881818298501009,
+          "avg_bull_exposure": 0.5690241917510275,
+          "bull_sessions": 399,
+          "max_exposure": 0.92815879685579,
+          "avg_positions": 8.4797507788162,
+          "max_positions": 10,
+          "annual_turnover": 6.514453486781837,
+          "completed_trades": 78,
+          "mean_holding_days": 84.78205128205128,
+          "median_holding_days": 91.5,
+          "fraction_90_days": 0.5769230769230769,
+          "fraction_180_days": 0.05128205128205128,
+          "exit_counts": {
+            "STOP_HIT": 39,
+            "REBALANCE": 39
+          },
+          "double_cost_cagr": 0.24191400329844748,
+          "double_cost_drawdown": -0.2285718321917245
+        },
+        "previously_examined": {
+          "cagr": 0.39840900515383937,
+          "max_drawdown": -0.1045220554104268,
+          "sharpe": 2.2337723269045897,
+          "avg_exposure": 0.6053010508291972,
+          "median_exposure": 0.5714923125478439,
+          "avg_bull_exposure": 0.6519643502700249,
+          "bull_sessions": 582,
+          "max_exposure": 0.9597219429949209,
+          "avg_positions": 9.7442799461642,
+          "max_positions": 10,
+          "annual_turnover": 6.568221834292426,
+          "completed_trades": 98,
+          "mean_holding_days": 110.1938775510204,
+          "median_holding_days": 91.5,
+          "fraction_90_days": 0.5408163265306123,
+          "fraction_180_days": 0.23469387755102042,
+          "exit_counts": {
+            "STOP_HIT": 54,
+            "REBALANCE": 44
+          },
+          "double_cost_cagr": 0.37119901219195817,
+          "double_cost_drawdown": -0.10910699371440025
+        },
+        "year_2024": {
+          "cagr": 0.17232841872866334,
+          "max_drawdown": -0.1045220554104268,
+          "sharpe": 1.0682112333808407,
+          "avg_exposure": 0.5527423688374524,
+          "median_exposure": 0.5714923125478439,
+          "avg_bull_exposure": 0.5883260226171806,
+          "bull_sessions": 197,
+          "max_exposure": 0.9510936775411767,
+          "avg_positions": 9.650602409638553,
+          "max_positions": 10,
+          "annual_turnover": 7.116781974116993,
+          "completed_trades": 35,
+          "mean_holding_days": 99.65714285714286,
+          "median_holding_days": 83.0,
+          "fraction_90_days": 0.4857142857142857,
+          "fraction_180_days": 0.2,
+          "exit_counts": {
+            "STOP_HIT": 20,
+            "REBALANCE": 15
+          },
+          "double_cost_cagr": 0.14764300412022302,
+          "double_cost_drawdown": -0.10910699371440014
+        }
+      }
+    },
+    {
+      "mode": "value",
+      "case": "long15",
+      "windows": {
+        "full": {
+          "cagr": 0.3243543573549663,
+          "max_drawdown": -0.22319524823017478,
+          "sharpe": 1.9749270917810684,
+          "avg_exposure": 0.586585869116245,
+          "median_exposure": 0.5984696770053876,
+          "avg_bull_exposure": 0.6633929897865996,
+          "bull_sessions": 981,
+          "max_exposure": 0.9963511332312829,
+          "avg_positions": 13.76245487364621,
+          "max_positions": 15,
+          "annual_turnover": 6.556659129373913,
+          "completed_trades": 253,
+          "mean_holding_days": 104.08300395256917,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.5731225296442688,
+          "fraction_180_days": 0.16996047430830039,
+          "exit_counts": {
+            "STOP_HIT": 132,
+            "REBALANCE": 121
+          },
+          "double_cost_cagr": 0.29861909704558576,
+          "double_cost_drawdown": -0.23134997977728078
+        },
+        "development": {
+          "cagr": 0.3177171719018328,
+          "max_drawdown": -0.22319524823017478,
+          "sharpe": 1.9657263438171655,
+          "avg_exposure": 0.4986959704914075,
+          "median_exposure": 0.5690492173464249,
+          "avg_bull_exposure": 0.6019939385716461,
+          "bull_sessions": 399,
+          "max_exposure": 0.936853657815695,
+          "avg_positions": 12.811526479750778,
+          "max_positions": 15,
+          "annual_turnover": 6.438077782035743,
+          "completed_trades": 115,
+          "mean_holding_days": 85.51304347826087,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.5826086956521739,
+          "fraction_180_days": 0.05217391304347826,
+          "exit_counts": {
+            "REBALANCE": 58,
+            "STOP_HIT": 57
+          },
+          "double_cost_cagr": 0.2925556630283279,
+          "double_cost_drawdown": -0.23134997977728078
+        },
+        "previously_examined": {
+          "cagr": 0.33112741049455563,
+          "max_drawdown": -0.14058806324056006,
+          "sharpe": 1.9817858711867802,
+          "avg_exposure": 0.6625284194757951,
+          "median_exposure": 0.6693437737252659,
+          "avg_bull_exposure": 0.7054861537638617,
+          "bull_sessions": 582,
+          "max_exposure": 0.9963511332312829,
+          "avg_positions": 14.584118438761777,
+          "max_positions": 15,
+          "annual_turnover": 6.676854560829249,
+          "completed_trades": 138,
+          "mean_holding_days": 119.55797101449275,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.5652173913043478,
+          "fraction_180_days": 0.26811594202898553,
+          "exit_counts": {
+            "STOP_HIT": 75,
+            "REBALANCE": 63
+          },
+          "double_cost_cagr": 0.30480314731722724,
+          "double_cost_drawdown": -0.14540917473478054
+        },
+        "year_2024": {
+          "cagr": 0.2394524837624863,
+          "max_drawdown": -0.09667724376254738,
+          "sharpe": 1.431608909058098,
+          "avg_exposure": 0.6295050474099101,
+          "median_exposure": 0.6603917569201907,
+          "avg_bull_exposure": 0.6606949128077046,
+          "bull_sessions": 197,
+          "max_exposure": 0.9633396908304067,
+          "avg_positions": 14.694779116465863,
+          "max_positions": 15,
+          "annual_turnover": 7.18842214568009,
+          "completed_trades": 49,
+          "mean_holding_days": 122.38775510204081,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5306122448979592,
+          "fraction_180_days": 0.30612244897959184,
+          "exit_counts": {
+            "STOP_HIT": 26,
+            "REBALANCE": 23
+          },
+          "double_cost_cagr": 0.2131136523622228,
+          "double_cost_drawdown": -0.09903676795508676
+        }
+      }
+    },
+    {
+      "mode": "value",
+      "case": "long20",
+      "windows": {
+        "full": {
+          "cagr": 0.31310996384127465,
+          "max_drawdown": -0.21166561802637052,
+          "sharpe": 1.9317441039305268,
+          "avg_exposure": 0.6051503419127886,
+          "median_exposure": 0.6249887402197298,
+          "avg_bull_exposure": 0.6926797850078795,
+          "bull_sessions": 981,
+          "max_exposure": 0.9831244000446333,
+          "avg_positions": 18.406498194945847,
+          "max_positions": 20,
+          "annual_turnover": 6.12167035439145,
+          "completed_trades": 336,
+          "mean_holding_days": 105.29761904761905,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5446428571428571,
+          "fraction_180_days": 0.18452380952380953,
+          "exit_counts": {
+            "STOP_HIT": 183,
+            "REBALANCE": 153
+          },
+          "double_cost_cagr": 0.2892680206011351,
+          "double_cost_drawdown": -0.21919107214429734
+        },
+        "development": {
+          "cagr": 0.2645717612518803,
+          "max_drawdown": -0.21166561802637052,
+          "sharpe": 1.6876199519263613,
+          "avg_exposure": 0.5273946414405463,
+          "median_exposure": 0.6079052260772744,
+          "avg_bull_exposure": 0.6425580100455663,
+          "bull_sessions": 399,
+          "max_exposure": 0.9156849896896735,
+          "avg_positions": 16.990654205607477,
+          "max_positions": 20,
+          "annual_turnover": 6.170548315812717,
+          "completed_trades": 153,
+          "mean_holding_days": 87.51633986928104,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5424836601307189,
+          "fraction_180_days": 0.08496732026143791,
+          "exit_counts": {
+            "STOP_HIT": 82,
+            "REBALANCE": 71
+          },
+          "double_cost_cagr": 0.2414100731723039,
+          "double_cost_drawdown": -0.21919107214429734
+        },
+        "previously_examined": {
+          "cagr": 0.35744919461748914,
+          "max_drawdown": -0.1297417572649262,
+          "sharpe": 2.1375067724781682,
+          "avg_exposure": 0.6723362903692888,
+          "median_exposure": 0.6568538197951258,
+          "avg_bull_exposure": 0.7270416204201868,
+          "bull_sessions": 582,
+          "max_exposure": 0.9831244000446333,
+          "avg_positions": 19.629878869448184,
+          "max_positions": 20,
+          "annual_turnover": 6.0963473639105175,
+          "completed_trades": 183,
+          "mean_holding_days": 120.1639344262295,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.546448087431694,
+          "fraction_180_days": 0.2677595628415301,
+          "exit_counts": {
+            "STOP_HIT": 101,
+            "REBALANCE": 82
+          },
+          "double_cost_cagr": 0.3329211761630164,
+          "double_cost_drawdown": -0.1341754975440147
+        },
+        "year_2024": {
+          "cagr": 0.19990682667574733,
+          "max_drawdown": -0.10436395111423036,
+          "sharpe": 1.2420415461412346,
+          "avg_exposure": 0.6612688123031523,
+          "median_exposure": 0.6721466475151905,
+          "avg_bull_exposure": 0.6986374482852427,
+          "bull_sessions": 197,
+          "max_exposure": 0.9527221368418086,
+          "avg_positions": 19.61847389558233,
+          "max_positions": 20,
+          "annual_turnover": 6.853548518630178,
+          "completed_trades": 65,
+          "mean_holding_days": 126.26153846153846,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5692307692307692,
+          "fraction_180_days": 0.3384615384615385,
+          "exit_counts": {
+            "STOP_HIT": 35,
+            "REBALANCE": 30
+          },
+          "double_cost_cagr": 0.1755937279547941,
+          "double_cost_drawdown": -0.10699076986998057
+        }
+      }
+    },
+    {
+      "mode": "value",
+      "case": "long15_vol25",
+      "windows": {
+        "full": {
+          "cagr": 0.40671413860029215,
+          "max_drawdown": -0.2669223990359466,
+          "sharpe": 1.837003478955831,
+          "avg_exposure": 0.7737933651409268,
+          "median_exposure": 0.9009409917838807,
+          "avg_bull_exposure": 0.8888499978953343,
+          "bull_sessions": 981,
+          "max_exposure": 1.0177208781405969,
+          "avg_positions": 13.76245487364621,
+          "max_positions": 15,
+          "annual_turnover": 6.939457211549083,
+          "completed_trades": 253,
+          "mean_holding_days": 104.08300395256917,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.5731225296442688,
+          "fraction_180_days": 0.16996047430830039,
+          "exit_counts": {
+            "STOP_HIT": 132,
+            "REBALANCE": 121
+          },
+          "double_cost_cagr": 0.3778145427026962,
+          "double_cost_drawdown": -0.27567549752491105
+        },
+        "development": {
+          "cagr": 0.41163366040130867,
+          "max_drawdown": -0.2669223990359466,
+          "sharpe": 1.8421710210406375,
+          "avg_exposure": 0.6859667329102271,
+          "median_exposure": 0.8549093399321311,
+          "avg_bull_exposure": 0.8789734636865231,
+          "bull_sessions": 399,
+          "max_exposure": 0.9985875924655538,
+          "avg_positions": 12.811526479750778,
+          "max_positions": 15,
+          "annual_turnover": 6.642074663085642,
+          "completed_trades": 115,
+          "mean_holding_days": 85.51304347826087,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.5826086956521739,
+          "fraction_180_days": 0.05217391304347826,
+          "exit_counts": {
+            "REBALANCE": 58,
+            "STOP_HIT": 57
+          },
+          "double_cost_cagr": 0.38383996655736197,
+          "double_cost_drawdown": -0.27567549752491105
+        },
+        "previously_examined": {
+          "cagr": 0.40380228576001254,
+          "max_drawdown": -0.21703991325689576,
+          "sharpe": 1.8312868893406617,
+          "avg_exposure": 0.8496812492487453,
+          "median_exposure": 0.9145786357943761,
+          "avg_bull_exposure": 0.8956210239250862,
+          "bull_sessions": 582,
+          "max_exposure": 1.0177208781405969,
+          "avg_positions": 14.584118438761777,
+          "max_positions": 15,
+          "annual_turnover": 7.214802803760621,
+          "completed_trades": 138,
+          "mean_holding_days": 119.55797101449275,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.5652173913043478,
+          "fraction_180_days": 0.26811594202898553,
+          "exit_counts": {
+            "STOP_HIT": 75,
+            "REBALANCE": 63
+          },
+          "double_cost_cagr": 0.3738506202245122,
+          "double_cost_drawdown": -0.22345157494247758
+        },
+        "year_2024": {
+          "cagr": 0.33193876870241956,
+          "max_drawdown": -0.15663769176482456,
+          "sharpe": 1.4196602751309824,
+          "avg_exposure": 0.8868316095576253,
+          "median_exposure": 0.9145786357943761,
+          "avg_bull_exposure": 0.8968724869570244,
+          "bull_sessions": 197,
+          "max_exposure": 0.9973397229963998,
+          "avg_positions": 14.694779116465863,
+          "max_positions": 15,
+          "annual_turnover": 7.328939823702039,
+          "completed_trades": 49,
+          "mean_holding_days": 122.38775510204081,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5306122448979592,
+          "fraction_180_days": 0.30612244897959184,
+          "exit_counts": {
+            "STOP_HIT": 26,
+            "REBALANCE": 23
+          },
+          "double_cost_cagr": 0.303129348577593,
+          "double_cost_drawdown": -0.1586063095565814
+        }
+      }
+    },
+    {
+      "mode": "value",
+      "case": "long20_vol25",
+      "windows": {
+        "full": {
+          "cagr": 0.40393658514896136,
+          "max_drawdown": -0.24914938415527588,
+          "sharpe": 1.8612270980290941,
+          "avg_exposure": 0.785140767006727,
+          "median_exposure": 0.9064556854693022,
+          "avg_bull_exposure": 0.8930683771882666,
+          "bull_sessions": 981,
+          "max_exposure": 0.9868808208890552,
+          "avg_positions": 18.406498194945847,
+          "max_positions": 20,
+          "annual_turnover": 6.477360122291075,
+          "completed_trades": 336,
+          "mean_holding_days": 105.29761904761905,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5446428571428571,
+          "fraction_180_days": 0.18452380952380953,
+          "exit_counts": {
+            "STOP_HIT": 183,
+            "REBALANCE": 153
+          },
+          "double_cost_cagr": 0.37698100887903174,
+          "double_cost_drawdown": -0.25739650466982045
+        },
+        "development": {
+          "cagr": 0.3755074467689865,
+          "max_drawdown": -0.24914938415527588,
+          "sharpe": 1.7665205259063244,
+          "avg_exposure": 0.698011472269643,
+          "median_exposure": 0.862182250288407,
+          "avg_bull_exposure": 0.8927678600726875,
+          "bull_sessions": 399,
+          "max_exposure": 0.9737657086608246,
+          "avg_positions": 16.990654205607477,
+          "max_positions": 20,
+          "annual_turnover": 6.384116301023159,
+          "completed_trades": 153,
+          "mean_holding_days": 87.51633986928104,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5424836601307189,
+          "fraction_180_days": 0.08496732026143791,
+          "exit_counts": {
+            "STOP_HIT": 82,
+            "REBALANCE": 71
+          },
+          "double_cost_cagr": 0.3494563976570393,
+          "double_cost_drawdown": -0.25739650466982045
+        },
+        "previously_examined": {
+          "cagr": 0.43024043094966546,
+          "max_drawdown": -0.2028741198529903,
+          "sharpe": 1.9404168306184095,
+          "avg_exposure": 0.8604261064699951,
+          "median_exposure": 0.9191651588438554,
+          "avg_bull_exposure": 0.893274401808741,
+          "bull_sessions": 582,
+          "max_exposure": 0.9868808208890552,
+          "avg_positions": 19.629878869448184,
+          "max_positions": 20,
+          "annual_turnover": 6.5755007993279015,
+          "completed_trades": 183,
+          "mean_holding_days": 120.1639344262295,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.546448087431694,
+          "fraction_180_days": 0.2677595628415301,
+          "exit_counts": {
+            "STOP_HIT": 101,
+            "REBALANCE": 82
+          },
+          "double_cost_cagr": 0.4023838403775504,
+          "double_cost_drawdown": -0.20893283563904774
+        },
+        "year_2024": {
+          "cagr": 0.29592955580592406,
+          "max_drawdown": -0.13246005415274353,
+          "sharpe": 1.338992360343083,
+          "avg_exposure": 0.8913035347729517,
+          "median_exposure": 0.9261685599161286,
+          "avg_bull_exposure": 0.8996367830042953,
+          "bull_sessions": 197,
+          "max_exposure": 0.9868808208890552,
+          "avg_positions": 19.61847389558233,
+          "max_positions": 20,
+          "annual_turnover": 6.786061112415716,
+          "completed_trades": 65,
+          "mean_holding_days": 126.26153846153846,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5692307692307692,
+          "fraction_180_days": 0.3384615384615385,
+          "exit_counts": {
+            "STOP_HIT": 35,
+            "REBALANCE": 30
+          },
+          "double_cost_cagr": 0.26995798745560595,
+          "double_cost_drawdown": -0.1351350492619241
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "current",
+      "windows": {
+        "full": {
+          "cagr": 0.33200830117077285,
+          "max_drawdown": -0.1408479014733387,
+          "sharpe": 2.078996510596289,
+          "avg_exposure": 0.5231767463781452,
+          "median_exposure": 0.5382275216500183,
+          "avg_bull_exposure": 0.619297834093201,
+          "bull_sessions": 981,
+          "max_exposure": 0.9890308921916448,
+          "avg_positions": 8.829602888086642,
+          "max_positions": 10,
+          "annual_turnover": 11.771730143087945,
+          "completed_trades": 405,
+          "mean_holding_days": 43.51851851851852,
+          "median_holding_days": 37.0,
+          "fraction_90_days": 0.09135802469135802,
+          "fraction_180_days": 0.0024691358024691358,
+          "exit_counts": {
+            "STOP_HIT": 312,
+            "REBALANCE": 91,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.28586776927095925,
+          "double_cost_drawdown": -0.15434968048142128
+        },
+        "development": {
+          "cagr": 0.33582039354888105,
+          "max_drawdown": -0.12820945522559835,
+          "sharpe": 2.204889110074883,
+          "avg_exposure": 0.4622546064747526,
+          "median_exposure": 0.49964182963147263,
+          "avg_bull_exposure": 0.6139723952192757,
+          "bull_sessions": 399,
+          "max_exposure": 0.9615799938552838,
+          "avg_positions": 8.040498442367602,
+          "max_positions": 10,
+          "annual_turnover": 10.924829850133221,
+          "completed_trades": 178,
+          "mean_holding_days": 40.76966292134831,
+          "median_holding_days": 32.5,
+          "fraction_90_days": 0.0898876404494382,
+          "fraction_180_days": 0.0056179775280898875,
+          "exit_counts": {
+            "STOP_HIT": 146,
+            "REBALANCE": 30,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.29284148739466653,
+          "double_cost_drawdown": -0.13992006991834893
+        },
+        "previously_examined": {
+          "cagr": 0.32977755396068886,
+          "max_drawdown": -0.14084790147333937,
+          "sharpe": 1.9837977993756353,
+          "avg_exposure": 0.5758174110053027,
+          "median_exposure": 0.5593667588255307,
+          "avg_bull_exposure": 0.6229487793005828,
+          "bull_sessions": 582,
+          "max_exposure": 0.9890308921916448,
+          "avg_positions": 9.511440107671602,
+          "max_positions": 10,
+          "annual_turnover": 12.533939901910099,
+          "completed_trades": 227,
+          "mean_holding_days": 45.67400881057269,
+          "median_holding_days": 41.0,
+          "fraction_90_days": 0.09251101321585903,
+          "fraction_180_days": 0.0,
+          "exit_counts": {
+            "STOP_HIT": 166,
+            "REBALANCE": 61
+          },
+          "double_cost_cagr": 0.28077125274252857,
+          "double_cost_drawdown": -0.15434968048142017
+        },
+        "year_2024": {
+          "cagr": 0.2855630518045438,
+          "max_drawdown": -0.11394668164442945,
+          "sharpe": 1.6761469415477648,
+          "avg_exposure": 0.5830523156662034,
+          "median_exposure": 0.5482938062473779,
+          "avg_bull_exposure": 0.5959942974475951,
+          "bull_sessions": 197,
+          "max_exposure": 0.9243064689299526,
+          "avg_positions": 9.441767068273093,
+          "max_positions": 10,
+          "annual_turnover": 12.66711199012476,
+          "completed_trades": 77,
+          "mean_holding_days": 47.675324675324674,
+          "median_holding_days": 46.0,
+          "fraction_90_days": 0.07792207792207792,
+          "fraction_180_days": 0.0,
+          "exit_counts": {
+            "STOP_HIT": 55,
+            "REBALANCE": 22
+          },
+          "double_cost_cagr": 0.23767898002748877,
+          "double_cost_drawdown": -0.11969991322061435
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "cap10",
+      "windows": {
+        "full": {
+          "cagr": 0.33200830117077285,
+          "max_drawdown": -0.1408479014733387,
+          "sharpe": 2.078996510596289,
+          "avg_exposure": 0.5231767463781452,
+          "median_exposure": 0.5382275216500183,
+          "avg_bull_exposure": 0.619297834093201,
+          "bull_sessions": 981,
+          "max_exposure": 0.9890308921916448,
+          "avg_positions": 8.829602888086642,
+          "max_positions": 10,
+          "annual_turnover": 11.771730143087945,
+          "completed_trades": 405,
+          "mean_holding_days": 43.51851851851852,
+          "median_holding_days": 37.0,
+          "fraction_90_days": 0.09135802469135802,
+          "fraction_180_days": 0.0024691358024691358,
+          "exit_counts": {
+            "STOP_HIT": 312,
+            "REBALANCE": 91,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.28586776927095925,
+          "double_cost_drawdown": -0.15434968048142128
+        },
+        "development": {
+          "cagr": 0.33582039354888105,
+          "max_drawdown": -0.12820945522559835,
+          "sharpe": 2.204889110074883,
+          "avg_exposure": 0.4622546064747526,
+          "median_exposure": 0.49964182963147263,
+          "avg_bull_exposure": 0.6139723952192757,
+          "bull_sessions": 399,
+          "max_exposure": 0.9615799938552838,
+          "avg_positions": 8.040498442367602,
+          "max_positions": 10,
+          "annual_turnover": 10.924829850133221,
+          "completed_trades": 178,
+          "mean_holding_days": 40.76966292134831,
+          "median_holding_days": 32.5,
+          "fraction_90_days": 0.0898876404494382,
+          "fraction_180_days": 0.0056179775280898875,
+          "exit_counts": {
+            "STOP_HIT": 146,
+            "REBALANCE": 30,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.29284148739466653,
+          "double_cost_drawdown": -0.13992006991834893
+        },
+        "previously_examined": {
+          "cagr": 0.32977755396068886,
+          "max_drawdown": -0.14084790147333937,
+          "sharpe": 1.9837977993756353,
+          "avg_exposure": 0.5758174110053027,
+          "median_exposure": 0.5593667588255307,
+          "avg_bull_exposure": 0.6229487793005828,
+          "bull_sessions": 582,
+          "max_exposure": 0.9890308921916448,
+          "avg_positions": 9.511440107671602,
+          "max_positions": 10,
+          "annual_turnover": 12.533939901910099,
+          "completed_trades": 227,
+          "mean_holding_days": 45.67400881057269,
+          "median_holding_days": 41.0,
+          "fraction_90_days": 0.09251101321585903,
+          "fraction_180_days": 0.0,
+          "exit_counts": {
+            "STOP_HIT": 166,
+            "REBALANCE": 61
+          },
+          "double_cost_cagr": 0.28077125274252857,
+          "double_cost_drawdown": -0.15434968048142017
+        },
+        "year_2024": {
+          "cagr": 0.2855630518045438,
+          "max_drawdown": -0.11394668164442945,
+          "sharpe": 1.6761469415477648,
+          "avg_exposure": 0.5830523156662034,
+          "median_exposure": 0.5482938062473779,
+          "avg_bull_exposure": 0.5959942974475951,
+          "bull_sessions": 197,
+          "max_exposure": 0.9243064689299526,
+          "avg_positions": 9.441767068273093,
+          "max_positions": 10,
+          "annual_turnover": 12.66711199012476,
+          "completed_trades": 77,
+          "mean_holding_days": 47.675324675324674,
+          "median_holding_days": 46.0,
+          "fraction_90_days": 0.07792207792207792,
+          "fraction_180_days": 0.0,
+          "exit_counts": {
+            "STOP_HIT": 55,
+            "REBALANCE": 22
+          },
+          "double_cost_cagr": 0.23767898002748877,
+          "double_cost_drawdown": -0.11969991322061435
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "cap15",
+      "windows": {
+        "full": {
+          "cagr": 0.34105342164097396,
+          "max_drawdown": -0.1611160786510737,
+          "sharpe": 2.146678499137278,
+          "avg_exposure": 0.5655340872692952,
+          "median_exposure": 0.5930270671032426,
+          "avg_bull_exposure": 0.671235787206525,
+          "bull_sessions": 981,
+          "max_exposure": 0.9874812214162283,
+          "avg_positions": 13.223826714801444,
+          "max_positions": 15,
+          "annual_turnover": 12.079903325457979,
+          "completed_trades": 597,
+          "mean_holding_days": 44.24120603015076,
+          "median_holding_days": 37.0,
+          "fraction_90_days": 0.09715242881072027,
+          "fraction_180_days": 0.0033500837520938024,
+          "exit_counts": {
+            "STOP_HIT": 461,
+            "REBALANCE": 133,
+            "CRASH_GUARD": 3
+          },
+          "double_cost_cagr": 0.2934024468150527,
+          "double_cost_drawdown": -0.17104474959441718
+        },
+        "development": {
+          "cagr": 0.37543725722170307,
+          "max_drawdown": -0.1611160786510737,
+          "sharpe": 2.4208979353247684,
+          "avg_exposure": 0.4828195766338087,
+          "median_exposure": 0.5287324271820353,
+          "avg_bull_exposure": 0.6389096571737625,
+          "bull_sessions": 399,
+          "max_exposure": 0.9387370504154271,
+          "avg_positions": 12.110591900311526,
+          "max_positions": 15,
+          "annual_turnover": 11.366394793710734,
+          "completed_trades": 269,
+          "mean_holding_days": 40.825278810408925,
+          "median_holding_days": 34.0,
+          "fraction_90_days": 0.08178438661710037,
+          "fraction_180_days": 0.0037174721189591076,
+          "exit_counts": {
+            "STOP_HIT": 218,
+            "REBALANCE": 48,
+            "CRASH_GUARD": 3
+          },
+          "double_cost_cagr": 0.3294291470035271,
+          "double_cost_drawdown": -0.17104474959441718
+        },
+        "previously_examined": {
+          "cagr": 0.3131674780833462,
+          "max_drawdown": -0.14465135400292728,
+          "sharpe": 1.9305467932206168,
+          "avg_exposure": 0.6370047680606578,
+          "median_exposure": 0.6283880841635944,
+          "avg_bull_exposure": 0.6933975155279551,
+          "bull_sessions": 582,
+          "max_exposure": 0.9874812214162283,
+          "avg_positions": 14.185733512786003,
+          "max_positions": 15,
+          "annual_turnover": 12.727995500098672,
+          "completed_trades": 328,
+          "mean_holding_days": 47.042682926829265,
+          "median_holding_days": 40.5,
+          "fraction_90_days": 0.10975609756097561,
+          "fraction_180_days": 0.003048780487804878,
+          "exit_counts": {
+            "STOP_HIT": 243,
+            "REBALANCE": 85
+          },
+          "double_cost_cagr": 0.26402947650699615,
+          "double_cost_drawdown": -0.15814062587931677
+        },
+        "year_2024": {
+          "cagr": 0.27116363038484015,
+          "max_drawdown": -0.12175491466473654,
+          "sharpe": 1.618096803507773,
+          "avg_exposure": 0.654121095782703,
+          "median_exposure": 0.6226498068915273,
+          "avg_bull_exposure": 0.6933052375685473,
+          "bull_sessions": 197,
+          "max_exposure": 0.9863673912879529,
+          "avg_positions": 14.0,
+          "max_positions": 15,
+          "annual_turnover": 13.032300962615066,
+          "completed_trades": 113,
+          "mean_holding_days": 48.2212389380531,
+          "median_holding_days": 42.0,
+          "fraction_90_days": 0.10619469026548672,
+          "fraction_180_days": 0.008849557522123894,
+          "exit_counts": {
+            "STOP_HIT": 80,
+            "REBALANCE": 33
+          },
+          "double_cost_cagr": 0.22251732773310895,
+          "double_cost_drawdown": -0.12501612564265185
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "cap20",
+      "windows": {
+        "full": {
+          "cagr": 0.35981244360941655,
+          "max_drawdown": -0.1602369491168102,
+          "sharpe": 2.256425790431863,
+          "avg_exposure": 0.5840629769878088,
+          "median_exposure": 0.6181588627758476,
+          "avg_bull_exposure": 0.6959661070329615,
+          "bull_sessions": 981,
+          "max_exposure": 0.9730404741556042,
+          "avg_positions": 17.732129963898917,
+          "max_positions": 20,
+          "annual_turnover": 11.803209411650231,
+          "completed_trades": 790,
+          "mean_holding_days": 44.741772151898736,
+          "median_holding_days": 37.0,
+          "fraction_90_days": 0.0949367088607595,
+          "fraction_180_days": 0.002531645569620253,
+          "exit_counts": {
+            "STOP_HIT": 605,
+            "REBALANCE": 179,
+            "CRASH_GUARD": 6
+          },
+          "double_cost_cagr": 0.3125754795412774,
+          "double_cost_drawdown": -0.1705616102187858
+        },
+        "development": {
+          "cagr": 0.40060339340778106,
+          "max_drawdown": -0.1602369491168102,
+          "sharpe": 2.559302449658768,
+          "avg_exposure": 0.5090355192372654,
+          "median_exposure": 0.5690555910930171,
+          "avg_bull_exposure": 0.6771781517055379,
+          "bull_sessions": 399,
+          "max_exposure": 0.9584274141024628,
+          "avg_positions": 16.333333333333332,
+          "max_positions": 20,
+          "annual_turnover": 11.261275291391813,
+          "completed_trades": 354,
+          "mean_holding_days": 41.64124293785311,
+          "median_holding_days": 35.0,
+          "fraction_90_days": 0.07909604519774012,
+          "fraction_180_days": 0.002824858757062147,
+          "exit_counts": {
+            "STOP_HIT": 280,
+            "REBALANCE": 68,
+            "CRASH_GUARD": 6
+          },
+          "double_cost_cagr": 0.3541751651029019,
+          "double_cost_drawdown": -0.1705616102187858
+        },
+        "previously_examined": {
+          "cagr": 0.32673001070397567,
+          "max_drawdown": -0.14802888076930398,
+          "sharpe": 2.0156727260510015,
+          "avg_exposure": 0.6488915474802032,
+          "median_exposure": 0.6546693936214315,
+          "avg_bull_exposure": 0.7088465093966075,
+          "bull_sessions": 582,
+          "max_exposure": 0.9730404741556042,
+          "avg_positions": 18.94078061911171,
+          "max_positions": 20,
+          "annual_turnover": 12.302671048904013,
+          "completed_trades": 436,
+          "mean_holding_days": 47.25917431192661,
+          "median_holding_days": 41.0,
+          "fraction_90_days": 0.10779816513761468,
+          "fraction_180_days": 0.0022935779816513763,
+          "exit_counts": {
+            "STOP_HIT": 325,
+            "REBALANCE": 111
+          },
+          "double_cost_cagr": 0.2787038839077056,
+          "double_cost_drawdown": -0.16890016255711215
+        },
+        "year_2024": {
+          "cagr": 0.32867825722289723,
+          "max_drawdown": -0.11176774383971988,
+          "sharpe": 1.9051297318096654,
+          "avg_exposure": 0.6457906978501102,
+          "median_exposure": 0.6162218785578047,
+          "avg_bull_exposure": 0.6807330788313268,
+          "bull_sessions": 197,
+          "max_exposure": 0.9233486300835949,
+          "avg_positions": 19.072289156626507,
+          "max_positions": 20,
+          "annual_turnover": 12.504360184283653,
+          "completed_trades": 149,
+          "mean_holding_days": 49.1744966442953,
+          "median_holding_days": 42.0,
+          "fraction_90_days": 0.12080536912751678,
+          "fraction_180_days": 0.006711409395973154,
+          "exit_counts": {
+            "STOP_HIT": 111,
+            "REBALANCE": 38
+          },
+          "double_cost_cagr": 0.2799016967697008,
+          "double_cost_drawdown": -0.11651469553536975
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "buffer2",
+      "windows": {
+        "full": {
+          "cagr": 0.2944007797919821,
+          "max_drawdown": -0.145232790714117,
+          "sharpe": 1.9201169047866815,
+          "avg_exposure": 0.5010769306576601,
+          "median_exposure": 0.49189373399540376,
+          "avg_bull_exposure": 0.587400659627942,
+          "bull_sessions": 981,
+          "max_exposure": 0.9986576397197856,
+          "avg_positions": 8.96028880866426,
+          "max_positions": 10,
+          "annual_turnover": 10.948118694145546,
+          "completed_trades": 370,
+          "mean_holding_days": 47.68108108108108,
+          "median_holding_days": 38.5,
+          "fraction_90_days": 0.13783783783783785,
+          "fraction_180_days": 0.002702702702702703,
+          "exit_counts": {
+            "STOP_HIT": 324,
+            "REBALANCE": 44,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.2526437286964385,
+          "double_cost_drawdown": -0.1581978893742767
+        },
+        "development": {
+          "cagr": 0.29897749025516585,
+          "max_drawdown": -0.12201408101905564,
+          "sharpe": 2.0212647431559425,
+          "avg_exposure": 0.44040346977736006,
+          "median_exposure": 0.4749211007985638,
+          "avg_bull_exposure": 0.5791233302321408,
+          "bull_sessions": 399,
+          "max_exposure": 0.9312531272763039,
+          "avg_positions": 8.19626168224299,
+          "max_positions": 10,
+          "annual_turnover": 10.157031855469326,
+          "completed_trades": 168,
+          "mean_holding_days": 44.07142857142857,
+          "median_holding_days": 33.5,
+          "fraction_90_days": 0.1130952380952381,
+          "fraction_180_days": 0.005952380952380952,
+          "exit_counts": {
+            "STOP_HIT": 152,
+            "REBALANCE": 14,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.2600694099028267,
+          "double_cost_drawdown": -0.1305008349847978
+        },
+        "previously_examined": {
+          "cagr": 0.2913836198171016,
+          "max_drawdown": -0.14523279071411643,
+          "sharpe": 1.8409277865398919,
+          "avg_exposure": 0.5535027205434644,
+          "median_exposure": 0.5329887653032243,
+          "avg_bull_exposure": 0.5930753235951663,
+          "bull_sessions": 582,
+          "max_exposure": 0.9986576397197856,
+          "avg_positions": 9.620457604306864,
+          "max_positions": 10,
+          "annual_turnover": 11.65996513340944,
+          "completed_trades": 202,
+          "mean_holding_days": 50.68316831683168,
+          "median_holding_days": 43.0,
+          "fraction_90_days": 0.15841584158415842,
+          "fraction_180_days": 0.0,
+          "exit_counts": {
+            "STOP_HIT": 172,
+            "REBALANCE": 30
+          },
+          "double_cost_cagr": 0.24704981315086294,
+          "double_cost_drawdown": -0.15819788937427726
+        },
+        "year_2024": {
+          "cagr": 0.31826701191766915,
+          "max_drawdown": -0.1374880534563423,
+          "sharpe": 1.8620576870536623,
+          "avg_exposure": 0.5779567966970068,
+          "median_exposure": 0.5529322684672338,
+          "avg_bull_exposure": 0.5959473754328806,
+          "bull_sessions": 197,
+          "max_exposure": 0.9688622251619343,
+          "avg_positions": 9.506024096385541,
+          "max_positions": 10,
+          "annual_turnover": 12.093051386293888,
+          "completed_trades": 70,
+          "mean_holding_days": 50.58571428571429,
+          "median_holding_days": 42.5,
+          "fraction_90_days": 0.18571428571428572,
+          "fraction_180_days": 0.0,
+          "exit_counts": {
+            "STOP_HIT": 58,
+            "REBALANCE": 12
+          },
+          "double_cost_cagr": 0.27129851875366984,
+          "double_cost_drawdown": -0.14154459152218657
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "buffer3",
+      "windows": {
+        "full": {
+          "cagr": 0.25798706034413343,
+          "max_drawdown": -0.14059264419999473,
+          "sharpe": 1.7152752661965438,
+          "avg_exposure": 0.4838427438546479,
+          "median_exposure": 0.49129909301673363,
+          "avg_bull_exposure": 0.5540832376244672,
+          "bull_sessions": 981,
+          "max_exposure": 0.9470293547541833,
+          "avg_positions": 9.014440433212997,
+          "max_positions": 10,
+          "annual_turnover": 10.70481023173159,
+          "completed_trades": 356,
+          "mean_holding_days": 49.91573033707865,
+          "median_holding_days": 38.0,
+          "fraction_90_days": 0.16853932584269662,
+          "fraction_180_days": 0.0056179775280898875,
+          "exit_counts": {
+            "STOP_HIT": 331,
+            "REBALANCE": 22,
+            "CRASH_GUARD": 3
+          },
+          "double_cost_cagr": 0.2182699996312405,
+          "double_cost_drawdown": -0.15937969477628766
+        },
+        "development": {
+          "cagr": 0.3022364083720648,
+          "max_drawdown": -0.13612376447224672,
+          "sharpe": 2.0406639549377057,
+          "avg_exposure": 0.4358833784682425,
+          "median_exposure": 0.4683682968327257,
+          "avg_bull_exposure": 0.5690308501818356,
+          "bull_sessions": 399,
+          "max_exposure": 0.9312703885428092,
+          "avg_positions": 8.258566978193146,
+          "max_positions": 10,
+          "annual_turnover": 9.843597122405493,
+          "completed_trades": 160,
+          "mean_holding_days": 46.7125,
+          "median_holding_days": 34.5,
+          "fraction_90_days": 0.15,
+          "fraction_180_days": 0.00625,
+          "exit_counts": {
+            "STOP_HIT": 151,
+            "REBALANCE": 6,
+            "CRASH_GUARD": 3
+          },
+          "double_cost_cagr": 0.2643839792542517,
+          "double_cost_drawdown": -0.1458266471895192
+        },
+        "previously_examined": {
+          "cagr": 0.22182853880776077,
+          "max_drawdown": -0.1405926441999955,
+          "sharpe": 1.457595526950826,
+          "avg_exposure": 0.5252827338655124,
+          "median_exposure": 0.5281853325925918,
+          "avg_bull_exposure": 0.5438356475722506,
+          "bull_sessions": 582,
+          "max_exposure": 0.9470293547541833,
+          "avg_positions": 9.66756393001346,
+          "max_positions": 10,
+          "annual_turnover": 11.476427047541637,
+          "completed_trades": 196,
+          "mean_holding_days": 52.53061224489796,
+          "median_holding_days": 42.5,
+          "fraction_90_days": 0.1836734693877551,
+          "fraction_180_days": 0.00510204081632653,
+          "exit_counts": {
+            "STOP_HIT": 180,
+            "REBALANCE": 16
+          },
+          "double_cost_cagr": 0.18051796155643118,
+          "double_cost_drawdown": -0.1593796947762881
+        },
+        "year_2024": {
+          "cagr": 0.2946439433604351,
+          "max_drawdown": -0.129461703291334,
+          "sharpe": 1.7478447956344072,
+          "avg_exposure": 0.5550396133988509,
+          "median_exposure": 0.5653100738551553,
+          "avg_bull_exposure": 0.5453543230159756,
+          "bull_sessions": 197,
+          "max_exposure": 0.9470293547541833,
+          "avg_positions": 9.76706827309237,
+          "max_positions": 10,
+          "annual_turnover": 11.21942522163734,
+          "completed_trades": 64,
+          "mean_holding_days": 56.953125,
+          "median_holding_days": 50.0,
+          "fraction_90_days": 0.25,
+          "fraction_180_days": 0.015625,
+          "exit_counts": {
+            "STOP_HIT": 58,
+            "REBALANCE": 6
+          },
+          "double_cost_cagr": 0.25182591237092766,
+          "double_cost_drawdown": -0.13315082736401607
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "rank_buffer_100pct",
+      "windows": {
+        "full": {
+          "cagr": 0.33656521159315633,
+          "max_drawdown": -0.16192272802419727,
+          "sharpe": 2.1112011899807555,
+          "avg_exposure": 0.5197722644272601,
+          "median_exposure": 0.5351927966013701,
+          "avg_bull_exposure": 0.6181810370078706,
+          "bull_sessions": 981,
+          "max_exposure": 0.9635353775817691,
+          "avg_positions": 8.693862815884476,
+          "max_positions": 10,
+          "annual_turnover": 11.244842439504763,
+          "completed_trades": 391,
+          "mean_holding_days": 44.16368286445013,
+          "median_holding_days": 37.0,
+          "fraction_90_days": 0.10230179028132992,
+          "fraction_180_days": 0.0025575447570332483,
+          "exit_counts": {
+            "STOP_HIT": 310,
+            "REBALANCE": 79,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.2922705600292679,
+          "double_cost_drawdown": -0.1748797710538369
+        },
+        "development": {
+          "cagr": 0.32796179832428685,
+          "max_drawdown": -0.12470676502568767,
+          "sharpe": 2.14718311402021,
+          "avg_exposure": 0.4391781208885252,
+          "median_exposure": 0.4767764961583623,
+          "avg_bull_exposure": 0.5797164372451399,
+          "bull_sessions": 399,
+          "max_exposure": 0.9309260044789284,
+          "avg_positions": 7.925233644859813,
+          "max_positions": 10,
+          "annual_turnover": 9.91522612522832,
+          "completed_trades": 170,
+          "mean_holding_days": 42.1764705882353,
+          "median_holding_days": 33.0,
+          "fraction_90_days": 0.10588235294117647,
+          "fraction_180_days": 0.0058823529411764705,
+          "exit_counts": {
+            "STOP_HIT": 143,
+            "REBALANCE": 25,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.2891206167417528,
+          "double_cost_drawdown": -0.13074303417846067
+        },
+        "previously_examined": {
+          "cagr": 0.3450953693858294,
+          "max_drawdown": -0.16192272802419705,
+          "sharpe": 2.0842157712990987,
+          "avg_exposure": 0.5894108110650363,
+          "median_exposure": 0.5793697303635647,
+          "avg_bull_exposure": 0.6445510976699491,
+          "bull_sessions": 582,
+          "max_exposure": 0.9635353775817691,
+          "avg_positions": 9.35800807537012,
+          "max_positions": 10,
+          "annual_turnover": 12.421633926574223,
+          "completed_trades": 221,
+          "mean_holding_days": 45.69230769230769,
+          "median_holding_days": 39.0,
+          "fraction_90_days": 0.09954751131221719,
+          "fraction_180_days": 0.0,
+          "exit_counts": {
+            "STOP_HIT": 167,
+            "REBALANCE": 54
+          },
+          "double_cost_cagr": 0.2959031826734473,
+          "double_cost_drawdown": -0.17487977105383756
+        },
+        "year_2024": {
+          "cagr": 0.3049489223720665,
+          "max_drawdown": -0.11423562531807085,
+          "sharpe": 1.804230756836119,
+          "avg_exposure": 0.5898233885954532,
+          "median_exposure": 0.5742601633713904,
+          "avg_bull_exposure": 0.6198764275859777,
+          "bull_sessions": 197,
+          "max_exposure": 0.9163959679293365,
+          "avg_positions": 9.012048192771084,
+          "max_positions": 10,
+          "annual_turnover": 11.827852221163909,
+          "completed_trades": 72,
+          "mean_holding_days": 46.611111111111114,
+          "median_holding_days": 42.0,
+          "fraction_90_days": 0.09722222222222222,
+          "fraction_180_days": 0.0,
+          "exit_counts": {
+            "STOP_HIT": 55,
+            "REBALANCE": 17
+          },
+          "double_cost_cagr": 0.2594804400528359,
+          "double_cost_drawdown": -0.11934359799616234
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "trail25",
+      "windows": {
+        "full": {
+          "cagr": 0.35398201545364905,
+          "max_drawdown": -0.15036343547760478,
+          "sharpe": 2.218956355090582,
+          "avg_exposure": 0.5250366721390485,
+          "median_exposure": 0.5354624794338169,
+          "avg_bull_exposure": 0.620186340137177,
+          "bull_sessions": 981,
+          "max_exposure": 0.976839224018547,
+          "avg_positions": 9.19350180505415,
+          "max_positions": 10,
+          "annual_turnover": 8.034001368752536,
+          "completed_trades": 248,
+          "mean_holding_days": 72.91935483870968,
+          "median_holding_days": 62.0,
+          "fraction_90_days": 0.3548387096774194,
+          "fraction_180_days": 0.028225806451612902,
+          "exit_counts": {
+            "REBALANCE": 150,
+            "STOP_HIT": 96,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.3218392252604314,
+          "double_cost_drawdown": -0.15743328542813528
+        },
+        "development": {
+          "cagr": 0.35226728556403186,
+          "max_drawdown": -0.15036343547760478,
+          "sharpe": 2.341052631712158,
+          "avg_exposure": 0.4467578947628086,
+          "median_exposure": 0.4546041117296923,
+          "avg_bull_exposure": 0.5768408542963152,
+          "bull_sessions": 399,
+          "max_exposure": 0.9641094941978361,
+          "avg_positions": 8.450155763239875,
+          "max_positions": 10,
+          "annual_turnover": 7.47545783730027,
+          "completed_trades": 107,
+          "mean_holding_days": 69.27102803738318,
+          "median_holding_days": 61.0,
+          "fraction_90_days": 0.2803738317757009,
+          "fraction_180_days": 0.028037383177570093,
+          "exit_counts": {
+            "REBALANCE": 61,
+            "STOP_HIT": 44,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.3223682796667666,
+          "double_cost_drawdown": -0.15743328542813528
+        },
+        "previously_examined": {
+          "cagr": 0.35658952901769214,
+          "max_drawdown": -0.14360774666288245,
+          "sharpe": 2.1298357404005968,
+          "avg_exposure": 0.5926745928329195,
+          "median_exposure": 0.5705110235619295,
+          "avg_bull_exposure": 0.6499025752754999,
+          "bull_sessions": 582,
+          "max_exposure": 0.976839224018547,
+          "avg_positions": 9.835800807537012,
+          "max_positions": 10,
+          "annual_turnover": 8.537432302635695,
+          "completed_trades": 141,
+          "mean_holding_days": 75.68794326241135,
+          "median_holding_days": 73.0,
+          "fraction_90_days": 0.41134751773049644,
+          "fraction_180_days": 0.028368794326241134,
+          "exit_counts": {
+            "REBALANCE": 89,
+            "STOP_HIT": 52
+          },
+          "double_cost_cagr": 0.3223957976022993,
+          "double_cost_drawdown": -0.15222407417213613
+        },
+        "year_2024": {
+          "cagr": 0.30313395528452336,
+          "max_drawdown": -0.108289426825113,
+          "sharpe": 1.7766389521010983,
+          "avg_exposure": 0.5964876100774298,
+          "median_exposure": 0.5745544946416945,
+          "avg_bull_exposure": 0.6181486004110763,
+          "bull_sessions": 197,
+          "max_exposure": 0.8785822372557722,
+          "avg_positions": 9.847389558232932,
+          "max_positions": 10,
+          "annual_turnover": 8.662519115201844,
+          "completed_trades": 50,
+          "mean_holding_days": 80.08,
+          "median_holding_days": 81.0,
+          "fraction_90_days": 0.48,
+          "fraction_180_days": 0.04,
+          "exit_counts": {
+            "REBALANCE": 33,
+            "STOP_HIT": 17
+          },
+          "double_cost_cagr": 0.2698151531969504,
+          "double_cost_drawdown": -0.11114704841583889
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "trail30",
+      "windows": {
+        "full": {
+          "cagr": 0.35105056539112756,
+          "max_drawdown": -0.1437392886291402,
+          "sharpe": 2.1977905514920018,
+          "avg_exposure": 0.5260216549868141,
+          "median_exposure": 0.5453356271855265,
+          "avg_bull_exposure": 0.6217760928116994,
+          "bull_sessions": 981,
+          "max_exposure": 0.978380593304154,
+          "avg_positions": 9.218050541516245,
+          "max_positions": 10,
+          "annual_turnover": 7.773184490331556,
+          "completed_trades": 236,
+          "mean_holding_days": 76.71186440677967,
+          "median_holding_days": 63.0,
+          "fraction_90_days": 0.3940677966101695,
+          "fraction_180_days": 0.029661016949152543,
+          "exit_counts": {
+            "REBALANCE": 158,
+            "STOP_HIT": 76,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.3200064552618269,
+          "double_cost_drawdown": -0.15235217738532658
+        },
+        "development": {
+          "cagr": 0.339890194301278,
+          "max_drawdown": -0.1431600810295579,
+          "sharpe": 2.254240894640122,
+          "avg_exposure": 0.4418985254229938,
+          "median_exposure": 0.4683682968327257,
+          "avg_bull_exposure": 0.5703777051723712,
+          "bull_sessions": 399,
+          "max_exposure": 0.931838061689907,
+          "avg_positions": 8.473520249221183,
+          "max_positions": 10,
+          "annual_turnover": 7.045370571046987,
+          "completed_trades": 101,
+          "mean_holding_days": 72.08910891089108,
+          "median_holding_days": 61.0,
+          "fraction_90_days": 0.3069306930693069,
+          "fraction_180_days": 0.0297029702970297,
+          "exit_counts": {
+            "REBALANCE": 63,
+            "STOP_HIT": 36,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.31195570928119687,
+          "double_cost_drawdown": -0.15018083693023043
+        },
+        "previously_examined": {
+          "cagr": 0.3618678896800882,
+          "max_drawdown": -0.14373928862914098,
+          "sharpe": 2.1578850555908726,
+          "avg_exposure": 0.5987094735332107,
+          "median_exposure": 0.5734612674977031,
+          "avg_bull_exposure": 0.657013131760311,
+          "bull_sessions": 582,
+          "max_exposure": 0.978380593304154,
+          "avg_positions": 9.861372812920592,
+          "max_positions": 10,
+          "annual_turnover": 8.421784916166013,
+          "completed_trades": 135,
+          "mean_holding_days": 80.17037037037036,
+          "median_holding_days": 81.0,
+          "fraction_90_days": 0.45925925925925926,
+          "fraction_180_days": 0.02962962962962963,
+          "exit_counts": {
+            "REBALANCE": 95,
+            "STOP_HIT": 40
+          },
+          "double_cost_cagr": 0.32799620208919134,
+          "double_cost_drawdown": -0.15235217738532647
+        },
+        "year_2024": {
+          "cagr": 0.32104570171018665,
+          "max_drawdown": -0.10828942776526318,
+          "sharpe": 1.848577462621023,
+          "avg_exposure": 0.6056093415318303,
+          "median_exposure": 0.6184945413757688,
+          "avg_bull_exposure": 0.628984589585361,
+          "bull_sessions": 197,
+          "max_exposure": 0.90716182572065,
+          "avg_positions": 9.887550200803213,
+          "max_positions": 10,
+          "annual_turnover": 8.493769700452095,
+          "completed_trades": 47,
+          "mean_holding_days": 84.87234042553192,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5319148936170213,
+          "fraction_180_days": 0.0425531914893617,
+          "exit_counts": {
+            "REBALANCE": 34,
+            "STOP_HIT": 13
+          },
+          "double_cost_cagr": 0.28792615539873667,
+          "double_cost_drawdown": -0.1111470493526443
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "long10",
+      "windows": {
+        "full": {
+          "cagr": 0.3603344797415122,
+          "max_drawdown": -0.15640720335524472,
+          "sharpe": 2.284071284704648,
+          "avg_exposure": 0.5062749009616287,
+          "median_exposure": 0.5475917160191351,
+          "avg_bull_exposure": 0.5970547096963402,
+          "bull_sessions": 981,
+          "max_exposure": 0.944541860791457,
+          "avg_positions": 9.288086642599279,
+          "max_positions": 10,
+          "annual_turnover": 6.906532443459821,
+          "completed_trades": 196,
+          "mean_holding_days": 92.88265306122449,
+          "median_holding_days": 91.5,
+          "fraction_90_days": 0.5918367346938775,
+          "fraction_180_days": 0.061224489795918366,
+          "exit_counts": {
+            "REBALANCE": 113,
+            "STOP_HIT": 81,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.3325106578985324,
+          "double_cost_drawdown": -0.16491685787968713
+        },
+        "development": {
+          "cagr": 0.3249558856938317,
+          "max_drawdown": -0.15452383733536168,
+          "sharpe": 2.215222746890038,
+          "avg_exposure": 0.41760934919702003,
+          "median_exposure": 0.44388975593687996,
+          "avg_bull_exposure": 0.5433003852433899,
+          "bull_sessions": 399,
+          "max_exposure": 0.906499848230634,
+          "avg_positions": 8.53582554517134,
+          "max_positions": 10,
+          "annual_turnover": 6.337406869478054,
+          "completed_trades": 85,
+          "mean_holding_days": 88.81176470588235,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5764705882352941,
+          "fraction_180_days": 0.058823529411764705,
+          "exit_counts": {
+            "REBALANCE": 45,
+            "STOP_HIT": 38,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.30006504150386437,
+          "double_cost_drawdown": -0.16208607298360933
+        },
+        "previously_examined": {
+          "cagr": 0.3927583351880497,
+          "max_drawdown": -0.15640720335524527,
+          "sharpe": 2.342354609656291,
+          "avg_exposure": 0.5828876657434309,
+          "median_exposure": 0.6117478563764295,
+          "avg_bull_exposure": 0.6339069012027444,
+          "bull_sessions": 582,
+          "max_exposure": 0.944541860791457,
+          "avg_positions": 9.938088829071333,
+          "max_positions": 10,
+          "annual_turnover": 7.4159888826375,
+          "completed_trades": 111,
+          "mean_holding_days": 96.0,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.6036036036036037,
+          "fraction_180_days": 0.06306306306306306,
+          "exit_counts": {
+            "REBALANCE": 68,
+            "STOP_HIT": 43
+          },
+          "double_cost_cagr": 0.3621956549404697,
+          "double_cost_drawdown": -0.16491685787968624
+        },
+        "year_2024": {
+          "cagr": 0.4813755135079889,
+          "max_drawdown": -0.10001370066619764,
+          "sharpe": 2.6315373015048684,
+          "avg_exposure": 0.5791192927253777,
+          "median_exposure": 0.6016886073344029,
+          "avg_bull_exposure": 0.619379679493015,
+          "bull_sessions": 197,
+          "max_exposure": 0.8842283668806105,
+          "avg_positions": 9.975903614457831,
+          "max_positions": 10,
+          "annual_turnover": 7.332403270193005,
+          "completed_trades": 37,
+          "mean_holding_days": 99.5945945945946,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.6216216216216216,
+          "fraction_180_days": 0.05405405405405406,
+          "exit_counts": {
+            "REBALANCE": 23,
+            "STOP_HIT": 14
+          },
+          "double_cost_cagr": 0.4492411098169524,
+          "double_cost_drawdown": -0.10182520599605893
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "long15",
+      "windows": {
+        "full": {
+          "cagr": 0.28829106189295417,
+          "max_drawdown": -0.19583398989015288,
+          "sharpe": 1.8836748462965338,
+          "avg_exposure": 0.5321001126100017,
+          "median_exposure": 0.5594565060691332,
+          "avg_bull_exposure": 0.6264334800297912,
+          "bull_sessions": 981,
+          "max_exposure": 0.9710021073159925,
+          "avg_positions": 13.896028880866426,
+          "max_positions": 15,
+          "annual_turnover": 7.165284093019477,
+          "completed_trades": 284,
+          "mean_holding_days": 95.62676056338029,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.5845070422535211,
+          "fraction_180_days": 0.09859154929577464,
+          "exit_counts": {
+            "REBALANCE": 154,
+            "STOP_HIT": 128,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.26094237824245536,
+          "double_cost_drawdown": -0.20561313809724013
+        },
+        "development": {
+          "cagr": 0.32631763805272396,
+          "max_drawdown": -0.19583398989015288,
+          "sharpe": 2.1894951223245553,
+          "avg_exposure": 0.46387802212922224,
+          "median_exposure": 0.49245261408002405,
+          "avg_bull_exposure": 0.6107191513390577,
+          "bull_sessions": 399,
+          "max_exposure": 0.9710021073159925,
+          "avg_positions": 12.800623052959502,
+          "max_positions": 15,
+          "annual_turnover": 6.8928518860572074,
+          "completed_trades": 122,
+          "mean_holding_days": 92.00819672131148,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.6147540983606558,
+          "fraction_180_days": 0.07377049180327869,
+          "exit_counts": {
+            "REBALANCE": 66,
+            "STOP_HIT": 54,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.29920291882812333,
+          "double_cost_drawdown": -0.20561313809724013
+        },
+        "previously_examined": {
+          "cagr": 0.2572676779823553,
+          "max_drawdown": -0.15241023324829162,
+          "sharpe": 1.6455393548251829,
+          "avg_exposure": 0.5910484061344439,
+          "median_exposure": 0.5893944687566036,
+          "avg_bull_exposure": 0.6372067053693147,
+          "bull_sessions": 582,
+          "max_exposure": 0.9652480986983543,
+          "avg_positions": 14.842530282637954,
+          "max_positions": 15,
+          "annual_turnover": 7.419746116109612,
+          "completed_trades": 162,
+          "mean_holding_days": 98.35185185185185,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.5617283950617284,
+          "fraction_180_days": 0.11728395061728394,
+          "exit_counts": {
+            "REBALANCE": 88,
+            "STOP_HIT": 74
+          },
+          "double_cost_cagr": 0.2296551387558825,
+          "double_cost_drawdown": -0.16058682594552354
+        },
+        "year_2024": {
+          "cagr": 0.23049857142121266,
+          "max_drawdown": -0.1263681838737969,
+          "sharpe": 1.4218319452712995,
+          "avg_exposure": 0.6185956367068159,
+          "median_exposure": 0.6012490921933148,
+          "avg_bull_exposure": 0.6552805327479452,
+          "bull_sessions": 197,
+          "max_exposure": 0.9163616588472864,
+          "avg_positions": 15.0,
+          "max_positions": 15,
+          "annual_turnover": 7.675392712698627,
+          "completed_trades": 58,
+          "mean_holding_days": 101.32758620689656,
+          "median_holding_days": 91.5,
+          "fraction_90_days": 0.5517241379310345,
+          "fraction_180_days": 0.15517241379310345,
+          "exit_counts": {
+            "REBALANCE": 31,
+            "STOP_HIT": 27
+          },
+          "double_cost_cagr": 0.202543450965309,
+          "double_cost_drawdown": -0.12697205960852498
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "long20",
+      "windows": {
+        "full": {
+          "cagr": 0.32754140593575065,
+          "max_drawdown": -0.1830055347969063,
+          "sharpe": 2.109294901343581,
+          "avg_exposure": 0.5642215862356746,
+          "median_exposure": 0.5942653113974868,
+          "avg_bull_exposure": 0.6725264201992431,
+          "bull_sessions": 981,
+          "max_exposure": 0.9755154152501397,
+          "avg_positions": 18.535740072202167,
+          "max_positions": 20,
+          "annual_turnover": 6.926621403256168,
+          "completed_trades": 384,
+          "mean_holding_days": 94.55989583333333,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.5859375,
+          "fraction_180_days": 0.08333333333333333,
+          "exit_counts": {
+            "REBALANCE": 211,
+            "STOP_HIT": 170,
+            "CRASH_GUARD": 3
+          },
+          "double_cost_cagr": 0.3002912807521796,
+          "double_cost_drawdown": -0.19230722119511556
+        },
+        "development": {
+          "cagr": 0.374400423902971,
+          "max_drawdown": -0.1830055347969063,
+          "sharpe": 2.4646518573847085,
+          "avg_exposure": 0.48305898697337907,
+          "median_exposure": 0.5322855651925963,
+          "avg_bull_exposure": 0.6427978612053186,
+          "bull_sessions": 399,
+          "max_exposure": 0.9486804831958223,
+          "avg_positions": 17.029595015576323,
+          "max_positions": 20,
+          "annual_turnover": 6.680254739959613,
+          "completed_trades": 162,
+          "mean_holding_days": 91.58024691358025,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.6234567901234568,
+          "fraction_180_days": 0.05555555555555555,
+          "exit_counts": {
+            "REBALANCE": 87,
+            "STOP_HIT": 72,
+            "CRASH_GUARD": 3
+          },
+          "double_cost_cagr": 0.34719620659107187,
+          "double_cost_drawdown": -0.19230722119511556
+        },
+        "previously_examined": {
+          "cagr": 0.289442237153011,
+          "max_drawdown": -0.13693204178432938,
+          "sharpe": 1.8311480798586595,
+          "avg_exposure": 0.6343513153425303,
+          "median_exposure": 0.620433653744883,
+          "avg_bull_exposure": 0.6929073395095109,
+          "bull_sessions": 582,
+          "max_exposure": 0.9755154152501397,
+          "avg_positions": 19.8371467025572,
+          "max_positions": 20,
+          "annual_turnover": 7.157963819573753,
+          "completed_trades": 222,
+          "mean_holding_days": 96.73423423423424,
+          "median_holding_days": 91.5,
+          "fraction_90_days": 0.5585585585585585,
+          "fraction_180_days": 0.1036036036036036,
+          "exit_counts": {
+            "REBALANCE": 124,
+            "STOP_HIT": 98
+          },
+          "double_cost_cagr": 0.2620880259466045,
+          "double_cost_drawdown": -0.14533862387062813
+        },
+        "year_2024": {
+          "cagr": 0.2825226144845656,
+          "max_drawdown": -0.12959201544885945,
+          "sharpe": 1.6772338111657932,
+          "avg_exposure": 0.6448572792091356,
+          "median_exposure": 0.6430536007919331,
+          "avg_bull_exposure": 0.6800514985625579,
+          "bull_sessions": 197,
+          "max_exposure": 0.9341122248220267,
+          "avg_positions": 19.967871485943775,
+          "max_positions": 20,
+          "annual_turnover": 7.2202972059578014,
+          "completed_trades": 77,
+          "mean_holding_days": 102.59740259740259,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5844155844155844,
+          "fraction_180_days": 0.16883116883116883,
+          "exit_counts": {
+            "REBALANCE": 45,
+            "STOP_HIT": 32
+          },
+          "double_cost_cagr": 0.25506996056684894,
+          "double_cost_drawdown": -0.13126733976983807
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "long15_vol25",
+      "windows": {
+        "full": {
+          "cagr": 0.39352666213419885,
+          "max_drawdown": -0.2051990604477879,
+          "sharpe": 1.8157110727352497,
+          "avg_exposure": 0.7532199942292154,
+          "median_exposure": 0.9002912011469153,
+          "avg_bull_exposure": 0.8920338403749978,
+          "bull_sessions": 981,
+          "max_exposure": 1.0004555486132507,
+          "avg_positions": 13.896028880866426,
+          "max_positions": 15,
+          "annual_turnover": 7.51658124002338,
+          "completed_trades": 284,
+          "mean_holding_days": 95.62676056338029,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.5845070422535211,
+          "fraction_180_days": 0.09859154929577464,
+          "exit_counts": {
+            "REBALANCE": 154,
+            "STOP_HIT": 128,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.36251600374986914,
+          "double_cost_drawdown": -0.2150149020862968
+        },
+        "development": {
+          "cagr": 0.42551389881031576,
+          "max_drawdown": -0.2051990604477879,
+          "sharpe": 1.9697513551378643,
+          "avg_exposure": 0.6582579427889572,
+          "median_exposure": 0.8366150772978608,
+          "avg_bull_exposure": 0.9036820768280018,
+          "bull_sessions": 399,
+          "max_exposure": 0.9912897683153592,
+          "avg_positions": 12.800623052959502,
+          "max_positions": 15,
+          "annual_turnover": 7.039227733434253,
+          "completed_trades": 122,
+          "mean_holding_days": 92.00819672131148,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.6147540983606558,
+          "fraction_180_days": 0.07377049180327869,
+          "exit_counts": {
+            "REBALANCE": 66,
+            "STOP_HIT": 54,
+            "CRASH_GUARD": 2
+          },
+          "double_cost_cagr": 0.39576217575405237,
+          "double_cost_drawdown": -0.2150149020862968
+        },
+        "previously_examined": {
+          "cagr": 0.36778021240980685,
+          "max_drawdown": -0.18617811502794102,
+          "sharpe": 1.6880596332186044,
+          "avg_exposure": 0.8352733415033013,
+          "median_exposure": 0.9194496520770268,
+          "avg_bull_exposure": 0.8840481937345364,
+          "bull_sessions": 582,
+          "max_exposure": 1.0004555486132507,
+          "avg_positions": 14.842530282637954,
+          "max_positions": 15,
+          "annual_turnover": 7.9486185199200206,
+          "completed_trades": 162,
+          "mean_holding_days": 98.35185185185185,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.5617283950617284,
+          "fraction_180_days": 0.11728395061728394,
+          "exit_counts": {
+            "REBALANCE": 88,
+            "STOP_HIT": 74
+          },
+          "double_cost_cagr": 0.33563243202580106,
+          "double_cost_drawdown": -0.19537254668004866
+        },
+        "year_2024": {
+          "cagr": 0.4922101911120962,
+          "max_drawdown": -0.12643141005654368,
+          "sharpe": 1.950753591014731,
+          "avg_exposure": 0.9094277318058933,
+          "median_exposure": 0.9432572690941764,
+          "avg_bull_exposure": 0.9249190797099659,
+          "bull_sessions": 197,
+          "max_exposure": 1.0004555486132507,
+          "avg_positions": 15.0,
+          "max_positions": 15,
+          "annual_turnover": 7.8907700287388165,
+          "completed_trades": 58,
+          "mean_holding_days": 101.32758620689656,
+          "median_holding_days": 91.5,
+          "fraction_90_days": 0.5517241379310345,
+          "fraction_180_days": 0.15517241379310345,
+          "exit_counts": {
+            "REBALANCE": 31,
+            "STOP_HIT": 27
+          },
+          "double_cost_cagr": 0.4574323469818675,
+          "double_cost_drawdown": -0.12703805624649556
+        }
+      }
+    },
+    {
+      "mode": "experimental",
+      "case": "long20_vol25",
+      "windows": {
+        "full": {
+          "cagr": 0.4473176063273707,
+          "max_drawdown": -0.19496401221116544,
+          "sharpe": 2.079143658528631,
+          "avg_exposure": 0.7566765837513372,
+          "median_exposure": 0.910336671582724,
+          "avg_bull_exposure": 0.8958640771583661,
+          "bull_sessions": 981,
+          "max_exposure": 0.9893982238836628,
+          "avg_positions": 18.535740072202167,
+          "max_positions": 20,
+          "annual_turnover": 7.260324526960278,
+          "completed_trades": 384,
+          "mean_holding_days": 94.55989583333333,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.5859375,
+          "fraction_180_days": 0.08333333333333333,
+          "exit_counts": {
+            "REBALANCE": 211,
+            "STOP_HIT": 170,
+            "CRASH_GUARD": 3
+          },
+          "double_cost_cagr": 0.41618632700220237,
+          "double_cost_drawdown": -0.2037761024747755
+        },
+        "development": {
+          "cagr": 0.5216680356096248,
+          "max_drawdown": -0.18873458833333212,
+          "sharpe": 2.3923532551365287,
+          "avg_exposure": 0.6608008437405538,
+          "median_exposure": 0.8981544660260962,
+          "avg_bull_exposure": 0.9081048672520572,
+          "bull_sessions": 399,
+          "max_exposure": 0.9729969636822344,
+          "avg_positions": 17.029595015576323,
+          "max_positions": 20,
+          "annual_turnover": 6.642136167709309,
+          "completed_trades": 162,
+          "mean_holding_days": 91.58024691358025,
+          "median_holding_days": 92.0,
+          "fraction_90_days": 0.6234567901234568,
+          "fraction_180_days": 0.05555555555555555,
+          "exit_counts": {
+            "REBALANCE": 87,
+            "STOP_HIT": 72,
+            "CRASH_GUARD": 3
+          },
+          "double_cost_cagr": 0.4917241822551113,
+          "double_cost_drawdown": -0.19834853642925354
+        },
+        "previously_examined": {
+          "cagr": 0.38756750522971717,
+          "max_drawdown": -0.19496401221116533,
+          "sharpe": 1.8198659246724178,
+          "avg_exposure": 0.8395194169773437,
+          "median_exposure": 0.9198464580119738,
+          "avg_bull_exposure": 0.8874721952900108,
+          "bull_sessions": 582,
+          "max_exposure": 0.9893982238836628,
+          "avg_positions": 19.8371467025572,
+          "max_positions": 20,
+          "annual_turnover": 7.813036702619284,
+          "completed_trades": 222,
+          "mean_holding_days": 96.73423423423424,
+          "median_holding_days": 91.5,
+          "fraction_90_days": 0.5585585585585585,
+          "fraction_180_days": 0.1036036036036036,
+          "exit_counts": {
+            "REBALANCE": 124,
+            "STOP_HIT": 98
+          },
+          "double_cost_cagr": 0.35545430101669373,
+          "double_cost_drawdown": -0.20377610247477573
+        },
+        "year_2024": {
+          "cagr": 0.5775720085337261,
+          "max_drawdown": -0.12981820987933523,
+          "sharpe": 2.2829884937588827,
+          "avg_exposure": 0.9263634029323403,
+          "median_exposure": 0.9350049710173414,
+          "avg_bull_exposure": 0.9261320358058477,
+          "bull_sessions": 197,
+          "max_exposure": 0.9620003448064146,
+          "avg_positions": 19.967871485943775,
+          "max_positions": 20,
+          "annual_turnover": 7.474512069216321,
+          "completed_trades": 77,
+          "mean_holding_days": 102.59740259740259,
+          "median_holding_days": 91.0,
+          "fraction_90_days": 0.5844155844155844,
+          "fraction_180_days": 0.16883116883116883,
+          "exit_counts": {
+            "REBALANCE": 45,
+            "STOP_HIT": 32
+          },
+          "double_cost_cagr": 0.5426404902524065,
+          "double_cost_drawdown": -0.1315027231771032
+        }
+      }
+    }
+  ]
+}

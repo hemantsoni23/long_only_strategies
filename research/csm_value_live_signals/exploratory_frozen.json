@@ -1,0 +1,121 @@
+{
+  "candidates": [
+    "value",
+    "growth_elendel",
+    "growth_q5",
+    "quality_elendel",
+    "growth_anti_elendel",
+    "anti_q5",
+    "growth_only"
+  ],
+  "selected": "growth_q5",
+  "selection": "development Calmar then Sharpe",
+  "development": [
+    {
+      "candidate": "value",
+      "cagr": 0.2450148612844183,
+      "max_drawdown": -0.1385889616234467,
+      "calmar": 1.7679247929581594,
+      "sharpe": 1.961139735244041,
+      "annual_turnover": 4.474001712551849,
+      "mean_exposure": 0.38265872739993423,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.027188085081623514,
+        "2020": 0.18892431628703754,
+        "2021": 0.44097425294571146
+      }
+    },
+    {
+      "candidate": "growth_elendel",
+      "cagr": 0.3363255859651386,
+      "max_drawdown": -0.14350087607727868,
+      "calmar": 2.3437179978191853,
+      "sharpe": 2.457417284871221,
+      "annual_turnover": 4.370941767758631,
+      "mean_exposure": 0.3799293307798386,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.06224644050694583,
+        "2020": 0.22177462209928955,
+        "2021": 0.6274901768849954
+      }
+    },
+    {
+      "candidate": "growth_q5",
+      "cagr": 0.354073420213062,
+      "max_drawdown": -0.14136792770931317,
+      "calmar": 2.5046234032737824,
+      "sharpe": 2.6162563259493905,
+      "annual_turnover": 4.303691541170661,
+      "mean_exposure": 0.39032085491633023,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.10541840487790455,
+        "2020": 0.24439927946369044,
+        "2021": 0.5886423072904845
+      }
+    },
+    {
+      "candidate": "quality_elendel",
+      "cagr": 0.2940996342690738,
+      "max_drawdown": -0.12968219475629328,
+      "calmar": 2.267848988997787,
+      "sharpe": 2.1895858998401367,
+      "annual_turnover": 3.915321392800155,
+      "mean_exposure": 0.3814287031402967,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.017227787240944314,
+        "2020": 0.2606110049384598,
+        "2021": 0.5162528633366628
+      }
+    },
+    {
+      "candidate": "growth_anti_elendel",
+      "cagr": 0.2589002297843739,
+      "max_drawdown": -0.13455984682113142,
+      "calmar": 1.92405264943952,
+      "sharpe": 2.1481630459940666,
+      "annual_turnover": 4.792710796223117,
+      "mean_exposure": 0.3883150643030456,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.05141266521570387,
+        "2020": 0.19301935204085563,
+        "2021": 0.4436517670988276
+      }
+    },
+    {
+      "candidate": "anti_q5",
+      "cagr": 0.23902410329500756,
+      "max_drawdown": -0.12498823256179703,
+      "calmar": 1.912372856195311,
+      "sharpe": 1.9856974860475134,
+      "annual_turnover": 4.41843915331821,
+      "mean_exposure": 0.3814638893812407,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.024589391482521483,
+        "2020": 0.23457815539385152,
+        "2021": 0.3740084556246879
+      }
+    },
+    {
+      "candidate": "growth_only",
+      "cagr": 0.2882086939066528,
+      "max_drawdown": -0.14519075488225774,
+      "calmar": 1.9850347505967256,
+      "sharpe": 2.2567415130580293,
+      "annual_turnover": 4.651718262363364,
+      "mean_exposure": 0.38620747191634824,
+      "max_positions": 10,
+      "annual_returns": {
+        "2019": 0.07051756167045231,
+        "2020": 0.19915516424703994,
+        "2021": 0.49689520023957057
+      }
+    }
+  ],
+  "warning": "All historical periods and related signals previously researched; exploratory comparison only."
+}
