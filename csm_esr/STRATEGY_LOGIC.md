@@ -1,4 +1,4 @@
-# CSM Earnings Surprise & Reaction — complete strategy logic
+# CSM ESR (Earnings Surprise & Reaction) — complete strategy logic
 
 Former name: **CSM PEAD Confirmed-Drift**. This document describes the current
 default implementation and the historical backtest, not a proposed change or
@@ -73,20 +73,27 @@ relative score, not a 200% investment return.
 
 | Step | Implemented rule |
 | --- | --- |
-| Filing reference session `D` | The first trading session **on or after** the filing date. |
-| Signal session `S` | The **second trading session after `D`**: `S = D + 2 trading sessions`. The signal is known after that day's close. |
-| Stock return | `stock close on S ÷ stock close on the session before D − 1`. Both stock closing prices must be actually observed; stale forward-filled stock closes are not used for this calculation. |
-| Market return | `internal market series on S ÷ the series on the session before D − 1`. |
+| First eligible session `A` | The first trading session **strictly after** the public filing date. The result is not usable on its filing date. |
+| Starting price | The last trading close **on or before** the filing date, immediately before `A`. This close is a price reference, not permission to use the report on its filing day. |
+| Signal session `S` | The **second trading session strictly after the filing date**: `S` is the session after `A`. The signal is known after that day's close. |
+| Stock return | `stock close on S ÷ stock starting close − 1`. Both stock closing prices must be actually observed; stale forward-filled stock closes are not used for this calculation. |
+| Market return | `internal market series on S ÷ the series on the starting-close session − 1`. |
 | Excess announcement return, or EAR | `stock return − market return` over the same interval. A larger number means the stock reacted more strongly than the internal comparison series. |
 | Outlier check | If the stock's return over the announcement interval is **less than −60% or greater than +200%**, the reaction is treated as unavailable. |
 | Other price filters | There is no default requirement for the stock to be above a moving average and no absolute-momentum entry gate. The optional market-wide moving-average gate is off. |
 
-**Example:** A result is filed on a Monday. If Tuesday and Wednesday are normal
-trading sessions, `D` is Monday, `S` is Wednesday, and the stock and market
-returns are measured from the previous Friday's close to Wednesday's close.
-The earliest possible purchase is Thursday's open. If a filing happens on a
-Saturday, `D` is the first subsequent trading session; the same two-session
-wait then applies. Holidays can shift all of these dates.
+**Example:** A result is filed on Monday. If the following sessions are normal,
+Tuesday is the first eligible session, Wednesday is the signal session, and the
+stock and market returns are measured from **Monday's close to Wednesday's
+close**. The earliest possible purchase is Thursday's open. If a filing happens
+on Saturday, Friday is the starting-close session, Monday is the first eligible
+session, Tuesday is the signal session and Wednesday is the earliest possible
+purchase. Holidays can shift these dates.
+
+This deliberately excludes the filing-day price movement, including a reaction
+that may have occurred after a pre-market or intraday announcement. It avoids
+mistaking price movement before an after-market filing for a reaction, but daily
+OHLCV cannot isolate the exact moment an intraday announcement became public.
 
 ## 5. Selection thresholds and ranking
 
@@ -115,6 +122,10 @@ combined score is **4.0**. Both individual thresholds were passed first.
 | Other entry checks | A stock must not already be held, be within its stop cooldown or have exited that same day. It must pass the current previous-close price and flat-day checks and have a valid positive opening price. The optional market gate, if enabled, must also pass. |
 | No valid open | No purchase is modeled at that session's close or at an invented open. The candidate can be retried while its entry window remains open. |
 | Same-day sale and new purchase | Scheduled exits are processed first at the open. Cash and slots they free can be used for another candidate, but the stock just sold is not repurchased that same day. |
+
+The completed-trade log records `Filed`, `Reaction_Base_Date`,
+`Available_Date` (the first eligible **trading session**), `Signal_Date` and
+`Entry_Date` so this sequence can be audited for each trade.
 
 ## 7. Position sizing and portfolio management
 
@@ -169,9 +180,9 @@ The stock is blocked for the following 20 trading sessions after that sale.
 
 1. A company files its quarterly report on Monday; the report has a usable EPS
    history and comparable share counts.
-2. The strategy calculates the EPS surprise from that report and earlier filed
-   quarters. It waits until Wednesday's close to measure the stock's reaction
-   against the internal market series.
+2. The strategy may use the result from Tuesday onward. It waits until
+   Wednesday's close and measures the stock's reaction from Monday's close,
+   comparing it against the internal market series over the same period.
 3. At that close, the event is compared with the last 120 calendar days of
    eligible events. If at least 150 are available and the stock passes both
    top-30% thresholds, it becomes a candidate with a combined score.

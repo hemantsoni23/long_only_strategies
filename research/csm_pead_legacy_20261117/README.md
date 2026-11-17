@@ -1,7 +1,7 @@
 # Archived CSM PEAD material
 
 On 17 November 2026, `csm_pead/` was renamed to
-`csm_earnings_surprise_reaction/` (CSM Earnings Surprise & Reaction).
+`csm_esr/` (CSM Earnings Surprise & Reaction), via the longer intermediate name.
 
 - `output/` and `output_run.log` are older, unaudited results from the
   original implementation. They use different data and trading assumptions.
@@ -14,4 +14,4 @@ On 17 November 2026, `csm_pead/` was renamed to
   rename.
 
 The maintained implementation, documentation, tests and current results are
-in `../../csm_earnings_surprise_reaction/`.
+in `../../csm_esr/`.

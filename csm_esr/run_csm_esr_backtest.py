@@ -1,12 +1,12 @@
 """
-run_earnings_surprise_reaction_backtest.py -- CSM Earnings Surprise & Reaction.
+run_csm_esr_backtest.py -- CSM ESR (Earnings Surprise & Reaction).
 
-The strategy is event-driven (entries are triggered by each company's own result date), so it keeps its own event loop (`EarningsSurpriseReactionStrategy.simulate`, like the HR/VCP breakout strategies) rather than
+The strategy is event-driven (entries are triggered by each company's own result date), so it keeps its own event loop (`CSMESRStrategy.simulate`, like the HR/VCP breakout strategies) rather than
 the monthly-rebalance Elendel engine.  Everything the user sees is Elendel's: the same performance report (portfolio metrics, 3 win-rate views, trade statistics with MAE/MFE,
 exit / entry-reason / regime breakdowns, turnover), yearly returns with yearly max/avg drawdown, 5-panel performance chart + monthly heatmap, daily log, Elendel-column trade log,
 and an IC/ICIR section (event-level: signal vs forward return across filing months, with a factor-decay table).
 
-    python3 run_earnings_surprise_reaction_backtest.py [--start 2020-09-01] [--end 2024-12-31]
+    python3 run_csm_esr_backtest.py [--start 2020-09-01] [--end 2024-12-31]
 Results before this audit used different data and execution conventions.
 """
 import argparse
@@ -20,11 +20,11 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import backtest_report as esr                                               # noqa: E402
 from backtest_data import load_all                                           # noqa: E402
-from earnings_surprise_reaction_strategy import EarningsSurpriseReactionStrategy                                           # noqa: E402
+from esr_strategy import CSMESRStrategy                                           # noqa: E402
 
 OUT = os.environ.get('CSM_ESR_OUTPUT_DIR', os.path.join(HERE, 'output'))
 os.makedirs(OUT, exist_ok=True)
-esr.configure('CSM Earnings Surprise & Reaction', 'csm_earnings_surprise_reaction', OUT)
+esr.configure('CSM ESR (Earnings Surprise & Reaction)', 'csm_esr', OUT)
 
 
 def regime_series(bench, index):
@@ -71,14 +71,15 @@ def elendel_trade_log(st, res, regime, start):
         rows.append({
             'Ticker': t.Ticker, 'Entry_Date': t.Entry_Date, 'Entry_Price': t.Entry_Price, 'Exit_Date': t.Exit_Date, 'Exit_Price': round(t.Exit_Price, 4),
             'Close_At_Exit': float(st._C[xi, st._cols[t.Ticker]]), 'Peak_Price': peak, 'Stop_Price_At_Exit': stop_lvl, 'Stop_Pct': st.hard_stop * 100, 'ATR_At_Entry': np.nan,
-            'Entry_Reason': 'EARNINGS_SURPRISE_REACTION', 'Exit_Reason': t.Reason,
+            'Entry_Reason': 'ESR_CONFIRMED', 'Exit_Reason': t.Reason,
             'Exit_Detail': ('HOLD_EXPIRED' if t.Reason == 'TIME_STOP' else ('GAP_DOWN_OPEN' if gap else 'ENTRY_HARD')),
             'Rank_At_Entry': np.nan, 'Rank_At_Exit': np.nan, 'Score_At_Entry': t.Score,
             'Regime_At_Entry': regime.get(t.Entry_Date, ''), 'Regime_At_Exit': regime.get(t.Exit_Date, ''), 'Signal_Age_Months': np.nan,
             'Weight': size / pv, 'Quantity': t.Shares, 'Position_Size': round(size, 2), 'Portfolio Value': round(pv, 2),
             'PnL_Pct': round(pnl_pct, 4), 'PnL_Abs': round(t.Shares * (t.Exit_Price - t.Entry_Price), 2),
             'Holding_Days': max((t.Exit_Date - t.Entry_Date).days, 1), 'Trading_Days_Held': t.Days_Held, 'MAE_Pct': mae, 'MFE_Pct': mfe,
-            'SUE_At_Entry': t.SUE, 'EAR_At_Entry': t.EAR, 'Signal_Date': t.Signal_Date, 'Filed': t.Filed})
+            'SUE_At_Entry': t.SUE, 'EAR_At_Entry': t.EAR, 'Signal_Date': t.Signal_Date, 'Filed': t.Filed,
+            'Available_Date': t.Available_Date, 'Reaction_Base_Date': t.Reaction_Base_Date})
     df = pd.DataFrame(rows).sort_values('Entry_Date').reset_index(drop=True); df.index += 1; df.index.name = 'Trade_ID'
     n = len(df); wins = (df.PnL_Pct > 0).sum()
     print(f"[Trade Log] {n} trades | Wins: {wins} | Losses: {(df.PnL_Pct < 0).sum()} | Win Rate: {wins/n*100:.1f}%")
@@ -136,19 +137,19 @@ def main(start='2020-09-01', end='2024-12-31'):
     if pd.Timestamp(start) > pd.Timestamp(end):
         raise ValueError('The report start must not be after the end.')
     prices, volumes, highs, lows, opens, bench = load_all(load_end=end)
-    st = EarningsSurpriseReactionStrategy(prices_df=prices, volumes_df=volumes, highs_df=highs, lows_df=lows, opens_df=opens, benchmark_series=bench)
+    st = CSMESRStrategy(prices_df=prices, volumes_df=volumes, highs_df=highs, lows_df=lows, opens_df=opens, benchmark_series=bench)
     st.calculate_factors()
     results, raw = build_results(st, bench, end)
     results = esr.slice_results(results, start, risk_free_rate=0.0)   # rf 0 as in the Elendel runner
     if not raw['transactions'].empty:
         raw['transactions'].loc[pd.to_datetime(raw['transactions'].Date) > results['equity_curve'].index[0]].to_csv(
-            os.path.join(OUT, 'csm_earnings_surprise_reaction_transactions.csv'), index=False)
+            os.path.join(OUT, 'csm_esr_transactions.csv'), index=False)
     results['equity_curve'] = results['equity_curve'].loc[:end];
     detailed_log = elendel_trade_log(st, raw, results['regime'], start)
     if not detailed_log.empty:
         detailed_log = detailed_log[detailed_log.Exit_Date <= pd.Timestamp(end)]
-        detailed_log.to_csv(os.path.join(OUT, 'csm_earnings_surprise_reaction_trade_log.csv'))
-        print(f"\n[Logs] {os.path.join(OUT, 'csm_earnings_surprise_reaction_trade_log.csv')}  ({len(detailed_log)} trades from {start})")
+        detailed_log.to_csv(os.path.join(OUT, 'csm_esr_trade_log.csv'))
+        print(f"\n[Logs] {os.path.join(OUT, 'csm_esr_trade_log.csv')}  ({len(detailed_log)} trades from {start})")
     esr.print_report(results, detailed_log, start, end, 'event_driven')
     esr.print_yearly_returns(results['portfolio_value'], dd_series=results.get('dd_series'))
     bench_slice = bench.reindex(results['equity_curve'].index).ffill()

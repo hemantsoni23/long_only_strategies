@@ -9,8 +9,8 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from earnings_surprise_reaction_fundamentals import _parse_date, build_events
-from earnings_surprise_reaction_strategy import EarningsSurpriseReactionStrategy
+from esr_fundamentals import _parse_date, build_events
+from esr_strategy import CSMESRStrategy
 
 
 def facts():
@@ -26,7 +26,7 @@ def engine(missing_open=False, stop=False):
     dates = pd.bdate_range('2023-01-02', periods=8)
     close = pd.DataFrame({'ABC': [100., 100., 90. if stop else 110., 111., 112., 113., 114., 115.]}, index=dates)
     opens = pd.DataFrame({'ABC': [100., 100., 105., np.nan if missing_open else 106., 107., 108., 109., 110.]}, index=dates)
-    st = EarningsSurpriseReactionStrategy(close, close * 1000, opens_df=opens, benchmark_series=pd.Series(1., index=dates),
+    st = CSMESRStrategy(close, close * 1000, opens_df=opens, benchmark_series=pd.Series(1., index=dates),
                       max_positions=1, hold_days=1 if not stop else 60, cash_annual_rate=0,
                       transaction_cost=0, stop_slippage_pct=0, hard_stop=.15 if not stop else .16)
     st._dates = dates; st._cols = {'ABC': 0}; st._C = close.to_numpy(); st._Craw = close.to_numpy()
@@ -37,7 +37,7 @@ def engine(missing_open=False, stop=False):
     return st
 
 
-class EarningsSurpriseReactionTests(unittest.TestCase):
+class ESRTests(unittest.TestCase):
     def test_iso_and_exchange_filing_dates_are_not_swapped(self):
         self.assertEqual(_parse_date('2020-11-05'), pd.Timestamp('2020-11-05'))
         self.assertEqual(_parse_date('05-Nov-2020 17:30:00'), pd.Timestamp('2020-11-05'))
@@ -61,6 +61,53 @@ class EarningsSurpriseReactionTests(unittest.TestCase):
         f.loc[f.period_end < pd.Timestamp('2021-06-30'), 'shares'] = 50.
         guarded = build_events(facts=f)
         self.assertNotIn(pd.Timestamp('2021-06-30'), set(guarded.period_end))
+
+    def test_reaction_starts_after_filing_for_weekdays_weekends_and_holidays(self):
+        dates = pd.bdate_range('2023-01-02', '2023-01-23').difference(pd.DatetimeIndex(['2023-01-16']))
+        close = pd.DataFrame({'ABC': 100. + np.arange(len(dates)) * 3}, index=dates)
+        benchmark = pd.Series(200. + np.arange(len(dates)), index=dates)
+        filings = ['2023-01-06', '2023-01-07', '2023-01-09', '2023-01-16']
+        events = pd.DataFrame({'symbol': ['ABC'] * 4, 'filed': pd.to_datetime(filings),
+                               'sue_eps': [1., 2., 3., 4.], 'dm_ebit': [0.] * 4})
+        def calculate(prices):
+            st = CSMESRStrategy(prices, prices * 1000, opens_df=prices,
+                                benchmark_series=benchmark, events_df=events, min_pool=1)
+            st.calculate_factors()
+            return st.events.set_index('filed')
+        out = calculate(close)
+        expected = {
+            '2023-01-06': ('2023-01-06', '2023-01-09', '2023-01-10'),
+            '2023-01-07': ('2023-01-06', '2023-01-09', '2023-01-10'),
+            '2023-01-09': ('2023-01-09', '2023-01-10', '2023-01-11'),
+            '2023-01-16': ('2023-01-13', '2023-01-17', '2023-01-18'),
+        }
+        for filed, (base, available, signal) in expected.items():
+            row = out.loc[pd.Timestamp(filed)]
+            self.assertEqual(row.reaction_base_date, pd.Timestamp(base))
+            self.assertEqual(row.available_date, pd.Timestamp(available))
+            self.assertEqual(row.sig_date, pd.Timestamp(signal))
+            self.assertGreater(row.available_date, pd.Timestamp(filed))
+            expected_ear = ((close.at[signal, 'ABC'] / close.at[base, 'ABC'] - 1)
+                            - (benchmark[signal] / benchmark[base] - 1))
+            self.assertAlmostEqual(row.ear, expected_ear)
+        # The Friday movement preceding a Monday filing is excluded from the
+        # Monday event's reaction. Its Monday baseline and later closes are unchanged.
+        changed = close.copy(); changed.loc['2023-01-06', 'ABC'] *= .5
+        out_changed = calculate(changed)
+        self.assertAlmostEqual(out.loc['2023-01-09', 'ear'], out_changed.loc['2023-01-09', 'ear'])
+
+    def test_reaction_does_not_forward_fill_a_missing_filing_day_close(self):
+        dates = pd.bdate_range('2023-01-02', periods=10)
+        close = pd.DataFrame({'ABC': 100. + np.arange(len(dates))}, index=dates)
+        close.loc['2023-01-04', 'ABC'] = np.nan
+        events = pd.DataFrame({'symbol': ['ABC'], 'filed': [pd.Timestamp('2023-01-04')],
+                               'sue_eps': [2.], 'dm_ebit': [0.]})
+        st = CSMESRStrategy(close, close * 1000, opens_df=close,
+                            benchmark_series=pd.Series(1., index=dates), events_df=events, min_pool=1)
+        st.calculate_factors()
+        self.assertEqual(st.events.iloc[0].reaction_base_date, pd.Timestamp('2023-01-04'))
+        self.assertTrue(pd.isna(st.events.iloc[0].ear))
+        self.assertFalse(st.events.iloc[0]['buy'])
 
     def test_backtest_buys_and_sells_at_later_valid_opens(self):
         st = engine(missing_open=True)
@@ -121,7 +168,7 @@ class EarningsSurpriseReactionTests(unittest.TestCase):
         st = engine()
         self.assertTrue(st._universe_ok(2, 0))
         with self.assertRaises(ValueError):
-            EarningsSurpriseReactionStrategy(st.prices, st.volumes, benchmark_series=st.benchmark, universe_top_n=1000)
+            CSMESRStrategy(st.prices, st.volumes, benchmark_series=st.benchmark, universe_top_n=1000)
 
     def test_signals_and_portfolio_survive_future_data_truncation(self):
         dates = pd.bdate_range('2023-01-02', periods=160)
@@ -135,7 +182,7 @@ class EarningsSurpriseReactionTests(unittest.TestCase):
                                 'dm_ebit': 0.1} for k, i in enumerate(range(8, 120, 9))
                                for j, sym in enumerate(('ABC', 'XYZ'))])
         def run(end):
-            st = EarningsSurpriseReactionStrategy(close.loc[:end], vol.loc[:end], opens_df=op.loc[:end],
+            st = CSMESRStrategy(close.loc[:end], vol.loc[:end], opens_df=op.loc[:end],
                               benchmark_series=benchmark.loc[:end], events_df=events, min_pool=2,
                               top_pct=.8, hold_days=10, max_positions=2)
             candidates = st.calculate_factors()
@@ -150,6 +197,9 @@ class EarningsSurpriseReactionTests(unittest.TestCase):
         self.assertTrue((a.sig_date > a.filed).all())
         pd.testing.assert_series_equal(r1['equity'].loc[:check_end], r2['equity'].loc[:check_end])
         self.assertTrue((r1['trades'].Entry_Date > r1['trades'].Signal_Date).all())
+        self.assertTrue((r1['trades'].Available_Date > r1['trades'].Filed).all())
+        self.assertTrue((r1['trades'].Reaction_Base_Date <= r1['trades'].Filed).all())
+        self.assertTrue((r1['trades'].Signal_Date > r1['trades'].Available_Date).all())
         np.testing.assert_allclose(r1['transactions'].Transaction_Cost,
                                    r1['transactions'].Trade_Value * full.transaction_cost)
 

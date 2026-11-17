@@ -4,7 +4,7 @@ import sys
 
 import pandas as pd
 
-from earnings_surprise_reaction_fundamentals import RESEARCH_END
+from esr_fundamentals import RESEARCH_END
 
 VALUE_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'csm_value')
 sys.path.insert(0, VALUE_DIR)

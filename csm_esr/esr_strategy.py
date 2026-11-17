@@ -1,12 +1,14 @@
 """
-earnings_surprise_reaction_strategy.py
+esr_strategy.py
 ================
-CSM Earnings Surprise & Reaction -- event-driven research on earnings surprises and the
+CSM ESR (Earnings Surprise & Reaction) -- event-driven research on earnings surprises and the
 subsequent price reaction. See README.md for limitations and execution rules.
 
-Signal (all known after the close of the signal day S = 2nd trading day after the filing date; point-in-time):
+Signal (known after the second trading session strictly after the filing date):
     SUE    = standardised unexpected EPS (seasonal difference / std of the last 4-8 differences)
-    EAR    = announcement return = stock return from close(d-1) to close(d+2) minus the equal-weight benchmark over the same days   (d = first trading day >= filing date)
+    EAR    = stock return from the last close on/before filing to the second
+             post-filing session's close, minus the benchmark's return over
+             the same interval. A filing-day move is never in this interval.
     BUY    when SUE and EAR are BOTH in the top `top_pct` (30%) of liquid-universe events filed in the previous `pool_days` (120) calendar days
            (thresholds are trailing, never look at later filings; needs >= `min_pool` events).  "Good news the market confirmed."
     Optional: `require_margin_up` (EBIT margin improved yoy), `use_market_gate` (equal-weight benchmark above its SMA200).
@@ -25,10 +27,10 @@ import datetime as _dt
 import numpy as np
 import pandas as pd
 
-from earnings_surprise_reaction_fundamentals import build_events, RESEARCH_END
+from esr_fundamentals import build_events, RESEARCH_END
 
 
-class EarningsSurpriseReactionStrategy:
+class CSMESRStrategy:
     def __init__(
         self,
         prices_df, volumes_df, highs_df=None, lows_df=None, opens_df=None, benchmark_series=None,
@@ -58,7 +60,7 @@ class EarningsSurpriseReactionStrategy:
         initial_capital    = 100_000.0,
     ):
         if benchmark_series is None:
-            raise ValueError('EarningsSurpriseReactionStrategy needs the equal-weight benchmark series (announcement return is benchmark-relative).')
+            raise ValueError('CSMESRStrategy needs the equal-weight benchmark series (announcement return is benchmark-relative).')
         self.prices = prices_df.loc[:RESEARCH_END].sort_index()
         self.volumes = volumes_df.loc[:RESEARCH_END].sort_index()
         self.highs = highs_df.loc[:RESEARCH_END].sort_index() if highs_df is not None else pd.DataFrame()
@@ -78,7 +80,7 @@ class EarningsSurpriseReactionStrategy:
         self.positions = None
         self.results = None
         self.position_metadata = []
-        print(f"CSM Earnings Surprise & Reaction initialised | signal: SUE & EAR both top {top_pct:.0%} of trailing {pool_days}d liquid events (pool>={min_pool})"
+        print(f"CSM ESR (Earnings Surprise & Reaction) initialised | signal: SUE & EAR both top {top_pct:.0%} of trailing {pool_days}d liquid events (pool>={min_pool})"
               f"{' & margin up' if require_margin_up else ''}{' | market gate SMA%d' % gate_sma if use_market_gate else ''}\n"
               f"  No liquidity-rank cutoff, price>{min_price}, circuit<={max_circuit_days}/63d | {max_positions} slots (1/{max_positions} each), hold {hold_days}d, "
               f"entry window {entry_window}d, hard stop {hard_stop:.0%} | cost {transaction_cost:.2%} one-way, cash {cash_annual_rate:.1%}")
@@ -111,12 +113,15 @@ class EarningsSurpriseReactionStrategy:
         ev = ev[ev.symbol.isin(self._cols)].copy().reset_index(drop=True)
         ev['filed'] = pd.to_datetime(ev['filed']).dt.normalize()
         ev = ev[ev.filed <= RESEARCH_END].reset_index(drop=True)
-        pos = self._dates.searchsorted(ev.filed.values)                    # first trading day >= filing date
-        ev['pos'] = pos
-        ev['sig_idx'] = pos + 2                                            # signal known after this day's close
-        ev = ev[(pos >= 1) & (ev.sig_idx + 1 < len(self._dates))].reset_index(drop=True)
+        # Availability is the next calendar day, so the first usable session
+        # must be strictly AFTER the filing date, including weekends/holidays.
+        first_available = self._dates.searchsorted(ev.filed.values, side='right')
+        ev['available_idx'] = first_available
+        ev['baseline_idx'] = first_available - 1  # last session on/before filing
+        ev['sig_idx'] = first_available + 1        # second post-filing session close
+        ev = ev[(ev.baseline_idx >= 0) & (ev.sig_idx + 1 < len(self._dates))].reset_index(drop=True)
         cj = ev.symbol.map(self._cols).astype(int).values
-        a, b2 = ev.pos.values - 1, ev.sig_idx.values
+        a, b2 = ev.baseline_idx.values, ev.sig_idx.values
         # A stale forward-filled quote is not an observed announcement return.
         p0, p1 = self._Craw[a, cj], self._Craw[b2, cj]
         with np.errstate(invalid='ignore', divide='ignore'):
@@ -125,6 +130,8 @@ class EarningsSurpriseReactionStrategy:
         ear = r - br
         ear[(r < -0.6) | (r > 2.0) | ~(p0 > 0) | ~(p1 > 0)] = np.nan
         ev['ear'] = ear
+        ev['reaction_base_date'] = self._dates[a]
+        ev['available_date'] = self._dates[ev.available_idx.values]
         ev['sig_date'] = self._dates[ev.sig_idx.values]
         ev['liquid'] = [self._universe_ok(int(i), int(j)) for i, j in zip(ev.sig_idx.values + 1, cj)]     # as it would look on the entry day (data to the prior close)
         ev = ev.sort_values('sig_idx').reset_index(drop=True)
@@ -263,7 +270,7 @@ class EarningsSurpriseReactionStrategy:
                     traded_value += tgt
                     transactions.append({'Date': dates[i], 'Ticker': cols[j], 'Side': 'BUY', 'Price': O[i, j],
                                          'Shares': shares, 'Trade_Value': tgt, 'Transaction_Cost': tgt * cost,
-                                         'Reason': 'EARNINGS_SURPRISE_REACTION'})
+                                         'Reason': 'ESR_CONFIRMED'})
                     slots -= 1; taken.append(r)
                 pending = [(e, r) for (e, r) in pending if not any(r is t for t in taken)]
             # Only after the close may today's exit decisions be made.
@@ -294,7 +301,8 @@ class EarningsSurpriseReactionStrategy:
         r = h['rec']; invested = h['shares'] * h['entry_price']
         return dict(Ticker=sym, Signal_Date=r.sig_date, Entry_Date=self._dates[h['entry_idx']], Entry_Price=h['entry_price'], Exit_Date=exit_date, Exit_Price=px,
                     Reason=reason, Shares=h['shares'], Days_Held=i_exit - h['entry_idx'], Return=proceeds / (invested * (1 + self.transaction_cost)) - 1, SUE=r.sue_eps, EAR=r.ear, Score=r.score,
-                    Filed=r.filed)
+                    Filed=r.filed, Available_Date=getattr(r, 'available_date', pd.NaT),
+                    Reaction_Base_Date=getattr(r, 'reaction_base_date', pd.NaT))
 
     def get_positions(self):
         """Daily executed-weight DataFrame from the event loop (dates x stocks)."""
